@@ -1,0 +1,8 @@
+packages:
+  - packages/*
+  - sites/*
+  - tooling/*
+
+catalog: # typescript: 
+onlyBuiltDependencies:
+  - esbuild

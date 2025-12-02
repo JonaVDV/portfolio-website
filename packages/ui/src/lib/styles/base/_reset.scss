@@ -1,0 +1,50 @@
+@layer reset {
+	/* Make sure all elements use border-box sizing */
+	*,
+	*::before,
+	*::after {
+		box-sizing: border-box;
+	}
+
+	/**
+    * Reset default styles for all elements
+    * make sure font properties are inherited for all elements (this is not the case by default for things like inputs)
+    */
+	* {
+		margin: 0;
+		padding: 0;
+		font: inherit;
+	}
+
+	/* Newer image reset that accounts for inline images*/
+	img,
+	picture,
+	figure {
+		max-width: 100%;
+		height: auto;
+		font-style: italic;
+		background-repeat: no-repeat;
+		background-size: cover;
+		shape-margin: var(--image-shape-margin);
+		vertical-align: middle;
+	}
+
+	ul[role='list'],
+	ol[role='list'] {
+		list-style: none;
+	}
+
+	svg {
+		max-width: 100%;
+		height: auto;
+		vertical-align: middle;
+	}
+
+	p {
+		text-wrap: pretty;
+	}
+
+	html {
+		// color-scheme: light dark;
+	}
+}

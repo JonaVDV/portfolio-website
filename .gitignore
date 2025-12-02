@@ -1,0 +1,12 @@
+node_modules
+
+.idea
+
+coverage
+*.lcov
+
+.eslintcache
+
+.DS_Store
+tmp
+dist

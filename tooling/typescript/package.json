@@ -1,0 +1,9 @@
+{
+  "private": true,
+  "name": "@jvdv-portfolio/typescript-config",
+  "description": "the typescript configuration for my portfolio",
+  "version": "1.0.0",
+  "files": [
+    "*.json"
+  ]
+}

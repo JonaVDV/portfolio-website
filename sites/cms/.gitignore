@@ -1,0 +1,54 @@
+# System files
+# ------------
+
+Icon
+.DS_Store
+
+# Temporary files
+# ---------------
+
+/public/media/*
+!/public/media/.gitkeep
+
+# Lock files
+# ---------------
+
+.lock
+
+# Editors
+# (sensitive workspace files)
+# ---------------------------
+
+*.sublime-workspace
+/.vscode
+/.idea
+
+# Composer dependencies
+# ---------------------
+
+/vendor
+
+site/plugins
+
+# -------------SECURITY-------------
+# NEVER publish these files via Git!
+# -------------SECURITY-------------
+
+# Accounts
+# ---------------
+
+/data/storage/accounts/*
+!/data/storage/accounts/.gitkeep
+
+# Runtime Files
+# ---------------
+
+/data/runtime/*
+!/data/runtime/cache/.gitkeep
+!/data/runtime/logs/.gitkeep
+!/data/runtime/sessions/.gitkeep
+
+# License
+# ---------------
+
+/data/storage/.license

@@ -1,0 +1,21 @@
+@use '../abstracts/' as *;
+
+@media (prefers-color-scheme: light) {
+	:root {
+		$current-theme: $light-theme;
+	}
+}
+@media (prefers-color-scheme: dark) {
+	:root {
+		$current-theme: $dark-theme;
+	}
+}
+
+:root {
+	@include generate-variables($sizes-fluid, 'size-fluid');
+	@include generate-variables($font-sizes, 'fs');
+	@include generate-variables($font-weights, 'fw');
+	@include generate-variables($sizes, 'size');
+	@include generate-variables($border-radius, 'radius');
+	@include generate-variables($current-theme, 'clr');
+}
