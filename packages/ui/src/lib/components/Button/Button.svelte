@@ -24,6 +24,7 @@
 
 	type Props = ButtonProps | LinkProps;
 
+	// eslint-disable-next-line svelte/no-unused-props
 	let props: Props = $props();
 </script>
 
@@ -55,7 +56,6 @@
 		background-color: var(--button-background);
 		color: var(--button-color);
 		color: hsl(0 0 50%);
-		
 
 		&:is(:hover, :focus) {
 			background-color: var(--button-hover-background, var(--button-background));

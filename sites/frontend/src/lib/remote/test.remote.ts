@@ -2,11 +2,6 @@ import { getRequestEvent, query } from '$app/server';
 import { env } from '$env/dynamic/private';
 import * as z from 'zod';
 
-const kqlSchema = z.object({
-	query: z.string(),
-	select: z.record(z.string(), z.union([z.string(), z.boolean(), z.array(z.string())])).optional()
-});
-
 export const kql = query(z.string(), async (query) => {
 	const { fetch } = getRequestEvent();
 
@@ -25,7 +20,7 @@ export const kql = query(z.string(), async (query) => {
 			})
 		});
 
-		const data = await test.json();
+		const data: unknown = await test.json();
 		console.log(data);
 	} catch (error) {
 		console.error('Error fetching data from Kirby API:', error);

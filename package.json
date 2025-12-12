@@ -5,7 +5,10 @@
   "description": "The monorepo for my portfolio website",
   "scripts": {
     "prepare": "husky",
-    "packages:dev": "pnpm -F ./packages/** dev"
+    "packages:dev": "pnpm -F ./packages/** dev",
+    "lint": "pnpm -r --filter '!@jvdv-portfolio/typescript-config' lint",
+    "format": "pnpm -r --filter '!@jvdv-portfolio/typescript-config' format",
+    "format:check": "pnpm -r --filter '!@jvdv-portfolio/typescript-config' format:check"
   },
   "engines": {
     "pnpm": ">=10.20.0"
@@ -15,6 +18,15 @@
   "author": "Jona van der Vlist",
   "license": "MIT",
   "devDependencies": {
-    "husky": "^9.1.7"
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.7"
+  },
+  "lint-staged": {
+    "*.{js,ts,svelte,json,md,css,scss}": [
+      "pnpm exec prettier --write"
+    ],
+    "*.{js,ts,svelte}": [
+      "pnpm exec eslint --fix"
+    ]
   }
 }

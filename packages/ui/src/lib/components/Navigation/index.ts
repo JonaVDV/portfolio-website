@@ -1,1 +1,1 @@
-export * as Navigation from "."
+export * as Navigation from '.';
