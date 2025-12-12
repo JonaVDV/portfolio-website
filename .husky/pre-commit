@@ -1,3 +1,12 @@
 #!/usr/bin/env bash
-# pnpm install --frozen-lockfile
-# pnpm run format
+# Run format and lint checks before commit
+# Note: This runs on all files in the workspace, not just staged files
+# To skip this check, use: git commit --no-verify
+
+echo "Running format check..."
+pnpm run format:check || exit 1
+
+echo "Running lint check..."
+pnpm run lint || exit 1
+
+echo "All checks passed!"

@@ -9,6 +9,8 @@
   },
   "dependencies": {
     "@eslint/compat": "^1.4.1",
+    "@eslint/js": "^9.39.1",
+    "eslint": "^9.39.1",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-svelte": "^3.13.0",
     "globals": "^16.5.0",
@@ -16,13 +18,14 @@
   },
   "scripts": {
     "clean": "rm -rf node_modules",
-    "format": "prettier --check . --ignore-path ../../.gitignore",
+    "format": "prettier --write . --ignore-path ../../.gitignore",
+    "format:check": "prettier --check . --ignore-path ../../.gitignore",
+    "lint": "prettier --check . --ignore-path ../../.gitignore",
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
     "@jvdv-portfolio/typescript-config": "workspace:*",
     "@types/node": "^24.10.0",
-    "eslint": "^9.39.1",
     "prettier": "^3.6.2",
     "typescript": "^5.9.3"
   }

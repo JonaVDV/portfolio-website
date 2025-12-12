@@ -1,12 +1,12 @@
-@use "../abstracts/" as *;
+@use '../abstracts/' as *;
 
 @layer base {
-  body {
-    font-family: $ff-secondary;
-    font-size: $fs-450;
-    font-weight: $fw-medium;
-    line-height: 1.5;
-    color: $clr-brand-900;
-    background-color: $clr-neutral-100;
-  }
+	body {
+		font-family: $ff-secondary;
+		font-size: $fs-450;
+		font-weight: $fw-medium;
+		line-height: 1.5;
+		color: $clr-brand-900;
+		background-color: $clr-neutral-100;
+	}
 }
