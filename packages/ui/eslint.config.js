@@ -7,4 +7,6 @@ import { svelteEslintConfig } from '@jvdv-portfolio/eslint-config/svelte';
 
 const gitignorePath = fileURLToPath(new URL('./.gitignore', import.meta.url));
 
-export default defineConfig(includeIgnoreFile(gitignorePath), ...svelteEslintConfig);
+export default defineConfig(includeIgnoreFile(gitignorePath), ...svelteEslintConfig, {
+	ignores: ['.storybook/**']
+});
