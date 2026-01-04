@@ -10,7 +10,7 @@ I have used all of these technologies in the past for some projects and I really
 
 This stack consists of a few parts, first, the frontend, which is the `ui` package. This package contains all the UI components used in the portfolio site. For this i have used the following technologies:
 
-- [Svelte](https://svelte.dev/docs/svelte/introduction)
+- [Svelte](https://svelte.dev/docs/svelte/overview)
 - [Typescript](https://www.typescriptlang.org/)
 - [Scss](https://sass-lang.com)
 - [Storybook](https://storybook.js.org/)
@@ -35,6 +35,5 @@ And lastly, the main site which ties everything together, this is also a SvelteK
 The technologies used for the main site are:
 - [SvelteKit](https://svelte.dev/docs/kit/introduction)
 - [Typescript](https://www.typescriptlang.org/)
-- [Svelte](https://svelte.dev/docs/svelte/introduction)
+- [Svelte](https://svelte.dev/docs/svelte/overview)
 - [Vite (build tool)](https://vitejs.dev/)
-
