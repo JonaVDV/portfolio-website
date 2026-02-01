@@ -11,11 +11,18 @@
 	}
 }
 
+html {
+	interpolate-size: allow-keywords;
+}
+
 :root {
-	@include generate-variables($sizes-fluid, 'size-fluid');
+	// @include generate-variables($sizes-fluid, 'size-fluid');
 	@include generate-variables($font-sizes, 'fs');
 	@include generate-variables($font-weights, 'fw');
-	@include generate-variables($sizes, 'size');
+	// @include generate-variables($sizes, 'size');
 	@include generate-variables($border-radius, 'radius');
 	@include generate-variables($current-theme, 'clr');
+
+	--ff-headings: 'Lexend Deca', #{$ff-fallback};
+	--ff-body: 'Lexend', #{$ff-fallback};
 }

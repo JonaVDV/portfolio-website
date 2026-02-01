@@ -1,3 +1,6 @@
+@use 'sass:meta';
 @layer reset, base, layout, utilities, components;
 
-
+@include meta.load-css('base');
+@include meta.load-css('layout');
+// @include meta.load-css("utilities/index");

@@ -1,0 +1,51 @@
+/* @link https://utopia.fyi/type/calculator?c=375,16,1.414,1440,20,1.414,5,1,800&s=0.75|0.5|0.25,1.5|2|3|4|6,s-l&g=s,l,xl,12 */
+// prettier-ignore
+$font-sizes: (
+    "900": clamp(5.6526rem, 5.155rem + 2.123cqi, 7.0657rem), // fs-900: 90.4413px → 113.0517px
+    "800": clamp(4rem, 3.6457rem + 1.5014cqi, 5rem),   // fs-800: 63.9613px → 79.9517px
+    "700": clamp(2.8271rem, 2.5783rem + 1.0618cqi, 3.5339rem), // fs-700: 45.2343px → 56.5429px
+    "600": clamp(2rem, 1.8234rem + 0.7509cqi, 2.5rem), // fs-600: 32px → 40px
+    "500": clamp(1.414rem, 1.2895rem + 0.5311cqi, 1.75rem), // fs-500: 22.624px → 28px
+    "400": clamp(1rem, 0.912rem + 0.3756cqi, 1.125rem),   // fs-400: 16px → 18px
+    "300": clamp(0.75rem, 0.645rem + 0.2656cqi, 0.875rem), // fs-300: 12px → 14px
+);
+
+$font-weights: (
+	'normal': 400,
+	'medium': 500,
+	'bold': 700,
+	'extra-bold': 800,
+	'black': 900
+);
+
+$ff-headings: var(--ff-headings, 'Lexend Deca');
+$ff-body: var(--ff-body, 'Lexend');
+
+$ff-fallback:
+	system-ui,
+	-apple-system,
+	BlinkMacSystemFont,
+	'Segoe UI',
+	Roboto,
+	Oxygen,
+	Ubuntu,
+	Cantarell,
+	'Open Sans',
+	'Helvetica Neue',
+	sans-serif;
+
+// variables
+
+$fs-300: var(--fs-300);
+$fs-400: var(--fs-400);
+$fs-500: var(--fs-500);
+$fs-600: var(--fs-600);
+$fs-700: var(--fs-700);
+$fs-800: var(--fs-800);
+$fs-900: var(--fs-900);
+
+$fw-normal: var(--fw-normal);
+$fw-medium: var(--fw-medium);
+$fw-bold: var(--fw-bold);
+$fw-extra-bold: var(--fw-extra-bold);
+$fw-black: var(--fw-black);

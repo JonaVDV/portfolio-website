@@ -1,3 +1,5 @@
-@use '../abstracts/' as *;
+@use './colors' as *;
+@use './mixins' as *;
+@use './radius' as *;
 
 $current-theme: $light-theme;

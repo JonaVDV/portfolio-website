@@ -1,0 +1,13 @@
+.flex-group {
+	--flex-gap: 1em;
+	display: flex;
+	width: var(--_flex-container-width, fit-content);
+	flex-wrap: wrap;
+	align-items: center;
+	gap: calc(var(--flex-gap) / 2) var(--flex-gap);
+}
+
+.flex-group.center {
+	--_flex-container-width: auto;
+	justify-content: center;
+}

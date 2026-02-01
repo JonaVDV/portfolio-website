@@ -1,15 +1,10 @@
-@use "sass:meta";
+@use 'sass:meta';
 
-@mixin heading(
-  $font-size,
-  $line-height: normal,
-  $letter-spacing: normal,
-  $font-weight: 400
-) {
-  font-size: $font-size;
-  line-height: $line-height;
-  letter-spacing: $letter-spacing;
-  font-weight: $font-weight;
+@mixin heading($font-size, $line-height: normal, $letter-spacing: normal, $font-weight: 400) {
+	font-size: $font-size;
+	line-height: $line-height;
+	letter-spacing: $letter-spacing;
+	font-weight: $font-weight;
 }
 
 /// Generate CSS variables from a map
@@ -18,11 +13,11 @@
 /// @param {string} $prefix - The prefix for the CSS variables
 /// @output CSS variables
 @mixin generate-variables($map, $prefix) {
-  @each $key, $value in $map {
-    @if meta.type-of($value) == "map" {
-      @include generate-variables($value, "#{$prefix}-#{$key}");
-    } @else {
-      --#{$prefix}-#{$key}: #{$value};
-    }
-  }
+	@each $key, $value in $map {
+		@if meta.type-of($value) == 'map' {
+			@include generate-variables($value, '#{$prefix}-#{$key}');
+		} @else {
+			--#{$prefix}-#{$key}: #{$value};
+		}
+	}
 }
