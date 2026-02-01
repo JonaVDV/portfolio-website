@@ -10,7 +10,8 @@
 return [
     'debug' => true,
     'api' => [
-        'basicAuth' => true
+        'basicAuth' => true,
+        'allowInsecure' => true,
     ],
     'panel.vue.compiler' => false,
     'yaml.handler' => 'symfony', // already makes use of the more modern Symfony YAML parser: https://getkirby.com/docs/reference/system/options/yaml (will become the default in a future Kirby version)
