@@ -3,6 +3,7 @@ packages:
   - sites/*
   - tooling/*
 
-catalog: # typescript: 
+catalog: 
+  svelte: ^
 onlyBuiltDependencies:
   - esbuild

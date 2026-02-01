@@ -4,7 +4,7 @@ import { includeIgnoreFile } from "@eslint/compat";
 import { defineConfig } from "eslint/config";
 import svelte from "eslint-plugin-svelte";
 import ts from "typescript-eslint";
-import { baseConfig } from "./base";
+import { baseConfig } from "./base.js";
 
 const svelteConfig = await import(
   fileURLToPath(new URL("./svelte.config.js", import.meta.url))
@@ -28,5 +28,5 @@ export const svelteEslintConfig = defineConfig(
         svelteConfig,
       },
     },
-  }
+  },
 );

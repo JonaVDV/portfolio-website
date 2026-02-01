@@ -16,8 +16,8 @@
 	"devDependencies": {
 		"@eslint/compat": "^1.4.0",
 		"@eslint/js": "^9.38.0",
-		"@jvdv-portfolio/typescript-config": "workspace:*",
 		"@jvdv-portfolio/eslint-config": "workspace:*",
+		"@jvdv-portfolio/typescript-config": "workspace:*",
 		"@sveltejs/adapter-auto": "^7.0.0",
 		"@sveltejs/kit": "^2.47.1",
 		"@sveltejs/vite-plugin-svelte": "^6.2.1",
@@ -33,6 +33,7 @@
 		"typescript": "^5.9.3",
 		"typescript-eslint": "^8.46.1",
 		"vite": "^7.1.10",
+		"zimmerframe": "^1.1.4",
 		"zod": "^4.1.12"
 	}
 }

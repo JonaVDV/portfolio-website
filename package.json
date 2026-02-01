@@ -5,7 +5,13 @@
   "description": "The monorepo for my portfolio website",
   "scripts": {
     "prepare": "husky",
-    "packages:dev": "pnpm -F ./packages/** dev"
+    "packages:dev": "pnpm --parallel dev",
+    "format": "pnpm --parallel format",
+    "format:fix": "pnpm --parallel format --write",
+    "lint": "pnpm --parallel lint",
+    "lint:fix": "pnpm --parallel lint:fix",
+    "lint:ws": "pnpm dlx sherriff@latest",
+    "ui:storybook": "pnpm -F ui storybook"
   },
   "engines": {
     "pnpm": ">=10.20.0"

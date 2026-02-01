@@ -58,5 +58,5 @@ export const baseConfig = defineConfig(
         tsconfigRootDir: import.meta.dirname,
       },
     },
-  }
+  },
 );

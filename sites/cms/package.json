@@ -1,0 +1,7 @@
+{
+  "name": "@jvdv-portfolio/cms",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "composer start"
+  }
+}
