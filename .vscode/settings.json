@@ -1,0 +1,77 @@
+{
+  "workbench.editor.labelFormat": "default",
+  "workbench.editor.customLabels.enabled": true,
+  "workbench.editor.customLabels.patterns": {
+    /** SVELTE */
+    "**/src/**/*.svelte": "${filename}",
+    "**/src/stores/**/*.{js,ts}": "${filename} (Store)",
+    /** SVELTEKIT */
+    // -- Home route needs special treatment
+    "**/src/routes/+page.svelte": "Home (Page)",
+    "**/src/routes/+page.{mdsvex,mdx}": "Home (MDX)",
+    "**/src/routes/+layout.svelte": "Layout (Root)",
+    // -- capture Home in grouped layouts
+    "**/src/routes/(**)/+page.svelte": "Home (Page)",
+    "**/src/routes/(**)/+page.{mdsvex,mdx}": "Home (MDX)",
+    // -- rest: require at least 1 dir with /*/**/, otherwise glob beats Home
+    "**/src/routes/*/**/+page.svelte": "${dirname} (Page)",
+    "**/src/routes/*/**/+page.{mdsvex,mdx}": "${dirname} (MDX)",
+    "**/src/routes/**/[[]*[]]/+page.svelte": "${dirname} (Route)",
+    // Layouts
+    "**/src/routes/*/**/+layout.svelte": "${dirname} (Layout)",
+    "**/src/routes/**/+layout.{js,ts}": "${dirname} (LayoutLoad)",
+    "**/src/routes/**/+layout.server.{js,ts}": "${dirname} (LayoutServerLoad)",
+    // Rest
+    "**/src/routes/**/+error.svelte": "${dirname} (Error Page)",
+    "**/src/routes/**/+page.{js,ts}": "${dirname} (Load)",
+    "**/src/routes/**/+page.server.{js,ts}": "${dirname} (ServerLoad)",
+    "**/src/routes/**/+server.{js,ts}": "${dirname} (Endpoint)",
+    "**/src/routes/**/*.remote.{js,ts}": "${filename} (Remote)",
+    "**/src/lib/server/*.{js,ts}": "${filename} (🔒)",
+    "**/src/hooks.{js,ts}": "Hooks",
+    "**/src/hooks.client.{js,ts}": "Hooks (Client)",
+    "**/src/hooks.server.{js,ts}": "Hooks (Server)"
+  },
+
+  // file nesting
+  "explorer.fileNesting.enabled": true,
+  "explorer.fileNesting.expand": false,
+  "explorer.fileNesting.patterns": {
+    // original source: https://github.com/antfu/vscode-file-nesting-config
+    "+layout.svelte": "+layout.ts,+layout.ts,+layout.js,+layout.server.ts,+layout.server.js",
+    "+page.svelte": "+page.server.ts,+page.server.js,+page.ts,+page.js",
+    "AGENTS.md": ".clinerules, .cursorrules, .replit.md, .windsurfrules, AGENT.md, CLAUDE.local.md, CLAUDE.md, GEMINI.md, TASKS.md, TODO.md, .mcp.json",
+    "*.ts": "$(capture).js, $(capture).d.ts.map, $(capture).*.ts, $(capture)_*.js, $(capture)_*.ts",
+    "*.js": "$(capture).js.map, $(capture).*.js, $(capture)_*.js",
+    "*.jsx": "$(capture).js, $(capture).*.jsx, $(capture)_*.js, $(capture)_*.jsx, $(capture).less, $(capture).module.less",
+    "*.tsx": "$(capture).ts, $(capture).*.tsx, $(capture)_*.ts, $(capture)_*.tsx, $(capture).less, $(capture).module.less",
+    ".gitignore": ".gitattributes, .gitmodules, .gitmessage, .mailmap, .git-blame*",
+    "tsconfig.json": "tsconfig.*.json",
+    "nixpacks.toml": "nixpacks.*",
+    ".env": "*.env, .env.*, .envrc, env.d.ts",
+    "vite.config.*": ".babelrc*, .codecov, .cssnanorc*, .htmlnanorc*, .lighthouserc.*, .mocha*, .postcssrc*, .terserrc*, api-extractor.json, ava.config.*, babel.config.*, capacitor.config.*, content.config.*, contentlayer.config.*, cssnano.config.*, cypress.*, drizzle.config.*, formkit.config.*, formulate.config.*, histoire.config.*, htmlnanorc.*, i18n.config.*, ionic.config.*, jasmine.*, jest.config.*, jsconfig.*, karma*, lighthouserc.*, panda.config.*, playwright.config.*, postcss.config.*, puppeteer.config.*, react-router.config.*, rspack.config.*, sst.config.*, svgo.config.*, tailwind.config.*, tsconfig.*, tsdoc.*, uno.config.*, unocss.config.*, vitest.config.*, vuetify.config.*, webpack.config.*, windi.config.*, stylelint*, .stylelint*",
+    "package.json": "*.code-workspace, .browserslist*, .circleci*, .commitlint*, .cspell*, .cz-config.js, .czrc, .dlint.json, .dprint.json*, .editorconfig, .eslint*, .firebase*, .flowconfig, .github*, .gitlab*, .gitmojirc.json, .gitpod*, .huskyrc*, .jslint*, .knip.*, .lintstagedrc*, .ls-lint.yml, .markdownlint*, .node-version, .nodemon*, .npm*, .nvmrc, .oxlintrc.json, .oxlintrc.json.bak, .pm2*, .pnp.*, .pnpm*, .prettier*, .pylintrc, .release-please*.json, .releaserc*, .ruff.toml, .sentry*, .shellcheckrc, .simple-git-hooks*, .stackblitz*, .styleci*, .stylelint*, .tazerc*, .textlint*, .tool-versions, .travis*, .versionrc*, .vscode*, .watchman*, .windsurfrules, .xo-config*, .yamllint*, .yarnrc*, Procfile, alejandra.toml, apollo.config.*, appveyor*, azure-pipelines*, biome.json*, bower.json, build.config.*, bun.lock, bun.lockb, bunfig.toml, colada.options.ts, commitlint*, crowdin*, cspell*, cz.config.*, dangerfile*, dlint.json, dprint.json*, ec.config.*, electron-builder.*, eslint*, firebase.json, grunt*, gulp*, jenkins*, knip.*, lefthook.*, lerna*, lint-staged*, nest-cli.*, netlify*, nodemon*, npm-shrinkwrap.json, nx.*, package-lock.json, package.nls*.json, phpcs.xml, pm2.*, pnpm*, prettier*, pullapprove*, pyrightconfig.json, release-please*.json, release-tasks.sh, release.config.*, renovate*, rolldown.config.*, rollup.config.*, rspack*, ruff.toml, sentry.*.config.ts, simple-git-hooks*, sonar-project.properties, stylelint*, taze.config.*, tsdown.config.*, tslint*, tsup.config.*, turbo*, typedoc*, unlighthouse*, vercel*, vetur.config.*, webpack*, workspace.json, wrangler.*, xo.config.*, yarn*",
+    "*.cjs": "$(capture).cjs.map, $(capture).*.cjs, $(capture)_*.cjs",
+    "*.component.ts": "$(capture).component.html, $(capture).component.spec.ts, $(capture).component.css, $(capture).component.scss, $(capture).component.sass, $(capture).component.less",
+    "*.csproj": "*.config, *proj.user, appsettings.*, bundleconfig.json",
+    "*.css": "$(capture).css.map, $(capture).*.css",
+    "*.go": "$(capture)_test.go",
+    "*.java": "$(capture).class",
+    "*.mjs": "$(capture).mjs.map, $(capture).*.mjs, $(capture)_*.mjs",
+    "*.module.ts": "$(capture).resolver.ts, $(capture).controller.ts, $(capture).service.ts",
+    "*.vue": "$(capture).*.ts, $(capture).*.js, $(capture).story.vue",
+    "deno.json*": "deno.lock",
+    "dockerfile": ".dockerignore, docker-compose.*, dockerfile*",
+    "pyproject.toml": ".editorconfig, .flake8, .isort.cfg, .pdm-python, .pdm.toml, .python-version, MANIFEST.in, Pipfile, Pipfile.lock, hatch.toml, pdm.lock, poetry.lock, pyproject.toml, requirements*.in, requirements*.pip, requirements*.txt, setup.cfg, setup.py, tox.ini",
+    "readme*": "authors, backers*, changelog*, citation*, code_of_conduct*, codeowners, contributing*, contributors, copying, credits, governance.md, history.md, license*, maintainers, readme*, security.md, sponsors*, todo*,tasks*",
+    "requirements.txt": ".editorconfig, .flake8, .isort.cfg, .python-version, requirements*.in, requirements*.pip, requirements*.txt, tox.ini",
+    "setup.py": ".editorconfig, .flake8, .isort.cfg, .python-version, MANIFEST.in, requirements*.in, requirements*.pip, requirements*.txt, setup.cfg, setup.py, tox.ini",
+    "shims.d.ts": "*.d.ts",
+    "*.sqlite": "${capture}.${extname}-*",
+    "*.db": "${capture}.${extname}-*",
+    "*.sqlite3": "${capture}.${extname}-*",
+    "*.db3": "${capture}.${extname}-*",
+    "*.sdb": "${capture}.${extname}-*",
+    "*.s3db": "${capture}.${extname}-*"
+  }
+}
