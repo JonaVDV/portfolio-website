@@ -30,32 +30,39 @@
 {#if props.as === 'link'}
 	{@const { children, variant, as, ...rest } = props as LinkProps}
 	<a {...rest} class={[rest.class, 'button']} data-variant={variant}>
+		<div aria-hidden="true" class="outline-supporter"></div>
 		{@render children()}
 	</a>
 {:else}
 	{@const { children, variant, as, ...rest } = props as ButtonProps}
 	<button {...rest} class={[rest.class, 'button']} data-variant={variant}>
+		<div aria-hidden="true" class="outline-supporter"></div>
 		{@render children()}
 	</button>
 {/if}
 
-<style>
+<style lang="scss">
+	@use '../../styles/abstracts/' as *;
+
 	.button[data-variant] {
 		/* Base settings */
-		--button-padding: 0.5em 1em;
-		--button-border-radius: 0.375em;
-		--button-font-size: 1rem;
+		--button-padding: 0.5rem 2rem;
+		--button-border-radius: 0;
+		--button-font-size: 1.125rem;
 		--button-font-weight: 600;
-
 		border: var(--button-border, 0);
 		padding: var(--button-padding);
 		border-radius: var(--button-border-radius);
 		font-size: var(--button-font-size);
 		font-weight: var(--button-font-weight);
 		background-color: var(--button-background);
+		position: relative;
+		text-transform: uppercase;
+		letter-spacing: 0.2ch;
+		outline: 0;
+		z-index: 1;
+		isolation: isolate;
 		color: var(--button-color);
-		color: hsl(0 0 50%);
-		
 
 		&:is(:hover, :focus) {
 			background-color: var(--button-hover-background, var(--button-background));
@@ -71,14 +78,15 @@
 	}
 
 	.button[data-variant='primary'] {
-		--button-background: hsl(220 90% 56%);
-		--button-color: hsl(0 0% 100%);
-		--button-hover-background: hsl(220 90% 46%);
-		--button-active-background: hsl(220 90% 36%);
-		box-shadow: 0 4px 6px hsl(220 90% 56% / 0.4);
-		transition:
-			background-color 0.2s,
-			box-shadow 0.2s;
+		--button-background: #{$clr-brand-400};
+		--button-color: #{$clr-brand-000};
+		--button-hover-background: #{$clr-brand-600};
+		--button-active-background: #{$clr-brand-700};
+
+		--focus-outline-width: 3px;
+		--focus-outline-color: #{$clr-brand-400};
+		--focus-outline-edge-size: 0.5rem;
+		--focus-outline-offset: 10px;
 	}
 
 	.button,
