@@ -1,29 +1,33 @@
 <script lang="ts">
 	import { draw } from 'svelte/transition';
 
-	let checked: boolean = false;
+	let checked: boolean = $state(false);
 </script>
 
-<input type="checkbox" bind:checked />
-{#if checked}
-	<svg
-		class="checked"
-		fill="none"
-		width="20"
-		height="20"
-		viewBox="0 0 20 20"
-		xmlns="http://www.w3.org/2000/svg"
-	>
-		<path
-			transition:draw={{ duration: 400 }}
-			d="M12.1549 1L1 9.80851L4.92958 9.17021L13.2958 3.93617L5.1831 10.1915L18.3662 6.23404L4.92958 15.4255L19 9.80851L5.8169 17.9787L18.3662 14.2766L13.5493 17.5957L18.3662 16.3191L17.3521 19L19 18.234"
-			stroke="#6E31E5"
-			stroke-width="2"
-			stroke-linecap="round"
-			stroke-linejoin="round"
-		/>
-	</svg>
-{/if}
+<div>
+	<input type="checkbox" bind:checked />
+	<div class="checked">
+		{#key checked}
+			<svg
+				fill="none"
+				width="20"
+				height="20"
+				viewBox="0 0 20 20"
+				style:display={checked ? 'inline' : 'none'}
+				xmlns="http://www.w3.org/2000/svg"
+			>
+				<path
+					transition:draw={{ duration: 400 }}
+					d="M12.1549 1L1 9.80851L4.92958 9.17021L13.2958 3.93617L5.1831 10.1915L18.3662 6.23404L4.92958 15.4255L19 9.80851L5.8169 17.9787L18.3662 14.2766L13.5493 17.5957L18.3662 16.3191L17.3521 19L19 18.234"
+					stroke="#6E31E5"
+					stroke-width="2"
+					stroke-linecap="round"
+					stroke-linejoin="round"
+				/>
+			</svg>
+		{/key}
+	</div>
+</div>
 
 <noscript>
 	<style>
@@ -58,9 +62,14 @@
 	}
 
 	.checked {
+		--checkmark-offset-top: -0.125rem;
+		--checkmark-offset-left: -0.125rem;
+		margin-block-start: var(--checkmark-offset-top);
+		margin-inline-start: var(--checkmark-offset-left);
+		display: inline-flex;
 		position: absolute;
 		position-anchor: --checkbox;
-		position-area: center;
+		position-area: center center;
 		pointer-events: none;
 	}
 </style>
