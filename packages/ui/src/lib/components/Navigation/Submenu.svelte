@@ -2,17 +2,6 @@
 	import type { Snippet } from 'svelte';
 	import polyfill from '@oddbird/css-anchor-positioning/fn';
 
-	$effect(() => {
-		if (!('anchorName' in document.documentElement.style)) {
-			console.log('It seems anchor positioning is not supported here :( Loading polyfill...');
-			polyfill().then(() => {
-				console.log('Anchor positioning polyfill loaded!');
-			});
-		}
-
-		return () => {};
-	});
-
 	interface Props {
 		trigger: Snippet<[id: string]>;
 		children: Snippet;
@@ -53,12 +42,17 @@
 		background-color: $clr-surface-000;
 		border: 1px solid $clr-surface-200;
 
-		// When anchor positioning is not supported, we need this because otherwise the polyfill won't work in firefox
-		// see: https://codepen.io/jamessw/pen/yyyKYwE?editors=1100 and (this issue)[https://github.com/oddbird/css-anchor-positioning/issues/330] in firefox 146 (at time of writing) may be 90% supported in a year or so and we can remove this and the polyfill
-		// Also see here for support status: https://caniuse.com/css-anchor-positioning
+		/// When anchor positioning is not supported, we need this because otherwise the polyfill won't work in firefox
+		/// @see: https://codepen.io/jamessw/pen/yyyKYwE?editors=1100 and (this issue)[https://github.com/oddbird/css-anchor-positioning/issues/330] in firefox 146 (at time of writing) may be 90% supported in a year or so and we can remove this and the polyfill
+		/// Also see here for support status: https://caniuse.com/css-anchor-positioning
 		@supports not (anchor-name: --test) {
 			inset: auto;
 		}
+	}
+
+	.submenu-wrapper {
+		// Makes sure that multiple submenus can be used in the same page without interfering with each other
+		anchor-scope: --submenu-anchor;
 	}
 
 	:global(.submenu-wrapper [popovertarget]) {
