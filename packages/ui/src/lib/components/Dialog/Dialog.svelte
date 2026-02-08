@@ -102,5 +102,42 @@
 	@use '../../styles/abstracts/' as *;
 
 	dialog:modal {
+		margin: auto;
+		opacity: 0;
+		width: min(100%, var(--dialog-max-width, 30em));
+		transition-behavior: allow-discrete;
+		border: 1px solid $clr-surface-200;
+		border-radius: 4px;
+		transition:
+			opacity 0.2s ease-in-out,
+			display 0.2s,
+			overlay 0.2s;
+
+		&[open] {
+			opacity: 1;
+		}
+	}
+
+	dialog::backdrop {
+		background-color: var(--modal-backdrop-color, hsl(0 0% 0% / 0.5));
+		transition-behavior: allow-discrete;
+		transition:
+			opacity 0.2s ease-in-out,
+			overlay 0.2s;
+	}
+
+	@starting-style {
+		dialog[open] {
+			opacity: 0;
+		}
+
+		dialog::backdrop {
+			opacity: 0;
+		}
+	}
+
+	dialog :global(.close-dialog) {
+		float: inline-end;
+		margin-inline-start: var(--close-button-safe-area, 0.25rem);
 	}
 </style>
