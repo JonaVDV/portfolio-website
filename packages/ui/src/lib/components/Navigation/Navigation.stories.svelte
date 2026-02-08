@@ -3,7 +3,7 @@
 	import Navigation from './Navigation.svelte';
 	// More on how to set up stories at: https://storybook.js.org/docs/writing-stories
 	const { Story } = defineMeta({
-		title: 'Example/Navigation',
+		title: 'Components/Navigation',
 		component: Navigation,
 		tags: ['autodocs']
 	});

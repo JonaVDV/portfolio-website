@@ -3,7 +3,7 @@
 	import Range from './Range.svelte';
 
 	const { Story } = defineMeta({
-		title: 'Example/Form/Range',
+		title: 'Components/Form/Range',
 		component: Range,
 		tags: ['autodocs'],
 		args: {

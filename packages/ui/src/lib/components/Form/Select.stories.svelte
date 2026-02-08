@@ -3,7 +3,7 @@
 	import Select from './Select.svelte';
 	// More on how to set up stories at: https://storybook.js.org/docs/writing-stories
 	const { Story } = defineMeta({
-		title: 'Example/Form/Select',
+		title: 'Components/Form/Select',
 		component: Select,
 		tags: ['autodocs'],
 		args: {

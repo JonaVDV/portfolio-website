@@ -6,7 +6,7 @@
 	const { Story } = defineMeta({
 		component: Dialog,
 		tags: ['autodocs'],
-		title: 'Example/Dialog',
+		title: 'Components/Dialog',
 		play: async ({ canvas, userEvent }) => {
 			await userEvent.click(canvas.getByRole('button'));
 
