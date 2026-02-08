@@ -11,3 +11,8 @@
 	--_flex-container-width: auto;
 	justify-content: center;
 }
+
+.space-between {
+	--_flex-container-width: 100%;
+	justify-content: space-between;
+}
