@@ -1,3 +1,16 @@
+.primary-layout-sidebar {
+	/* prettier-ignore */
+	grid-template-columns:
+		[sidebar] auto 
+		[full-width-start] 
+			var(--full) 
+				[content-start] 
+					var(--content) 
+				[content-end] 
+			var(--full) 
+		[full-width-end];
+}
+
 .primary-layout > *,
 .full-width > * {
 	grid-column: content;

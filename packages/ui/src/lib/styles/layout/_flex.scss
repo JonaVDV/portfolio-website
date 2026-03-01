@@ -16,3 +16,7 @@
 	--_flex-container-width: 100%;
 	justify-content: space-between;
 }
+
+.flex-group.nowrap {
+	flex-wrap: nowrap;
+}

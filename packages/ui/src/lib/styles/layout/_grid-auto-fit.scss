@@ -1,0 +1,24 @@
+.grid-auto-columns {
+	/* User settings */
+	--max-columns: 2;
+	--min-column-size: 350px;
+	--grid-fit-strategy: auto-fit; /* or auto-fill */
+
+	/* Calculations */
+	--breakpoint: calc(
+		/* 
+        Calculate the point at which the columns no longer fit 
+        this is the minimum column size multiplied by the maximum number of columns, plus the total gap between those columns
+        for example, if the minimum column size is 350px, the maximum number of columns is 4, and the gap is 1em, the breakpoint would be: 1448px
+        */
+			var(--min-column-size) * var(--max-columns) + (var(--max-columns) - 1) * var(--gap, 1em)
+	);
+	--column-size: calc((100% / var(--max-columns)) - (var(--gap, 1em)));
+
+	display: grid;
+	gap: var(--gap);
+	grid-template-columns: repeat(
+		var(--grid-fit-strategy),
+		minmax(min(max(var(--column-size), (100% - var(--breakpoint)) * -9999), 100%), 1fr)
+	);
+}

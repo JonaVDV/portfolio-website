@@ -46,12 +46,11 @@
 
 	.button[data-variant] {
 		/* Base settings */
-		--button-padding: 0.5rem 2rem;
 		--button-border-radius: 0;
 		--button-font-size: 1.125rem;
 		--button-font-weight: 600;
 		border: var(--button-border, 0);
-		padding: var(--button-padding);
+		padding: var(--button-padding, 0.75rem 1.5rem);
 		border-radius: var(--button-border-radius);
 		font-size: var(--button-font-size);
 		font-weight: var(--button-font-weight);
@@ -93,6 +92,7 @@
 	.button[data-variant='stripped'] {
 		/* Reset button styles */
 		appearance: none;
+		padding: var(--button-padding, 0);
 		border: 0;
 		background-color: transparent;
 		cursor: pointer;

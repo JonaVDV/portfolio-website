@@ -4,6 +4,7 @@
 	import type { HTMLAttributes } from 'svelte/elements';
 
 	interface Props extends Omit<HTMLAttributes<HTMLElement>, 'children'> {
+		ref: HTMLDialogElement | null;
 		/**
 		 * The trigger that opens the dialog.
 		 */
@@ -47,21 +48,19 @@
 		>;
 	}
 
-	let { trigger, children, footer, lightDismiss, ...rest }: Props = $props();
+	let { trigger, children, footer, ref = $bindable(null), lightDismiss, ...rest }: Props = $props();
 
 	let dialogId = $props.id();
 
-	let element = $state<HTMLDialogElement | null>(null);
-
 	function close() {
-		if (!open || !element?.open) return;
-		element?.close();
+		if (!open || !ref?.open) return;
+		ref?.close();
 		open = false;
 	}
 
 	function openDialog() {
-		if (open || element?.open) return;
-		element?.showModal();
+		if (open || ref?.open) return;
+		ref?.showModal();
 		open = true;
 	}
 
@@ -74,7 +73,7 @@
 	onclose={() => (open = false)}
 	closedby={lightDismiss ? 'any' : 'closerequest'}
 	id={dialogId}
-	bind:this={element}
+	bind:this={ref}
 	{...rest}
 >
 	<Button
@@ -85,6 +84,7 @@
 		data-testid="close-dialog-button"
 		aria-label="Close dialog"
 		onclick={close}
+		--button-padding=".25rem"
 	>
 		<!-- Replace with icon later -->
 		X

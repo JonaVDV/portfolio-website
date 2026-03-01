@@ -58,7 +58,7 @@
 		background-repeat: no-repeat;
 		background-position: center;
 		// background-position: var(--switch-checked-background-position);
-		background-size: var(--switch-checked-background-position);
+		background-size: 100cqi;
 	}
 
 	@keyframes switch-checked {

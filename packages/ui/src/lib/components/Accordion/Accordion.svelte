@@ -22,7 +22,7 @@
 
 When using multiple accordions together, they will open independently by default. 
 if you want to have only one accordion open at a time, you can use the name attribute on the details element and set it to the same value for all accordions that you want to be grouped together.
-However, this should either be used sparingly or not at all since it can have [negative accessibility implications](https://www.w3.org/TR/wai-aria-practices-1.2/#accordion)
+However, this should either be used sparingly or not at all since it can have 
 
 @example
     ```
@@ -74,6 +74,8 @@ However, this should either be used sparingly or not at all since it can have [n
 
 	details ::details-content {
 		@starting-style {
+			opacity: 0;
+			transform: translateY(-10px);
 		}
 
 		transition-behavior: allow-discrete;
