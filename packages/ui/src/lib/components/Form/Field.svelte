@@ -31,18 +31,25 @@
 		form: TForm;
 		label: string;
 		name: TName;
-		children: Snippet<[field: FieldType<TForm, TName>]>;
+		children: Snippet<[field: FieldType<TForm, TName>, id: string]>;
 	};
 
+	let id = $props.id();
+
 	let { form, label, name, children }: Props<TForm, TName> = $props();
+
+	const field = $derived({
+		...(form.fields[name] as FieldType<TForm, TName>),
+		id
+	});
 </script>
 
 <div class="form-group">
-	<label for={name}>
+	<label for={id}>
 		{label}
 	</label>
 
-	{@render children(form.fields[name] as FieldType<TForm, TName>)}
+	{@render children(form.fields[name] as FieldType<TForm, TName>, id)}
 </div>
 
 <style lang="scss">
