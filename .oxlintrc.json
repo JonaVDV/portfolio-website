@@ -1,0 +1,23 @@
+{
+	"$schema": "./node_modules/oxlint/configuration_schema.json",
+	"plugins": ["typescript", "vitest", "jsdoc", "import", "promise"],
+	"categories": {
+		"correctness": "error",
+		"suspicious": "warn"
+	},
+	"rules": {
+		"no-undef": "off",
+		"typescript/no-unused-vars": [
+			"error",
+			{ "argsIgnorePattern": "^_", "varsIgnorePattern": "^_" }
+		],
+		"typescript/consistent-type-imports": [
+			"warn",
+			{ "prefer": "type-imports", "fixStyle": "separate-type-imports" }
+		],
+		"typescript/no-misused-promises": ["error", { "checksVoidReturn": { "attributes": false } }],
+		"typescript/no-unnecessary-condition": ["error", { "allowConstantLoopConditions": true }],
+		"typescript/no-non-null-assertion": "error"
+	},
+	"ignorePatterns": ["sites/cms/vendor/", "sites/cms/public/assets/js/", "storybook-static/"]
+}

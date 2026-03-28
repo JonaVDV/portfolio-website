@@ -1,0 +1,20 @@
+{
+	"$schema": "./node_modules/oxfmt/configuration_schema.json",
+	"useTabs": true,
+	"singleQuote": true,
+	"trailingComma": "none",
+	"printWidth": 100,
+	"sortPackageJson": false,
+	"ignorePatterns": [
+		"**/*.svelte",
+		"pnpm-lock.yaml",
+		"package-lock.json",
+		"yarn.lock",
+		"bun.lock",
+		"bun.lockb",
+		"packages/ui/static/",
+		"sites/frontend/static/",
+		"sites/cms/vendor/",
+		"sites/cms/public/assets/"
+	]
+}
