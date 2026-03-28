@@ -1,2 +1,2 @@
 // reexport icons from lucide
-export * from '~/icons/lucide';
+export { default as lucide } from 'virtual:icons/lucide';

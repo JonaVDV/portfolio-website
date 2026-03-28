@@ -1,5 +1,0 @@
-{
-  "extends": "@jvdv-portfolio/typescript-config/base.json",
-  "include": ["."],
-  "exclude": ["node_modules"]
-}

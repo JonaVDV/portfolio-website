@@ -1,74 +1,73 @@
 {
 	"name": "ui",
 	"version": "0.0.1",
-	"scripts": {
-		"dev": "vite dev",
-		"build": "vite build && npm run prepack",
-		"preview": "vite preview",
-		"prepare": "svelte-kit sync || echo ''",
-		"prepack": "svelte-kit sync && svelte-package && publint",
-		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
-		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
-		"format": "prettier --write .",
-		"lint": "prettier --check . && eslint .",
-		"storybook": "storybook dev -p 6006",
-		"build-storybook": "storybook build"
-	},
+	"keywords": [
+		"svelte"
+	],
 	"files": [
 		"dist",
 		"!dist/**/*.test.*",
 		"!dist/**/*.spec.*"
 	],
+	"type": "module",
 	"sideEffects": [
 		"**/*.css"
 	],
-	"svelte": "./dist/index.js",
 	"types": "./dist/index.d.ts",
-	"type": "module",
+	"svelte": "./dist/index.js",
 	"exports": {
 		".": {
 			"types": "./dist/index.d.ts",
 			"svelte": "./dist/index.js"
 		}
 	},
-	"peerDependencies": {
-		"@sveltejs/kit": "^2.50.1",
-		"svelte": "^5.0.0"
+	"scripts": {
+		"dev": "vp dev",
+		"build": "vp build && npm run prepack",
+		"preview": "vp preview",
+		"prepare": "svelte-kit sync || echo ''",
+		"prepack": "svelte-kit sync && svelte-package && publint",
+		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
+		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
+		"format": "vp fmt --write && prettier --write 'src/**/*.svelte'",
+		"lint": "vp lint && eslint .",
+		"storybook": "storybook dev -p 6006",
+		"build-storybook": "storybook build"
 	},
 	"devDependencies": {
 		"@eslint/compat": "^1.4.0",
-		"@eslint/js": "^9.38.0",
-		"@jvdv-portfolio/typescript-config": "workspace:*",
 		"@oddbird/css-anchor-positioning": "^0.8.0",
-		"@storybook/addon-a11y": "^10.2.10",
-		"@storybook/addon-docs": "^10.2.10",
-		"@storybook/addon-svelte-csf": "^5.0.11",
-		"@storybook/addon-vitest": "^10.2.10",
-		"@storybook/sveltekit": "^10.2.10",
+		"@storybook/addon-a11y": "^10.3.3",
+		"@storybook/addon-docs": "^10.3.3",
+		"@storybook/addon-svelte-csf": "^5.1.2",
+		"@storybook/addon-vitest": "^10.3.3",
+		"@storybook/sveltekit": "^10.3.3",
 		"@sveltejs/adapter-auto": "^7.0.0",
+		"@sveltejs/kit": "^2.55.0",
 		"@sveltejs/package": "^2.5.7",
-		"@sveltejs/vite-plugin-svelte": "^6.2.1",
+		"@sveltejs/vite-plugin-svelte": "^7.0.0",
 		"@types/node": "^24",
 		"browserslist": "^4.28.1",
 		"eslint": "^9.38.0",
-		"eslint-config-prettier": "^10.1.8",
+		"eslint-plugin-oxlint": "^1.57.0",
 		"eslint-plugin-storybook": "^10.2.10",
 		"eslint-plugin-svelte": "^3.12.4",
-		"globals": "^16.4.0",
 		"lightningcss": "^1.31.1",
-		"prettier": "^3.6.2",
-		"prettier-plugin-svelte": "^3.4.1",
+		"prettier": "^3.8.1",
+		"prettier-plugin-svelte": "^3.5.1",
 		"publint": "^0.3.14",
 		"sass-embedded": "^1.93.3",
-		"storybook": "^10.2.10",
+		"storybook": "^10.3.3",
 		"svelte": "^5.49.1",
 		"svelte-check": "^4.3.6",
 		"typescript": "^5.9.3",
-		"typescript-eslint": "^8.46.1",
-		"vite": "^7.3.1",
+		"typescript-eslint": "^8.46.3",
+		"vite": "catalog:",
+		"vite-plus": "catalog:",
 		"zod": "^4.1.12"
 	},
-	"keywords": [
-		"svelte"
-	]
+	"peerDependencies": {
+		"@sveltejs/kit": "^2.50.1",
+		"svelte": "^5.0.0"
+	}
 }

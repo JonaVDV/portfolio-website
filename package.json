@@ -1,26 +1,28 @@
 {
-  "private": true,
-  "name": "jvdv-portfolio",
-  "version": "1.0.0",
-  "description": "The monorepo for my portfolio website",
-  "scripts": {
-    "prepare": "husky",
-    "packages:dev": "pnpm --parallel dev",
-    "format": "pnpm --parallel format",
-    "format:fix": "pnpm --parallel format --write",
-    "lint": "pnpm --parallel lint",
-    "lint:fix": "pnpm --parallel lint:fix",
-    "lint:ws": "pnpm dlx sherriff@latest",
-    "ui:storybook": "pnpm -F ui storybook"
-  },
-  "engines": {
-    "pnpm": ">=10.20.0"
-  },
-  "packageManager": "pnpm@10.20.0",
-  "keywords": [],
-  "author": "Jona van der Vlist",
-  "license": "MIT",
-  "devDependencies": {
-    "husky": "^9.1.7"
-  }
+	"name": "jvdv-portfolio",
+	"version": "1.0.0",
+	"private": true,
+	"type": "module",
+	"description": "The monorepo for my portfolio website",
+	"keywords": [],
+	"license": "MIT",
+	"author": "Jona van der Vlist",
+	"scripts": {
+		"prepare": "vp config",
+		"packages:dev": "pnpm --parallel dev",
+		"format": "pnpm --parallel format",
+		"format:fix": "pnpm --parallel format --write",
+		"lint": "pnpm --parallel lint",
+		"lint:fix": "pnpm --parallel lint:fix",
+		"lint:ws": "pnpm dlx sherriff@latest",
+		"ui:storybook": "pnpm -F ui storybook"
+	},
+	"devDependencies": {
+		"oxlint": "^1.57.0",
+		"vite-plus": "catalog:"
+	},
+	"engines": {
+		"pnpm": ">=10.20.0"
+	},
+	"packageManager": "pnpm@10.20.0"
 }
