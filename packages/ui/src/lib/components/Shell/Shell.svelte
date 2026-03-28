@@ -33,29 +33,29 @@
 		.full-width > * {
 			grid-column: content;
 		}
-	}
-	.primary-layout,
-	.full-width {
-		--minimum-content-padding: 2rem;
+		.primary-layout,
+		.full-width {
+			--minimum-content-padding: 2rem;
 
-		/** TRACK WIDTHS **/
-		--full-max-width: 1fr;
-		--content-max-width: 65ch;
+			/** TRACK WIDTHS **/
+			--full-max-width: 1fr;
+			--content-max-width: 65ch;
 
-		/** TRACK SIZES **/
-		--full: minmax(var(--minimum-content-padding), 1fr);
-		--content: min(var(--content-max-width), 100% - var(--minimum-content-padding) * 2);
+			/** TRACK SIZES **/
+			--full: minmax(var(--minimum-content-padding), 1fr);
+			--content: min(var(--content-max-width), 100% - var(--minimum-content-padding) * 2);
 
-		display: grid;
-		/* prettier-ignore */
-		grid-template-columns: 
-        [full-width-start]
-        var(--full)
-            [content-start]
-            var(--content)
-            [content-end]
-        var(--full)
-        [full-width-end];
+			display: grid;
+			/* prettier-ignore */
+			grid-template-columns: 
+			[full-width-start]
+			var(--full)
+				[content-start]
+				var(--content)
+				[content-end]
+			var(--full)
+			[full-width-end];
+		}
 	}
 	.with-sidebar {
 		/* prettier-ignore */

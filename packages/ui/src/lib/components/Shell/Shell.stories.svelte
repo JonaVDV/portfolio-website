@@ -1,6 +1,7 @@
 <script lang="ts" module>
 	import { defineMeta } from '@storybook/addon-svelte-csf';
 	import Shell from './Shell.svelte';
+	import Sidebar from '$components/Sidebar/Sidebar.svelte';
 
 	const { Story } = defineMeta({
 		title: 'Components/Shell',
@@ -59,15 +60,13 @@
 	{#snippet template()}
 		<Shell modules={['content', 'sidebar']}>
 			{#snippet sidebar()}
-				<aside>
-					<nav>
-						<ul>
-							<li><a href="#">Home</a></li>
-							<li><a href="#">About</a></li>
-							<li><a href="#">Contact</a></li>
-						</ul>
-					</nav>
-				</aside>
+				<Sidebar>
+					<ul>
+						<li><a href="#">Home</a></li>
+						<li><a href="#">About</a></li>
+						<li><a href="#">Contact</a></li>
+					</ul>
+				</Sidebar>
 			{/snippet}
 			<p>This is the content of the shell.</p>
 		</Shell>
