@@ -1,19 +1,44 @@
 <script lang="ts">
+	import { setSidebarState } from '$components/Sidebar/context';
 	import type { Snippet } from 'svelte';
 
 	interface Props {
 		modules?: ('content' | 'sidebar' | 'header')[];
-		header?: Snippet;
+		header?: Snippet<
+			[
+				{
+					toggleSidebar: () => void;
+				}
+			]
+		>;
 		sidebar?: Snippet;
 		children?: Snippet;
 	}
 
 	let { modules = ['content'], sidebar, children, header }: Props = $props();
+
+	const sidebarState = $state({
+		collapsed: false,
+		toggle() {
+			this.collapsed = !this.collapsed;
+		},
+		setCollapsed(value: boolean) {
+			this.collapsed = value;
+		}
+	});
+
+	function toggleSidebar() {
+		sidebarState.collapsed = !sidebarState.collapsed;
+	}
+
+	setSidebarState(sidebarState);
 </script>
 
 <div class={['primary-layout', modules.includes('sidebar') ? 'with-sidebar' : '']}>
 	{#if modules.includes('header')}
-		{@render header?.()}
+		{@render header?.({
+			toggleSidebar
+		})}
 	{/if}
 	{#if !modules.includes('sidebar') && !modules.includes('content')}
 		{@render children?.()}
@@ -57,10 +82,15 @@
 			[full-width-end];
 		}
 	}
+
+	.primary-layout {
+		min-block-size: 100svh;
+		grid-template-rows: min-content 1fr;
+	}
 	.with-sidebar {
 		/* prettier-ignore */
 		grid-template-columns:
-        [sidebar] auto 
+        [sidebar] minmax(var(--sidebar-icon-width, 0), auto) 
         [full-width-start] 
             var(--full) 
                 [content-start] 
@@ -72,6 +102,7 @@
 
 	.with-sidebar > :global(aside) {
 		grid-column: sidebar;
+		grid-row: 1 / -1;
 	}
 
 	/** CLASSES **/
