@@ -1,7 +1,8 @@
 <script lang="ts" module>
 	import { defineMeta } from '@storybook/addon-svelte-csf';
 	import Shell from './Shell.svelte';
-	import Sidebar from '$components/Sidebar/Sidebar.svelte';
+	import { Sidebar } from '$components/Sidebar';
+	import Header from '$components/Header/header.svelte';
 
 	const { Story } = defineMeta({
 		title: 'Components/Shell',
@@ -44,9 +45,9 @@
 				<header class="header | full-width">
 					<nav>
 						<ul class="flex-group">
-							<li><a href="#">Home</a></li>
-							<li><a href="#">About</a></li>
-							<li><a href="#">Contact</a></li>
+							<li><a href="https://example.com/home">Home</a></li>
+							<li><a href="https://example.com/about">About</a></li>
+							<li><a href="https://example.com/contact">Contact</a></li>
 						</ul>
 					</nav>
 				</header>
@@ -60,13 +61,158 @@
 	{#snippet template()}
 		<Shell modules={['content', 'sidebar']}>
 			{#snippet sidebar()}
-				<Sidebar>
+				<Sidebar.Root>
 					<ul>
-						<li><a href="#">Home</a></li>
-						<li><a href="#">About</a></li>
-						<li><a href="#">Contact</a></li>
+						<li><a href="https://example.com/home">Home</a></li>
+						<li><a href="https://example.com/about">About</a></li>
+						<li><a href="https://example.com/contact">Contact</a></li>
 					</ul>
-				</Sidebar>
+				</Sidebar.Root>
+			{/snippet}
+			<p>This is the content of the shell.</p>
+		</Shell>
+	{/snippet}
+</Story>
+
+<Story name="With header and Sidebar">
+	{#snippet template()}
+		<Shell modules={['header', 'content', 'sidebar']}>
+			{#snippet header({ toggleSidebar })}
+				<Header sticky layout="full-width">
+					<div class="flex-group space-between">
+						<button onclick={toggleSidebar}> sb </button>
+						<strong>Portfolio</strong>
+					</div>
+				</Header>
+			{/snippet}
+			{#snippet sidebar()}
+				<Sidebar.Root>
+					{#snippet header()}
+						<div class="sidebar-header | flex-group space-between">
+							<strong>Menu</strong>
+						</div>
+					{/snippet}
+					<Sidebar.Group collapsible={false}>
+						{#snippet title()}
+							<div class="flex-group nowrap">
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									width="24"
+									height="24"
+									viewBox="0 0 24 24"
+									fill="none"
+									stroke="currentColor"
+									stroke-width="2"
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									class="lucide-icon lucide lucide-square-terminal"
+									><path d="m7 11 2-2-2-2"></path><path d="M11 13h4"></path><rect
+										width="18"
+										height="18"
+										x="3"
+										y="3"
+										rx="2"
+										ry="2"
+									></rect></svg
+								>
+								Playground
+							</div>
+						{/snippet}
+						<Sidebar.Item>History</Sidebar.Item>
+						<Sidebar.Item>Starred</Sidebar.Item>
+						<Sidebar.Item>Settings</Sidebar.Item>
+					</Sidebar.Group>
+					<Sidebar.Group>
+						{#snippet title()}
+							<div class="flex-group nowrap">
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									width="24"
+									height="24"
+									viewBox="0 0 24 24"
+									fill="none"
+									stroke="currentColor"
+									stroke-width="2"
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									class="lucide-icon lucide lucide-square-terminal"
+									><path d="m7 11 2-2-2-2"></path><path d="M11 13h4"></path><rect
+										width="18"
+										height="18"
+										x="3"
+										y="3"
+										rx="2"
+										ry="2"
+									></rect></svg
+								>
+								Playground
+							</div>
+						{/snippet}
+						<Sidebar.Item>History</Sidebar.Item>
+						<Sidebar.Item>Starred</Sidebar.Item>
+						<Sidebar.Item>Settings</Sidebar.Item>
+					</Sidebar.Group>
+					<Sidebar.Group>
+						{#snippet title()}
+							<div class="flex-group nowrap">
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									width="24"
+									height="24"
+									viewBox="0 0 24 24"
+									fill="none"
+									stroke="currentColor"
+									stroke-width="2"
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									class="lucide-icon lucide lucide-square-terminal"
+									><path d="m7 11 2-2-2-2"></path><path d="M11 13h4"></path><rect
+										width="18"
+										height="18"
+										x="3"
+										y="3"
+										rx="2"
+										ry="2"
+									></rect></svg
+								>
+								Playground
+							</div>
+						{/snippet}
+						<Sidebar.Item>History</Sidebar.Item>
+						<Sidebar.Item>Starred</Sidebar.Item>
+						<Sidebar.Item>Settings</Sidebar.Item>
+					</Sidebar.Group>
+					<Sidebar.Group>
+						{#snippet title()}
+							<div class="flex-group nowrap">
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									width="24"
+									height="24"
+									viewBox="0 0 24 24"
+									fill="none"
+									stroke="currentColor"
+									stroke-width="2"
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									class="lucide-icon lucide lucide-square-terminal"
+									><path d="m7 11 2-2-2-2"></path><path d="M11 13h4"></path><rect
+										width="18"
+										height="18"
+										x="3"
+										y="3"
+										rx="2"
+										ry="2"
+									></rect></svg
+								>
+								Playground
+							</div>
+						{/snippet}
+						<Sidebar.Item>History</Sidebar.Item>Sidebar.Item>
+						<Sidebar.Item>Starred</Sidebar.Item>
+						<Sidebar.Item>Settings</Sidebar.Item>
+					</Sidebar.Group>
+				</Sidebar.Root>
 			{/snippet}
 			<p>This is the content of the shell.</p>
 		</Shell>
