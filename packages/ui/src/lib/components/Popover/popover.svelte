@@ -64,13 +64,12 @@
 		'span-self-end': 'self-end',
 		'span-all': 'center'
 	} as const;
-	export type PopoverPosition =
-		`${keyof typeof blockTokenMap}${'' | ` ${keyof typeof inlineTokenMap}`}`;
+	export type PopoverPosition = 'top' | 'bottom' | 'left' | 'right' | 'center' | (string & {});
 </script>
 
 <script lang="ts">
 	import type { Snippet } from 'svelte';
-	import type { HTMLButtonAttributes } from 'svelte/elements';
+	import type { HTMLAttributes, HTMLButtonAttributes } from 'svelte/elements';
 
 	type ParsedPosition = {
 		block?: string;
@@ -136,9 +135,8 @@
 		return parsed;
 	}
 
-	interface Props {
+	interface Props extends HTMLAttributes<HTMLDivElement> {
 		trigger: Snippet<[{ props: HTMLButtonAttributes }]>;
-		children: Snippet;
 		/**
 		 * A reference to the popover content element. Use `showPopover()` / `hidePopover()` to
 		 * programmatically control visibility.
@@ -156,12 +154,6 @@
 		 * adjusted using the `--tether-size` custom property on the popover content element.
 		 */
 		hasArrow?: boolean;
-
-		openOnHover?: boolean;
-		/**
-		 * Delay in milliseconds before showing/hiding the popover when `openOnHover` is enabled.
-		 */
-		showHideDelay?: number;
 	}
 
 	let {
@@ -170,33 +162,16 @@
 		ref = $bindable(null),
 		position = 'top',
 		hasArrow = true,
-		openOnHover = false,
-		showHideDelay = 100
+		...rest
 	}: Props = $props();
 
 	const id = $props.id();
 	const positionState = $derived(parsePosition(position));
-
-	async function showPopover() {
-		await new Promise((resolve) =>
-			setTimeout((resolve) => {
-				if (ref) {
-					ref.showPopover();
-				}
-				resolve(null);
-			}, showHideDelay)
-		);
-	}
 </script>
 
 <div class="popover-wrapper">
 	<!-- anchor-name is set inline so the polyfill can reliably read it -->
-	<div
-		class="popover-trigger"
-		style="anchor-name: --component-popover"
-		onfocus={showPopover}
-		onblur={openOnHover ? showPopover : undefined}
-	>
+	<div class="popover-trigger" style="anchor-name: --component-popover">
 		{@render trigger?.({ props: { popovertarget: `popover-${id}` } as HTMLButtonAttributes })}
 	</div>
 
@@ -213,8 +188,9 @@
 		style:--popover-position={position}
 		data-has-arrow={hasArrow}
 		style="position-anchor: --component-popover{hasArrow ? '' : '; --tether-size: 0px'}"
+		{...rest}
 	>
-		{@render children()}
+		{@render children?.()}
 	</div>
 </div>
 
@@ -257,16 +233,10 @@
 		position-area: var(--popover-position);
 		position-try: --popover-top, --popover-bottom, --popover-left, --popover-right;
 		/* Also include the renamed property for Chrome 125-128 compatibility */
-		position-try-fallbacks:
-			flip-block flip-inline --popover-top,
-			--popover-bottom,
-			--popover-left,
-			--popover-right;
+		position-try-fallbacks: --popover-top, --popover-bottom, --popover-left, --popover-right;
 
 		overflow: visible;
 		clip-path: inset(var(--tether-offset)) margin-box;
-		max-width: 300px;
-
 		background: var(--popover-bg, #000);
 		color: var(--popover-color, #fff);
 		border: var(--popover-border, none);
@@ -284,7 +254,11 @@
 			position: absolute;
 			z-index: -1;
 			/* vertical tether (used when popover is above/below) */
-			inset: calc(-1 * var(--tether-size)) calc(50% - var(--tether-size));
+			left: max(
+				var(--tether-size),
+				min(calc(50% - var(--tether-size)), anchor-size(width) / 2 - var(--tether-size))
+			);
+			inset-block: calc(-1 * var(--tether-size));
 			background: inherit;
 			clip-path: polygon(
 				0 var(--tether-size),
