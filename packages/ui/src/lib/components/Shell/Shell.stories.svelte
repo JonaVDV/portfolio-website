@@ -208,7 +208,7 @@
 								Playground
 							</div>
 						{/snippet}
-						<Sidebar.Item>History</Sidebar.Item>Sidebar.Item>
+						<Sidebar.Item>History</Sidebar.Item>
 						<Sidebar.Item>Starred</Sidebar.Item>
 						<Sidebar.Item>Settings</Sidebar.Item>
 					</Sidebar.Group>

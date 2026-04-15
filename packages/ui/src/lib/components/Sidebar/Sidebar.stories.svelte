@@ -7,15 +7,16 @@
 	import DropdownMenu from '$components/DropdownMenu/dropdown-menu.svelte';
 	import Separator from '$components/separator/Separator.svelte';
 	import Button from '$components/Button/Button.svelte';
+	import { Root } from './exports';
 	const { Story } = defineMeta({
 		title: 'Components/Sidebar',
-		component: Sidebar.Root,
+		component: Root,
 		tags: ['autodocs']
 	});
 </script>
 
 <Story name="Default Sidebar">
-	<Sidebar>
+	<Sidebar.Root>
 		{#snippet header()}
 			<div class="flex-group space-between nowrap">
 				<div>
@@ -57,12 +58,12 @@
 				</div>
 			</div>
 		{/snippet}
-	</Sidebar>
+	</Sidebar.Root>
 </Story>
 
 <Story name="Composable Sidebar">
 	{#snippet template()}
-		<Sidebar>
+		<Sidebar.Root>
 			<section class="flex-group">
 				<div>
 					<strong>Workspace</strong>
@@ -85,6 +86,6 @@
 			<section class="flex-group">
 				<SidebarItem href="https://example.com/logout">Sign out</SidebarItem>
 			</section>
-		</Sidebar>
+		</Sidebar.Root>
 	{/snippet}
 </Story>
