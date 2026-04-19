@@ -171,7 +171,7 @@
 
 <div class="popover-wrapper">
 	<!-- anchor-name is set inline so the polyfill can reliably read it -->
-	<div class="popover-trigger" style="anchor-name: --component-popover">
+	<div class="popover-trigger">
 		{@render trigger?.({ props: { popovertarget: `popover-${id}` } as HTMLButtonAttributes })}
 	</div>
 
@@ -179,7 +179,7 @@
 	<div
 		class="popover-content"
 		id="popover-{id}"
-		popover
+		popover="auto"
 		bind:this={ref}
 		data-position={position}
 		data-block-position={positionState.block}
@@ -213,8 +213,8 @@
 	}
 
 	.popover-trigger {
-		width: fit-content;
-		place-self: center;
+		anchor-name: --component-popover;
+		width: var(--popover-trigger-width);
 	}
 
 	.popover-content {
@@ -254,11 +254,7 @@
 			position: absolute;
 			z-index: -1;
 			/* vertical tether (used when popover is above/below) */
-			left: max(
-				var(--tether-size),
-				min(calc(50% - var(--tether-size)), anchor-size(width) / 2 - var(--tether-size))
-			);
-			inset-block: calc(-1 * var(--tether-size));
+			inset: calc(-1 * var(--tether-size)) calc(50% - var(--tether-size));
 			background: inherit;
 			clip-path: polygon(
 				0 var(--tether-size),

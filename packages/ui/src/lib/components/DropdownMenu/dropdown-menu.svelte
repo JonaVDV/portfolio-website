@@ -33,7 +33,8 @@
 
 <style>
 	.dropdown-menu-content { 
-		min-width: min(var(--dropdown-menu-min-width, max-content), 100%);
+		/* min-width: min(var(--dropdown-menu-min-width, max-content), 100%); */
+		width: fit-content;
 	}
 
 	.dropdown-menu-content :global(:where(svg)) {

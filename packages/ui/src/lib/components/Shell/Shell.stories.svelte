@@ -3,6 +3,19 @@
 	import Shell from './Shell.svelte';
 	import { Sidebar } from '$components/Sidebar';
 	import Header from '$components/Header/header.svelte';
+	import DropdownMenu from '$components/DropdownMenu/dropdown-menu.svelte';
+	import UpDown from '~icons/lucide/chevrons-up-down';
+	import Gallery from '~icons/lucide/gallery-vertical-end';
+	import Terminal from '~icons/lucide/square-terminal';
+	import Models from '~icons/lucide/bot';
+	import Settings from '~icons/lucide/settings-2';
+	import Documentation from '~icons/lucide/book-open';
+	import DropdownGroup from '$components/DropdownMenu/dropdown-group.svelte';
+	import DropdownItem from '$components/DropdownMenu/dropdown-item.svelte';
+	import Kbd, { cmd } from '$components/Kbd/Kbd.svelte';
+	import Separator from '$components/separator/Separator.svelte';
+	import CMD from '~icons/lucide/command';
+	import Acme from '~icons/lucide/audio-waveform';
 
 	const { Story } = defineMeta({
 		title: 'Components/Shell',
@@ -79,7 +92,7 @@
 		<Shell modules={['header', 'content', 'sidebar']}>
 			{#snippet header({ toggleSidebar })}
 				<Header sticky layout="full-width">
-					<div class="flex-group space-between">
+					<div class="flex-group space-between | full-content">
 						<button onclick={toggleSidebar}> sb </button>
 						<strong>Portfolio</strong>
 					</div>
@@ -88,33 +101,65 @@
 			{#snippet sidebar()}
 				<Sidebar.Root>
 					{#snippet header()}
-						<div class="sidebar-header | flex-group space-between">
-							<strong>Menu</strong>
-						</div>
+						<Sidebar.Header>
+							<DropdownMenu
+								content="This is the content of the dropdown menu. It can be a string or a Svelte component."
+								position="right span-all"
+								--popover-padding="8px"
+								--icon-size="1em"
+							>
+								{#snippet trigger({ props })}
+									<Sidebar.Item as="button" {...props} class="push-last nowrap">
+										<div
+											style="background-color: blue; color: white; padding: 0.25rem; aspect-ratio: 1/1; display: grid; place-items: center; border-radius: 0.375rem; width: 1.5rem; flex-shrink: 0;"
+										>
+											<Gallery width="1.5rem" height="1.5rem" />
+										</div>
+										<div style="display: grid;">
+											<span> Acme Inc </span>
+											<span> enterprise </span>
+										</div>
+										<UpDown />
+									</Sidebar.Item>
+								{/snippet}
+								<DropdownGroup label="Teams">
+									<DropdownItem>
+										{#snippet before()}
+											<Gallery />
+										{/snippet}
+										Acme Inc
+										{#snippet keybind()}
+											<Kbd --kbd-background="transparent">{cmd} 1</Kbd>
+										{/snippet}
+									</DropdownItem>
+									<DropdownItem>
+										{#snippet before()}
+											<Acme />
+										{/snippet}
+										Acme corp.
+										{#snippet keybind()}
+											<Kbd --kbd-background="transparent">{cmd} 2</Kbd>
+										{/snippet}
+									</DropdownItem>
+									<DropdownItem>
+										{#snippet before()}
+											<CMD />
+										{/snippet}
+										Evil Corp.
+										{#snippet keybind()}
+											<Kbd --kbd-background="transparent">{cmd} 3</Kbd>
+										{/snippet}
+									</DropdownItem>
+									<Separator></Separator>
+									<DropdownItem>Add item</DropdownItem>
+								</DropdownGroup>
+							</DropdownMenu>
+						</Sidebar.Header>
 					{/snippet}
-					<Sidebar.Group collapsible={false}>
+					<Sidebar.Group tooltipContent="Playground">
 						{#snippet title()}
 							<div class="flex-group nowrap">
-								<svg
-									xmlns="http://www.w3.org/2000/svg"
-									width="24"
-									height="24"
-									viewBox="0 0 24 24"
-									fill="none"
-									stroke="currentColor"
-									stroke-width="2"
-									stroke-linecap="round"
-									stroke-linejoin="round"
-									class="lucide-icon lucide lucide-square-terminal"
-									><path d="m7 11 2-2-2-2"></path><path d="M11 13h4"></path><rect
-										width="18"
-										height="18"
-										x="3"
-										y="3"
-										rx="2"
-										ry="2"
-									></rect></svg
-								>
+								<Terminal />
 								Playground
 							</div>
 						{/snippet}
@@ -122,96 +167,49 @@
 						<Sidebar.Item>Starred</Sidebar.Item>
 						<Sidebar.Item>Settings</Sidebar.Item>
 					</Sidebar.Group>
-					<Sidebar.Group>
+					<Sidebar.Group tooltipContent="Models">
 						{#snippet title()}
 							<div class="flex-group nowrap">
-								<svg
-									xmlns="http://www.w3.org/2000/svg"
-									width="24"
-									height="24"
-									viewBox="0 0 24 24"
-									fill="none"
-									stroke="currentColor"
-									stroke-width="2"
-									stroke-linecap="round"
-									stroke-linejoin="round"
-									class="lucide-icon lucide lucide-square-terminal"
-									><path d="m7 11 2-2-2-2"></path><path d="M11 13h4"></path><rect
-										width="18"
-										height="18"
-										x="3"
-										y="3"
-										rx="2"
-										ry="2"
-									></rect></svg
-								>
-								Playground
+								<Models />
+								Models
 							</div>
 						{/snippet}
-						<Sidebar.Item>History</Sidebar.Item>
-						<Sidebar.Item>Starred</Sidebar.Item>
-						<Sidebar.Item>Settings</Sidebar.Item>
+						<Sidebar.Item>Genisis</Sidebar.Item>
+						<Sidebar.Item>Explorer</Sidebar.Item>
+						<Sidebar.Item>Quantum</Sidebar.Item>
 					</Sidebar.Group>
-					<Sidebar.Group>
+					<Sidebar.Group tooltipContent="Documentation">
 						{#snippet title()}
 							<div class="flex-group nowrap">
-								<svg
-									xmlns="http://www.w3.org/2000/svg"
-									width="24"
-									height="24"
-									viewBox="0 0 24 24"
-									fill="none"
-									stroke="currentColor"
-									stroke-width="2"
-									stroke-linecap="round"
-									stroke-linejoin="round"
-									class="lucide-icon lucide lucide-square-terminal"
-									><path d="m7 11 2-2-2-2"></path><path d="M11 13h4"></path><rect
-										width="18"
-										height="18"
-										x="3"
-										y="3"
-										rx="2"
-										ry="2"
-									></rect></svg
-								>
-								Playground
+								<Documentation />
+								Documentation
 							</div>
 						{/snippet}
-						<Sidebar.Item>History</Sidebar.Item>
-						<Sidebar.Item>Starred</Sidebar.Item>
-						<Sidebar.Item>Settings</Sidebar.Item>
+						<Sidebar.Item>Introduction</Sidebar.Item>
+						<Sidebar.Item>Getting Started</Sidebar.Item>
+						<Sidebar.Item>Tutorials</Sidebar.Item>
+						<Sidebar.Item>Changelog</Sidebar.Item>
 					</Sidebar.Group>
-					<Sidebar.Group>
+					<Sidebar.Group tooltipContent="Settings">
 						{#snippet title()}
 							<div class="flex-group nowrap">
-								<svg
-									xmlns="http://www.w3.org/2000/svg"
-									width="24"
-									height="24"
-									viewBox="0 0 24 24"
-									fill="none"
-									stroke="currentColor"
-									stroke-width="2"
-									stroke-linecap="round"
-									stroke-linejoin="round"
-									class="lucide-icon lucide lucide-square-terminal"
-									><path d="m7 11 2-2-2-2"></path><path d="M11 13h4"></path><rect
-										width="18"
-										height="18"
-										x="3"
-										y="3"
-										rx="2"
-										ry="2"
-									></rect></svg
-								>
-								Playground
+								<Settings />
+								Settings
 							</div>
 						{/snippet}
-						<Sidebar.Item>History</Sidebar.Item>
-						<Sidebar.Item>Starred</Sidebar.Item>
-						<Sidebar.Item>Settings</Sidebar.Item>
+						<Sidebar.Item>General</Sidebar.Item>
+						<Sidebar.Item>Team</Sidebar.Item>
+						<Sidebar.Item>Billing</Sidebar.Item>
+						<Sidebar.Item>Limits</Sidebar.Item>
 					</Sidebar.Group>
+					{#snippet footer()}
+						<Sidebar.Footer>
+							<div class="flex-group nowrap">
+								<Settings />
+								Account
+							</div>
+						</Sidebar.Footer>
+					{/snippet}
 				</Sidebar.Root>
 			{/snippet}
 			<p>This is the content of the shell.</p>
