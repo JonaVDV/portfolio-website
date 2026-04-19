@@ -3,12 +3,13 @@
 
 	interface Props {
 		children: Snippet;
+		sticky?: boolean;
 	}
 
-	let { children }: Props = $props();
+	let { children, sticky = false }: Props = $props();
 </script>
 
-<section class="sidebar-header">
+<section class="sidebar-header" style:position={sticky ? 'sticky' : 'static'}>
 	{@render children()}
 </section>
 
@@ -16,9 +17,10 @@
 	@use '../../styles/abstracts/' as *;
 
 	.sidebar-header {
-		display: grid;
-		gap: 0.75rem;
-		padding: 1rem;
-		border-block-end: 1px solid var(--sidebar-border, #{$clr-surface-200});
+		top: 0;
+		width: 100%;
+		padding-inline: var(--sidebar-header-padding, 0.75rem);
+		border-block-end: var(--sidebar-header-border-color) var(--sidebar-header-border-width, 1px)
+			solid;
 	}
 </style>

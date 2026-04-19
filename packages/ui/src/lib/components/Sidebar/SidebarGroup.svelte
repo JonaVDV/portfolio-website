@@ -1,6 +1,9 @@
 <script lang="ts">
+	import Tooltip from '$components/Tooltip/Tooltip.svelte';
 	import type { Snippet } from 'svelte';
+	import ChevronRight from '~icons/lucide/chevron-right';
 	import type { HTMLDetailsAttributes } from 'svelte/elements';
+	import { getSidebarState } from './context';
 
 	interface Props extends Omit<HTMLDetailsAttributes, 'children' | 'open' | 'title'> {
 		title: Snippet | string;
@@ -8,6 +11,7 @@
 		children: Snippet;
 		open?: boolean;
 		collapsible?: boolean;
+		tooltipContent?: Snippet | string;
 	}
 
 	let {
@@ -16,18 +20,44 @@
 		children,
 		open = $bindable(false),
 		collapsible = true,
+		tooltipContent,
 		class: className = '',
 		...rest
 	}: Props = $props();
+
+	const sidebar = getSidebarState();
+	const groupTooltipContent = $derived(tooltipContent ?? title);
 </script>
 
-<svelte:element
-	this={collapsible ? 'details' : 'div'}
-	data-collapsible={collapsible}
-	{...rest}
-	class={['sidebar-group', className]}
->
-	<summary class="sidebar-group-summary | flex-group space-between nowrap">
+{#snippet GroupTitle()}
+	{#if sidebar.collapsed && tooltipContent}
+		<Tooltip
+			content={tooltipContent}
+			position="right"
+			hasArrow={true}
+			skipDelayDuration={0}
+			--popover-trigger-width="100%"
+		>
+			{#snippet trigger({ props })}
+				{@const neededProps = {
+					popovertarget: props.popovertarget,
+					onpointerenter: props.onpointerenter,
+					onpointerleave: props.onpointerleave
+				}}
+				<span class="sidebar-group-title sidebar-group-tooltip-trigger" {...neededProps}>
+					{#if typeof title === 'string'}
+						<span>
+							{title}
+						</span>
+					{:else}
+						<span>
+							{@render title()}
+						</span>
+					{/if}
+				</span>
+			{/snippet}
+		</Tooltip>
+	{:else}
 		<span class="sidebar-group-title">
 			{#if typeof title === 'string'}
 				{title}
@@ -35,22 +65,31 @@
 				{@render title()}
 			{/if}
 		</span>
+	{/if}
+{/snippet}
+
+{#snippet Summary(collapsible: boolean)}
+	<svelte:element
+		this={collapsible ? 'summary' : 'button'}
+		class="sidebar-group-summary | flex-group space-between nowrap"
+	>
+		{@render GroupTitle()}
 		{#if collapsible && icon}
 			{@render icon()}
 		{:else if collapsible}
-			<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-				<path
-					d="M6 9l6 6 6-6"
-					stroke="currentColor"
-					stroke-width="2"
-					fill="none"
-					fill-rule="evenodd"
-					stroke-linecap="round"
-					stroke-linejoin="round"
-				/>
-			</svg>
+			<ChevronRight />
 		{/if}
-	</summary>
+	</svelte:element>
+{/snippet}
+
+<svelte:element
+	this={collapsible ? 'details' : 'div'}
+	data-collapsible={collapsible}
+	data-collapsed={sidebar.collapsed ? 'true' : undefined}
+	{...rest}
+	class={['sidebar-group', className]}
+>
+	{@render Summary(collapsible)}
 
 	<ul role="list" class="sidebar-group-content">
 		{@render children()}
@@ -82,6 +121,18 @@
 	.sidebar-group[data-collapsible='true'] > .sidebar-group-summary {
 		cursor: pointer;
 	}
+
+	.sidebar-group-summary:is(:where(.group)[data-collapsible="icons-only"] *) {
+		width: var(--sidebar-group-icon-size);
+		aspect-ratio: 1/1;
+		overflow: hidden;
+
+	}
+
+	// :global .sidebar-group[data-collapsed='true'] > .sidebar-group-summary {
+	// 	width: var(--sidebar-group-icon-size);
+	// 	aspect-ratio: 1/1;
+	// }
 
 	.sidebar-group-content {
 		display: grid;

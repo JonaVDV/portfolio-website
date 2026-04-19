@@ -1,39 +1,63 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
-	import type { HTMLAnchorAttributes } from 'svelte/elements';
+	import { getSidebarState } from './context';
 
-	interface Props extends Omit<HTMLAnchorAttributes, 'children'> {
+	interface Props {
 		children: Snippet;
+		icon?: Snippet;
 		before?: Snippet;
 		after?: Snippet;
+		action?: Snippet;
 		active?: boolean;
+		as?: 'link' | 'button';
+		[key: string]: unknown;
 	}
 
-	let { children, before, after, active, class: className = '', ...rest }: Props = $props();
+	let {
+		children,
+		icon,
+		before,
+		after,
+		action,
+		active,
+		as = 'link',
+		class: className = '',
+		...rest
+	}: Props = $props();
+
+	const sidebar = getSidebarState();
 </script>
 
-<li>
-	<a
-		{...rest}
-		class={['sidebar-item | flex-group', className]}
-		aria-current={active ? 'page' : undefined}
-		data-active={active ? 'true' : undefined}
-	>
-		{#if before}
-			<span class="sidebar-item-icon" aria-hidden="true">
-				{@render before()}
-			</span>
-		{/if}
-		<span class="sidebar-item-label">
-			{@render children()}
-		</span>
+{#snippet Inner()}
+	{@render children()}
 
-		{#if after}
-			<span class="sidebar-item-icon" aria-hidden="true">
-				{@render after()}
-			</span>
-		{/if}
-	</a>
+	{#if action}
+		{@render action()}
+	{/if}
+{/snippet}
+
+<li style="list-style: none;">
+	{#if as === 'link'}
+		<a
+			{...rest}
+			class={['sidebar-item | flex-group nowrap', className]}
+			aria-current={active ? 'page' : undefined}
+			data-collapsed={sidebar.collapsed ? 'true' : undefined}
+			data-active={active ? 'true' : undefined}
+		>
+			{@render Inner()}
+		</a>
+	{:else if as === 'button'}
+		<button
+			{...rest}
+			class={['sidebar-item | flex-group nowrap', className]}
+			aria-pressed={active ? 'true' : 'false'}
+			data-collapsed={sidebar.collapsed ? 'true' : undefined}
+			data-active={active ? 'true' : undefined}
+		>
+			{@render Inner()}
+		</button>
+	{/if}
 </li>
 
 <style lang="scss">
@@ -43,8 +67,11 @@
 		--sidebar-item-padding: 0.25rem 0.25rem;
 		--sidebar-item-icon-size: 1.25rem;
 
-		inline-size: 100%;
+		width: 100%;
+		overflow: hidden;
 		padding: var(--sidebar-item-padding);
+		appearance: none;
+		border: 0;
 		border-radius: 0.75rem;
 		color: inherit;
 		text-decoration: none;
@@ -60,17 +87,18 @@
 			background-color: var(--sidebar-item-active-background, #{$clr-brand-200});
 			color: var(--sidebar-item-active-color, #{$clr-brand-900});
 		}
+
+		& :global(svg) {
+			flex-shrink: 0;
+		}
 	}
 
-	.sidebar-item-icon {
-		display: grid;
-		place-items: center;
-		inline-size: var(--sidebar-item-icon-size);
-		aspect-ratio: 1/1;
-		flex-shrink: 0;
+	li {
+		overflow: hidden;
 	}
 
-	.sidebar-item-label {
-		min-inline-size: 0;
+	.sidebar-item[data-collapsed='true'] {
+		width: var(--sidebar-icons-only-width, 3rem);
+		height: var(--sidebar-icons-only-width, 3rem);
 	}
 </style>

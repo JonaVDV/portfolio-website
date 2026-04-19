@@ -27,7 +27,7 @@
 	}: Props = $props();
 </script>
 
-<svelte:window on:keydown={handleEscape} />
+<svelte:window onkeydown={handleEscape} />
 
 <aside
 	class="sidebar"
@@ -35,28 +35,20 @@
 	data-collapsible={collapsible}
 	data-collapsed={sidebar.collapsed}
 >
-	{@render header?.()}
 	<div>
+		{@render header?.()}
+	</div>
+	<div class="sidebar-content">
 		{@render children?.()}
 	</div>
-	{@render footer?.()}
+	<div>
+		{@render footer?.()}
+	</div>
 </aside>
 <div class="sidebar-overlay" aria-hidden="true" onclick={() => (sidebar.collapsed = true)}></div>
 
 <style lang="scss">
 	@use '../../styles/abstracts' as *;
-
-	@property --sidebar-icon-width {
-		syntax: '<length>';
-		inherits: false;
-		initial-value: 3rem;
-	}
-
-	@property --sidebar-max-width {
-		syntax: '<length>';
-		inherits: false;
-		initial-value: 16rem;
-	}
 
 	aside[data-collapsible='off-canvas'] {
 		&[data-collapsed='true'] {
@@ -66,22 +58,24 @@
 		}
 	}
 
+	/* Icons-only: Minimize to icon width when collapsed */
 	aside[data-collapsible='icons-only'] {
 		&[data-collapsed='true'] {
-			max-width: var(--sidebar-icon-width, 3rem);
+			width: var(--sidebar-icon-width, 3rem);
 			overflow-x: hidden;
 		}
 	}
 
-	@media (max-width: 820px) {
+	// this should be the same breakpoint as the one used in the Shell component for the mobile sidebar behavior
+	@media (max-width: 48rem) {
 		aside:not([data-collapsible='none']) {
 			position: fixed;
 			inset-block: 0;
 			grid-template-rows: min-content 1fr min-content;
+			min-width: var(--sidebar-max-width);
 
 			&[data-collapsed='true'] {
 				translate: -100% 0;
-				max-width: unset;
 			}
 		}
 
@@ -103,18 +97,27 @@
 		display: block;
 	}
 
+	aside > div {
+		width: inherit;
+	}
+
 	aside {
 		--sidebar-background: #{$clr-surface-100};
 		--sidebar-transition: 0.3s ease-in-out;
 
 		display: grid;
 		background-color: var(--sidebar-background);
-		grid-template-rows: subgrid;
-		transition: translate var(--sidebar-transition);
+		grid-template-rows: min-content 1fr min-content;
+		transition: translate var(--sidebar-transition) max-width var(--sidebar-transition);
 		position: sticky;
+		width: var(--sidebar-active-width);
 		top: 0;
-		overflow-y: auto;
+		overflow: auto;
 		z-index: 2;
+		// we need 100svh here to ensure the sidebar takes up the full height of the viewport, but stays scrollable when the content exceeds the viewport height. This is especially important for mobile devices where the viewport height can change when the address bar shows/hides.
+		scrollbar-gutter: stable;
+		scrollbar-width: thin;
+		height: 100svh;
 		anchor-name: --sidebar;
 	}
 </style>
