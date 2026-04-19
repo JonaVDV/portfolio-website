@@ -20,3 +20,11 @@
 .flex-group.nowrap {
 	flex-wrap: nowrap;
 }
+
+.flex-group.push-first > :first-child {
+	margin-inline-end: auto;
+}
+
+.flex-group.push-last > :last-child {
+	margin-inline-start: auto;
+}
