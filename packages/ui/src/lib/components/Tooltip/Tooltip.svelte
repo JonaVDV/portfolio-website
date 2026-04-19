@@ -84,9 +84,15 @@
 			props: {
 				onpointerenter: openOnHover ? scheduleOpen : undefined,
 				onpointerleave: openOnHover ? scheduleClose : undefined,
+				onfocus: openPopover,
+				onblur: closePopover,
 				...props
 			}
 		})}
 	{/snippet}
-	test
+	{#if typeof content === 'string'}
+		{content}
+	{:else}
+		{@render content()}
+	{/if}
 </Popover>
