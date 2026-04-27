@@ -75,6 +75,7 @@
 	bind:ref
 	onpointerenter={openOnHover ? scheduleOpen : undefined}
 	onpointerleave={openOnHover ? scheduleClose : undefined}
+	role="tooltip"
 	popover="hint"
 	{position}
 	{...rest}
@@ -84,9 +85,9 @@
 			props: {
 				onpointerenter: openOnHover ? scheduleOpen : undefined,
 				onpointerleave: openOnHover ? scheduleClose : undefined,
-				onfocus: openPopover,
-				onblur: closePopover,
-				...props
+				onfocus: scheduleOpen,
+				onblur: scheduleClose,
+				popovertarget: props.popovertarget
 			}
 		})}
 	{/snippet}
