@@ -16,6 +16,11 @@
 	import Separator from '$components/separator/Separator.svelte';
 	import CMD from '~icons/lucide/command';
 	import Acme from '~icons/lucide/audio-waveform';
+	import Travel from '~icons/lucide/map';
+	import CircleChart from '~icons/lucide/pie-chart';
+	import Frame from '~icons/lucide/frame';
+	import Kebab from '~icons/lucide/ellipsis';
+	import Button from '$components/Button/Button.svelte';
 
 	const { Story } = defineMeta({
 		title: 'Components/Shell',
@@ -23,6 +28,19 @@
 		tags: ['autodocs']
 	});
 </script>
+
+{#snippet sidebar_item_action()}
+	<DropdownMenu position="center right" --popover-trigger-width="fit-content" --popover-custom-fallbacks="none">
+		{#snippet trigger({ props })}
+			<Button {...props}>
+				<Kebab />
+			</Button>
+		{/snippet}
+		<DropdownItem>Sub Action 1</DropdownItem>
+		<DropdownItem>Sub Action 2</DropdownItem>
+		<DropdownItem>Sub Action 3</DropdownItem>
+	</DropdownMenu>
+{/snippet}
 
 <Story name="Default">
 	{#snippet template()}
@@ -93,58 +111,51 @@
 			{#snippet header({ toggleSidebar })}
 				<Header sticky layout="full-width">
 					<div class="flex-group space-between | full-content">
-						<button onclick={toggleSidebar}> sb </button>
+						<Button variant="stripped" onclick={toggleSidebar}> sb </Button>
 						<strong>Portfolio</strong>
 					</div>
 				</Header>
 			{/snippet}
 			{#snippet sidebar()}
-				<Sidebar.Root>
+				<Sidebar.Root --sidebar-item-font-size="0.875rem">
 					{#snippet header()}
 						<Sidebar.Header>
 							<DropdownMenu
 								content="This is the content of the dropdown menu. It can be a string or a Svelte component."
-								position="right span-all"
+								position="right top"
+								inheritTriggerWidth
 								--popover-padding="8px"
 								--icon-size="1em"
 							>
 								{#snippet trigger({ props })}
 									<Sidebar.Item as="button" {...props} class="push-last nowrap">
-										<div
-											style="background-color: blue; color: white; padding: 0.25rem; aspect-ratio: 1/1; display: grid; place-items: center; border-radius: 0.375rem; width: 1.5rem; flex-shrink: 0;"
-										>
-											<Gallery width="1.5rem" height="1.5rem" />
+										<div class="company-logo">
+											<Gallery />
 										</div>
 										<div style="display: grid;">
-											<span> Acme Inc </span>
-											<span> enterprise </span>
+											<span class="truncate"> Acme Inc </span>
+											<span class="truncate"> enterprise </span>
 										</div>
 										<UpDown />
 									</Sidebar.Item>
 								{/snippet}
 								<DropdownGroup label="Teams">
 									<DropdownItem>
-										{#snippet before()}
-											<Gallery />
-										{/snippet}
+										<Gallery />
 										Acme Inc
 										{#snippet keybind()}
 											<Kbd --kbd-background="transparent">{cmd} 1</Kbd>
 										{/snippet}
 									</DropdownItem>
 									<DropdownItem>
-										{#snippet before()}
-											<Acme />
-										{/snippet}
+										<Acme />
 										Acme corp.
 										{#snippet keybind()}
 											<Kbd --kbd-background="transparent">{cmd} 2</Kbd>
 										{/snippet}
 									</DropdownItem>
 									<DropdownItem>
-										{#snippet before()}
-											<CMD />
-										{/snippet}
+										<CMD />
 										Evil Corp.
 										{#snippet keybind()}
 											<Kbd --kbd-background="transparent">{cmd} 3</Kbd>
@@ -156,58 +167,71 @@
 							</DropdownMenu>
 						</Sidebar.Header>
 					{/snippet}
-					<Sidebar.Group tooltipContent="Playground">
-						{#snippet title()}
-							<div class="flex-group nowrap">
+					<Sidebar.Section label="Platform">
+						<Sidebar.Group tooltipContent="Playground">
+							{#snippet title()}
 								<Terminal />
 								Playground
-							</div>
-						{/snippet}
-						<Sidebar.Item>History</Sidebar.Item>
-						<Sidebar.Item>Starred</Sidebar.Item>
-						<Sidebar.Item>Settings</Sidebar.Item>
-					</Sidebar.Group>
-					<Sidebar.Group tooltipContent="Models">
-						{#snippet title()}
-							<div class="flex-group nowrap">
+							{/snippet}
+							<Sidebar.Item href="#">History</Sidebar.Item>
+							<Sidebar.Item href="#">Starred</Sidebar.Item>
+							<Sidebar.Item href="#">Settings</Sidebar.Item>
+						</Sidebar.Group>
+						<Sidebar.Group tooltipContent="Models">
+							{#snippet title()}
 								<Models />
 								Models
-							</div>
-						{/snippet}
-						<Sidebar.Item>Genisis</Sidebar.Item>
-						<Sidebar.Item>Explorer</Sidebar.Item>
-						<Sidebar.Item>Quantum</Sidebar.Item>
-					</Sidebar.Group>
-					<Sidebar.Group tooltipContent="Documentation">
-						{#snippet title()}
-							<div class="flex-group nowrap">
+							{/snippet}
+							<Sidebar.Item href="#">Genisis</Sidebar.Item>
+							<Sidebar.Item href="#">Explorer</Sidebar.Item>
+							<Sidebar.Item href="#">Quantum</Sidebar.Item>
+						</Sidebar.Group>
+						<Sidebar.Group tooltipContent="Documentation">
+							{#snippet title()}
 								<Documentation />
 								Documentation
-							</div>
-						{/snippet}
-						<Sidebar.Item>Introduction</Sidebar.Item>
-						<Sidebar.Item>Getting Started</Sidebar.Item>
-						<Sidebar.Item>Tutorials</Sidebar.Item>
-						<Sidebar.Item>Changelog</Sidebar.Item>
-					</Sidebar.Group>
-					<Sidebar.Group tooltipContent="Settings">
-						{#snippet title()}
-							<div class="flex-group nowrap">
+							{/snippet}
+							<Sidebar.Item href="#">Introduction</Sidebar.Item>
+							<Sidebar.Item href="#">Getting Started</Sidebar.Item>
+							<Sidebar.Item href="#">Tutorials</Sidebar.Item>
+							<Sidebar.Item href="#">Changelog</Sidebar.Item>
+						</Sidebar.Group>
+						<Separator --separator-margin=".125rem" />
+						<Sidebar.Group tooltipContent="Settings">
+							{#snippet title()}
 								<Settings />
 								Settings
-							</div>
-						{/snippet}
-						<Sidebar.Item>General</Sidebar.Item>
-						<Sidebar.Item>Team</Sidebar.Item>
-						<Sidebar.Item>Billing</Sidebar.Item>
-						<Sidebar.Item>Limits</Sidebar.Item>
-					</Sidebar.Group>
+							{/snippet}
+							<Sidebar.Item href="#">General</Sidebar.Item>
+							<Sidebar.Item href="#">Team</Sidebar.Item>
+							<Sidebar.Item href="#">Billing</Sidebar.Item>
+							<Sidebar.Item href="#">Limits</Sidebar.Item>
+						</Sidebar.Group>
+					</Sidebar.Section>
+					<Sidebar.Section label="Projects" --sidebar-item-font-size="0.875rem">
+						<Sidebar.Item class="" href="#" action={sidebar_item_action}>
+							<Frame />
+							Design engineering
+						</Sidebar.Item>
+						<Sidebar.Item class="" href="#" action={sidebar_item_action}>
+							<CircleChart />
+							Sales and marketing
+						</Sidebar.Item>
+						<Sidebar.Item class="" href="#" action={sidebar_item_action}>
+							<Travel />
+							Travel
+						</Sidebar.Item>
+					</Sidebar.Section>
 					{#snippet footer()}
 						<Sidebar.Footer>
-							<div class="flex-group nowrap">
-								<Settings />
-								Account
-							</div>
+							<Sidebar.Item as="button">
+								<img src="https://www.shadcn-svelte.com/avatars/shadcn.jpg" alt="" />
+								<div class="account-details text-start">
+									<span class="fw-bold | truncate">shadcn</span>
+									<span class="truncate">shadcn@example.com</span>
+								</div>
+								<UpDown />
+							</Sidebar.Item>
 						</Sidebar.Footer>
 					{/snippet}
 				</Sidebar.Root>
@@ -216,3 +240,42 @@
 		</Shell>
 	{/snippet}
 </Story>
+
+<style>
+	img {
+		border-radius: 50%;
+		aspect-ratio: 1/1;
+		max-width: min(3rem, 100%);
+	}
+
+	.text-start {
+		text-align: start;
+	}
+
+	.company-logo {
+		max-width: min(2.5rem, 100%);
+		width: 100%;
+		flex-shrink: 0;
+		display: grid;
+		place-items: center;
+		aspect-ratio: 1;
+		background-color: blue;
+		color: white;
+		border-radius: 50%;
+	}
+
+	.account-details {
+		display: grid;
+		/* overflow: hidden; */
+	}
+
+	.truncate {
+		overflow: hidden;
+		text-overflow: clip;
+		white-space: nowrap;
+	}
+
+	.account-details span:last-child {
+		font-size: 0.75rem;
+	}
+</style>
