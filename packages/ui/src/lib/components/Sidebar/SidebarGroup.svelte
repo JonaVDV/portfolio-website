@@ -4,6 +4,7 @@
 	import ChevronRight from '~icons/lucide/chevron-right';
 	import type { HTMLDetailsAttributes } from 'svelte/elements';
 	import { getSidebarState } from './context';
+	import Button from '$components/Button/Button.svelte';
 
 	interface Props extends Omit<HTMLDetailsAttributes, 'children' | 'open' | 'title'> {
 		title: Snippet | string;
@@ -26,39 +27,53 @@
 	}: Props = $props();
 
 	const sidebar = getSidebarState();
-	const groupTooltipContent = $derived(tooltipContent ?? title);
+
+	// Bound to the Tooltip's popover element so we can imperatively show/hide it
+	// from the summary's focus events. The Tooltip only renders when collapsed, so
+	// this is null when the sidebar is expanded (the guards below handle that).
+	let tooltipEl: HTMLElement | null = $state(null);
+
+	function handleSummaryFocusin() {
+		if (sidebar.collapsed && tooltipEl && !tooltipEl.matches(':popover-open')) {
+			// Show immediately on keyboard focus — no delay, per WCAG best practice.
+			tooltipEl.showPopover();
+		}
+	}
+
+	function handleSummaryFocusout(e: FocusEvent) {
+		if (!sidebar.collapsed || !tooltipEl) return;
+		// Only hide if focus is moving entirely outside this element.
+		// Covers the case where focus moves from summary to a child (unlikely
+		// since the span has no tabindex, but defensive).
+		const related = e.relatedTarget as Node | null;
+		if (!(e.currentTarget as Element).contains(related)) {
+			tooltipEl.hidePopover();
+		}
+	}
 </script>
 
 {#snippet GroupTitle()}
 	{#if sidebar.collapsed && tooltipContent}
 		<Tooltip
+			bind:ref={tooltipEl}
 			content={tooltipContent}
-			position="right"
+			position="right center"
 			hasArrow={true}
-			skipDelayDuration={0}
+			--popover-custom-fallbacks="none"
 			--popover-trigger-width="100%"
 		>
 			{#snippet trigger({ props })}
-				{@const neededProps = {
-					popovertarget: props.popovertarget,
-					onpointerenter: props.onpointerenter,
-					onpointerleave: props.onpointerleave
-				}}
-				<span class="sidebar-group-title sidebar-group-tooltip-trigger" {...neededProps}>
+				<span class="sidebar-group-title | flex-group nowrap" {...props as Record<string, unknown>}>
 					{#if typeof title === 'string'}
-						<span>
-							{title}
-						</span>
+						{title}
 					{:else}
-						<span>
-							{@render title()}
-						</span>
+						{@render title()}
 					{/if}
 				</span>
 			{/snippet}
 		</Tooltip>
 	{:else}
-		<span class="sidebar-group-title">
+		<span class="sidebar-group-title | flex-group nowrap">
 			{#if typeof title === 'string'}
 				{title}
 			{:else}
@@ -72,12 +87,14 @@
 	<svelte:element
 		this={collapsible ? 'summary' : 'button'}
 		class="sidebar-group-summary | flex-group space-between nowrap"
+		onfocusin={handleSummaryFocusin}
+		onfocusout={handleSummaryFocusout}
 	>
 		{@render GroupTitle()}
 		{#if collapsible && icon}
 			{@render icon()}
 		{:else if collapsible}
-			<ChevronRight />
+			<ChevronRight/>
 		{/if}
 	</svelte:element>
 {/snippet}
@@ -108,6 +125,7 @@
 		--sidebar-group-border: solid;
 		--sidebar-group-border-width: 1px;
 		width: 100%;
+		overflow: hidden;
 		padding: var(--sidebar-group-padding);
 	}
 
@@ -121,18 +139,6 @@
 	.sidebar-group[data-collapsible='true'] > .sidebar-group-summary {
 		cursor: pointer;
 	}
-
-	.sidebar-group-summary:is(:where(.group)[data-collapsible="icons-only"] *) {
-		width: var(--sidebar-group-icon-size);
-		aspect-ratio: 1/1;
-		overflow: hidden;
-
-	}
-
-	// :global .sidebar-group[data-collapsed='true'] > .sidebar-group-summary {
-	// 	width: var(--sidebar-group-icon-size);
-	// 	aspect-ratio: 1/1;
-	// }
 
 	.sidebar-group-content {
 		display: grid;
