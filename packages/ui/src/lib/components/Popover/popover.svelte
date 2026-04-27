@@ -154,6 +154,10 @@
 		 * adjusted using the `--tether-size` custom property on the popover content element.
 		 */
 		hasArrow?: boolean;
+		/**
+		 * Whether the popover should inherit the trigger's width. When true, the popover's layout width will match the trigger's width, but it can still visually overflow if the content is wider. This is useful for dropdowns
+		 */
+		inheritTriggerWidth?: boolean;
 	}
 
 	let {
@@ -162,6 +166,7 @@
 		ref = $bindable(null),
 		position = 'top',
 		hasArrow = true,
+		inheritTriggerWidth = false,
 		...rest
 	}: Props = $props();
 
@@ -185,6 +190,7 @@
 		data-block-position={positionState.block}
 		data-inline-position={positionState.inline}
 		data-tether-axis={positionState.tetherAxis}
+		data-inherit-trigger-width={inheritTriggerWidth}
 		style:--popover-position={position}
 		data-has-arrow={hasArrow}
 		style="position-anchor: --component-popover{hasArrow ? '' : '; --tether-size: 0px'}"
@@ -214,7 +220,22 @@
 
 	.popover-trigger {
 		anchor-name: --component-popover;
-		width: var(--popover-trigger-width);
+		width: var(--popover-trigger-width, fit-content);
+		/*
+		 * Cap the trigger's layout box to the nearest inline-size container.
+		 * When inside the sidebar (aside[container: sidebar/inline-size]) this
+		 * resolves to the sidebar's actual layout width — 3rem when collapsed,
+		 * 16rem when expanded. Without this, overflow-x:hidden on the aside clips
+		 * the visual box but NOT the layout box, so the anchor rect for popovers
+		 * remains the full intrinsic text width and dropdowns position against it.
+		 * Outside any container falls back to 100svw (viewport), so normal
+		 * popovers outside the sidebar are unaffected.
+		 */
+		max-inline-size: 100cqi;
+	}
+
+	.popover-content[data-inherit-trigger-width='true'] {
+		inline-size: max(anchor-size(inline), var(--popover-max-width, min(100%, max-content)));
 	}
 
 	.popover-content {
@@ -224,16 +245,16 @@
 		--popover-margin-inline-start: 0px;
 		--popover-margin-inline-end: 0px;
 
-		position: absolute;
+		position: fixed;
 		inset: auto;
 		margin: 0;
 		/* position-area and position-try are not set inline so the polyfill
 		   reads them from the stylesheet. The direction-specific data attributes
 		   below provide the actual values per axis. */
 		position-area: var(--popover-position);
-		position-try: --popover-top, --popover-bottom, --popover-left, --popover-right;
+		/* position-try: --popover-top, --popover-bottom, --popover-left, --popover-right; */
 		/* Also include the renamed property for Chrome 125-128 compatibility */
-		position-try-fallbacks: --popover-top, --popover-bottom, --popover-left, --popover-right;
+		position-try-fallbacks: var(--popover-custom-fallbacks, --popover-top, --popover-bottom, --popover-left, --popover-right);
 
 		overflow: visible;
 		clip-path: inset(var(--tether-offset)) margin-box;
@@ -346,7 +367,7 @@
 	}
 
 	@position-try --popover-bottom {
-		position-area: bottom;
+		position-area: bottom left;
 		--popover-margin-block-start: calc(var(--tether-size) + var(--popover-offset));
 		--popover-margin-block-end: 0px;
 		--popover-margin-inline-start: 0px;
