@@ -6,23 +6,15 @@
 		/**
 		 * The `before` and `after` props can be used to render content before or after the main content of the dropdown item. The `keybind` prop is a shortcut for rendering a keybind on the right side of the dropdown item. If both `after` and `keybind` are provided, `after` will take precedence.
 		 */
-		before?: Snippet;
-		after?: Snippet;
 		keybind?: Snippet;
 	}
 
-	let { children, before, after, keybind }: Props = $props();
+	let { children, keybind }: Props = $props();
 </script>
 
-<li class="flex-group | space-between | nowrap" role="menuitem">
-	<div class="flex-group nowrap">
-		{@render before?.()}
-
-		{@render children()}
-	</div>
-	{#if after}
-		{@render after()}
-	{:else if keybind}
+<li class="flex-group | space-between | nowrap push-last" role="menuitem">
+	{@render children?.()}
+	{#if keybind}
 		{@render keybind()}
 	{/if}
 </li>

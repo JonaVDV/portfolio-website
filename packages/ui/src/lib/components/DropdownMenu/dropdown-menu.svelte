@@ -26,17 +26,12 @@
 			props
 		})}
 	{/snippet}
-	<div class="dropdown-menu-content">
+	<div class="dropdown-menu-content" role="menu">
 		{@render childrenProp?.()}
 	</div>
 </Popover>
 
 <style>
-	.dropdown-menu-content { 
-		/* min-width: min(var(--dropdown-menu-min-width, max-content), 100%); */
-		width: fit-content;
-	}
-
 	.dropdown-menu-content :global(:where(svg)) {
 		width: var(--icon-size);
 		flex-shrink: 0;

@@ -27,7 +27,8 @@
 	{#snippet template()}
 		<DropdownMenu
 			content="This is the content of the dropdown menu. It can be a string or a Svelte component."
-			position="right span-all"
+			position="right top"
+			inheritTriggerWidth={true}
 			--popover-padding="8px"
 			--icon-size="1em"
 		>
@@ -36,27 +37,21 @@
 			{/snippet}
 			<DropdownGroup label="Teams">
 				<DropdownItem>
-					{#snippet before()}
-						<Gallery />
-					{/snippet}
+					<Gallery />
 					Acme Inc
 					{#snippet keybind()}
 						<Kbd --kbd-background="transparent">{cmd} 1</Kbd>
 					{/snippet}
 				</DropdownItem>
 				<DropdownItem>
-					{#snippet before()}
-						<Acme />
-					{/snippet}
+					<Acme />
 					Acme corp.
 					{#snippet keybind()}
 						<Kbd --kbd-background="transparent">{cmd} 2</Kbd>
 					{/snippet}
 				</DropdownItem>
 				<DropdownItem>
-					{#snippet before()}
-						<CMD />
-					{/snippet}
+					<CMD />
 					Evil Corp.
 					{#snippet keybind()}
 						<Kbd --kbd-background="transparent">{cmd} 3</Kbd>
