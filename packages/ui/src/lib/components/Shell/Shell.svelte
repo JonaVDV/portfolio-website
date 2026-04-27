@@ -117,10 +117,23 @@
 		}
 	}
 
+	@property --sidebar-active-width {
+		syntax: '<length>';
+		inherits: false;
+		initial-value: 0px;
+	}
+
 	.primary-layout {
 		min-block-size: 100svh;
 		container: primary-layout / inline-size;
 		grid-template-rows: min-content 1fr;
+		/*
+		 * Isolates the layout's stacking context so z-index values inside
+		 * (sidebar, overlay, content) only compete with each other — not with
+		 * app-level modals or toasts. Those just need to be above the Shell
+		 * element itself, with whatever z-index the app assigns to it.
+		 */
+		isolation: isolate;
 	}
 
 	.with-sidebar[data-sidebar-collapsed='true'] {
@@ -128,6 +141,13 @@
 	}
 
 	.with-sidebar {
+		transition: --sidebar-active-width var(--sidebar-transition-duration, 0.3s)
+			var(--sidebar-transition-easing, ease-in-out);
+
+		@media (prefers-reduced-motion: reduce) {
+			transition-duration: 0.01ms;
+		}
+
 		/* prettier-ignore */
 		grid-template-columns:
         [sidebar] var(--sidebar)
@@ -141,7 +161,7 @@
 	}
 
 	.with-sidebar > :global(aside) {
-		--sidebar-icon-width: var(var(--sidebar-icons-only-width));
+		--sidebar-icon-width: var(--sidebar-icons-only-width);
 		grid-column: sidebar;
 		grid-row: 1 / -1;
 	}
