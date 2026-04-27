@@ -1,7 +1,19 @@
 <script module>
+	/**
+	 * The command icon
+	 */
 	export const cmd = '⌘';
+	/**
+	 * The control icon
+	 */
 	export const ctrl = '⌃';
+	/**
+	 * The option/alt icon
+	 */
 	export const alt = '⌥';
+	/**
+	 * The shift icon
+	 */
 	export const shift = '⇧';
 </script>
 
