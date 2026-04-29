@@ -30,7 +30,11 @@
 </script>
 
 {#snippet sidebar_item_action()}
-	<DropdownMenu position="center right" --popover-trigger-width="fit-content" --popover-custom-fallbacks="none">
+	<DropdownMenu
+		position="center right"
+		--popover-trigger-width="fit-content"
+		--popover-custom-fallbacks="none"
+	>
 		{#snippet trigger({ props })}
 			<Button {...props}>
 				<Kebab />
@@ -111,7 +115,7 @@
 			{#snippet header({ toggleSidebar })}
 				<Header sticky layout="full-width">
 					<div class="flex-group space-between | full-content">
-						<Button variant="stripped" onclick={toggleSidebar}> sb </Button>
+						<Button variant="stripped" onclick={toggleSidebar}>sb</Button>
 						<strong>Portfolio</strong>
 					</div>
 				</Header>
@@ -219,7 +223,7 @@
 						</Sidebar.Item>
 						<Sidebar.Item class="" href="#" action={sidebar_item_action}>
 							<Travel />
-							Travel
+							<span> Travel </span>
 						</Sidebar.Item>
 					</Sidebar.Section>
 					{#snippet footer()}

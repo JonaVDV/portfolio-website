@@ -44,6 +44,17 @@
 
 <style lang="scss">
 	.sidebar-section {
+		--sidebar-section-padding-inline: 0.5rem;
+		/*
+		 * Gated: collapses to 0 at icon-rail width. Defining this as a separate
+		 * variable lets children reference the live computed value in their own
+		 * 100cqi-based width formulas so the 100cqi-indent arithmetic produces
+		 * the full rail width (not a reduced one) when fully collapsed.
+		 */
+		--_sidebar-section-indent: min(
+			var(--sidebar-section-padding-inline),
+			max(0px, (100cqi - var(--sidebar-icons-only-width, 3rem)) * 9999)
+		);
 		display: grid;
 		gap: var(--sidebar-section-gap, 0.25rem);
 		padding-block: var(--sidebar-section-padding-block, 0.75rem);
@@ -51,10 +62,7 @@
 		 * Same gate as SidebarItem: collapses inline padding to zero at
 		 * icon-rail width, preserving user-set value when expanded.
 		 */
-		padding-inline: min(
-			var(--sidebar-section-padding-inline, 0.5rem),
-			max(0px, (100cqi - var(--sidebar-icons-only-width, 3rem)) * 9999)
-		);
+		padding-inline: var(--sidebar-section-padding-inline, 0.5rem);
 	}
 
 	.sidebar-section-label {
@@ -67,6 +75,7 @@
 		white-space: nowrap;
 		overflow: hidden;
 		margin: 0;
+		text-overflow: ellipsis;
 		/*
 		 * Optional inset so the label aligns visually with item text
 		 * (items carry their own padding-inline, so this nudge is separate).
@@ -78,8 +87,7 @@
 	}
 
 	.sidebar-section-content {
-		display: grid;
-		gap: var(--sidebar-section-content-gap, 0.125rem);
+		width: min(100%, 100cqi - (var(--sidebar-section-padding-inline, 0px) * 2));
 	}
 
 	.visually-hidden {

@@ -24,14 +24,13 @@
 	const sidebar = getSidebarState();
 </script>
 
-<li style="list-style: none;">
+<li data-collapsed={sidebar.collapsed}>
 	{#if as === 'link'}
 		<a
 			{...rest}
 			class={['sidebar-item | flex-group nowrap', className]}
 			aria-current={active ? 'page' : undefined}
-			data-collapsed={sidebar.collapsed ? 'true' : undefined}
-			data-active={active ? 'true' : undefined}
+			data-active={active}
 		>
 			{@render children()}
 		</a>
@@ -41,7 +40,7 @@
 			class={['sidebar-item | flex-group nowrap', className]}
 			aria-pressed={active ? 'true' : 'false'}
 			data-collapsed={sidebar.collapsed ? 'true' : undefined}
-			data-active={active ? 'true' : undefined}
+			data-active={active}
 		>
 			{@render children()}
 		</button>
@@ -57,39 +56,43 @@
 <style lang="scss">
 	@use '../../styles/abstracts/' as *;
 
-	li {
-		--sidebar-item-padding-block: 0.25rem;
-		--sidebar-item-padding-inline: 0.25rem;
-		--sidebar-item-gap: 0.75rem;
-		--sidebar-item-icon-size: 1.25rem;
-		--sidebar-item-border-radius: 0.75rem;
-		--_sidebar-gate: max(0.5rem, (100cqi - var(--sidebar-icons-only-width, 3rem)) * 9999);
+	@property --sidebar-item-font-size {
+		syntax: '<length>';
+		inherits: true;
+		initial-value: 1rem;
+	}
 
+	li {
+		--sidebar-item-padding-block: 0.5rem;
+		--sidebar-item-padding-inline: 0.5rem;
+		--sidebar-item-gap: 0.75rem;
+		--sidebar-item-icon-size: 1rem;
+		--sidebar-item-border-radius: 0.75rem;
 		--flex-gap: min(var(--sidebar-item-gap), var(--_sidebar-gate));
 		anchor-scope: --sidebar-item;
 		list-style: none;
+
+		--_sidebar-item-width: min(100%, 100cqi - (var(--sidebar-section-padding-inline, 0px) * 2));
+		--_sidebar-padding-inline: calc(var(--sidebar-item-padding-inline) + var(--_sidebar-gate));
+		width: var(--_sidebar-item-width);
 	}
 
 	.sidebar-item {
-		/*
-		 * 100% respects the containing-block hierarchy: items inside indented
-		 * groups fill the group's available area; items in header/footer fill the
-		 * sidebar width after those containers' own gated padding.
-		 * 100cqi would break group-indented items by expanding them to the full
-		 * sidebar width regardless of indentation, overflowing group's clip.
-		 */
-		width: 100%;
+		width: inherit;
 		anchor-name: --sidebar-item;
 		padding-block: var(--sidebar-item-padding-block);
-		padding-inline: min(var(--sidebar-item-padding-inline), var(--_sidebar-gate));
+		padding-inline: var(--sidebar-item-padding-inline);
 		border-radius: var(--sidebar-item-border-radius);
 		font-size: var(--sidebar-item-font-size);
 		appearance: none;
 		border: 0;
 		color: inherit;
 		text-decoration: none;
+		white-space: nowrap;
+		overflow: hidden;
 		transition:
 			background-color 0.2s ease,
+			--sidebar-item-font-size 0.2s ease,
 			color 0.2s ease;
 
 		&:is(:hover, :focus-visible) {
@@ -103,7 +106,12 @@
 
 		& > :global(svg) {
 			flex-shrink: 0;
+			width: var(--sidebar-item-icon-size);
 		}
+	}
+
+	li[data-collapsed='true'] .sidebar-action {
+		display: none;
 	}
 
 	.sidebar-action {
@@ -112,6 +120,8 @@
 		top: anchor(top);
 		bottom: anchor(bottom);
 		right: calc(anchor(right) + var(--sidebar-item-padding-inline));
+		transition: display 0.2s ease;
+		transition-behavior: allow-discrete;
 
 		&[data-show-on-hover='true'] {
 			opacity: 0;

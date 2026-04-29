@@ -94,7 +94,7 @@
 		{#if collapsible && icon}
 			{@render icon()}
 		{:else if collapsible}
-			<ChevronRight/>
+			<ChevronRight />
 		{/if}
 	</svelte:element>
 {/snippet}
@@ -119,12 +119,14 @@
 	.sidebar-group {
 		--sidebar-group-title-gap: 0.25rem;
 		--sidebar-group-inset: 0.5em;
-		--sidebar-group-padding: 0.5rem 1rem;
+		--sidebar-group-padding: 0.5rem 0.25rem;
 		--sidebar-group-gap: 0.25em;
 		--sidebar-group-icon-size: 1rem;
 		--sidebar-group-border: solid;
 		--sidebar-group-border-width: 1px;
-		width: 100%;
+
+		--_sidebar-group-width: min(100%, 100cqi - (var(--sidebar-section-padding-inline, 0px) * 2));
+		width: var(--_sidebar-group-width);
 		overflow: hidden;
 		padding: var(--sidebar-group-padding);
 	}
