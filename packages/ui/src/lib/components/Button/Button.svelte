@@ -99,6 +99,7 @@
 		display: inline-flex;
 		min-width: fit-content;
 		align-items: center;
+		vertical-align: middle;
 		justify-content: center;
 	}
 </style>

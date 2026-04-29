@@ -12,7 +12,8 @@
 }
 
 .primary-layout > *,
-.full-width > * {
+.full-width > *,
+.padding-breakout > * {
 	grid-column: content;
 }
 .primary-layout,
@@ -70,4 +71,33 @@
 }
 .full-content {
 	padding-inline: var(--minimum-content-padding);
+}
+
+.padding-breakout {
+	container: padding-breakout / inline-size;
+	--minimum-content-padding: 0rem;
+
+	/*
+	 * Outer tracks flex freely: they absorb all the space between the icon column
+	 * and the sidebar's current layout width. When the sidebar collapses to icon
+	 * width the tracks shrink to 0, so full-width elements match the sidebar edge.
+	 */
+	--full: minmax(0px, 1fr);
+
+	/*
+	 * Content column = the icon-rail width. Inherits --sidebar-icons-only-width from
+	 * the shell so a single variable drives both the shell track reservation and the
+	 * sidebar's inner icon column. Falls back to 3rem when used standalone.
+	 */
+	--content: var(--sidebar-icons-only-width, 3rem);
+
+	display: grid;
+	grid-template-columns:
+		[full-width-start]
+		var(--full)
+		[content-start]
+		var(--content)
+		[content-end]
+		var(--full)
+		[full-width-end];
 }
