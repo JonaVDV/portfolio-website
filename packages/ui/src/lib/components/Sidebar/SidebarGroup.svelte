@@ -117,40 +117,85 @@
 	@use '../../styles/abstracts/' as *;
 
 	.sidebar-group {
+		// --- User settings ---
 		--sidebar-group-title-gap: 0.25rem;
-		--sidebar-group-inset: 0.5em;
-		--sidebar-group-padding: 0.5rem 0.25rem;
-		--sidebar-group-gap: 0.25em;
+		--sidebar-group-inset: -0.25rem;
+		--sidebar-group-padding-block: 0.5rem;
+		--sidebar-group-padding-inline: 0.25rem;
+		--sidebar-group-gap: 0em;
 		--sidebar-group-icon-size: 1rem;
+		--sidebar-group-font-size: 0.875rem;
 		--sidebar-group-border: solid;
 		--sidebar-group-border-width: 1px;
 
+		/*
+		 * Gate: 0px at icon-rail width (collapsed), large when expanded.
+		 * Used to switch between the centering formula and the user-defined value.
+		 */
+		--_G: max(0px, (100cqi - var(--sidebar-icons-only-width, 3rem)) * 9999);
+		/*
+		 * Centering padding: the inline padding required to center the icon within
+		 * the icon rail, accounting for the section's own padding on each side.
+		 */
+		--_centered-inline: calc(
+			(
+					var(--sidebar-icons-only-width, 3rem) - 2 *
+						var(--sidebar-section-padding-inline, 0.5rem) - var(--sidebar-group-icon-size, 1rem)
+				) /
+				2
+		);
 		--_sidebar-group-width: min(100%, 100cqi - (var(--sidebar-section-padding-inline, 0px) * 2));
 		width: var(--_sidebar-group-width);
 		overflow: hidden;
-		padding: var(--sidebar-group-padding);
+		padding-block: var(--sidebar-group-padding-block);
+		/*
+		 * Formula: user_padding + max(0, centered - user_padding - G)
+		 *
+		 * Collapsed (G = 0):  max(user_padding, centered)  → centers the icon
+		 * Expanded  (G → ∞):  user_padding                 → user-defined value
+		 * Sum equals width:   centered = user_padding       → no change
+		 */
+		padding-inline: calc(
+			var(--sidebar-group-padding-inline) +
+				max(0px, var(--_centered-inline) - var(--sidebar-group-padding-inline) - var(--_G))
+		);
+
+		transition: padding-inline 0.3s ease-in-out;
 	}
 
 	:global(.sidebar-group svg) {
 		width: var(--sidebar-group-icon-size);
 		aspect-ratio: 1/1;
 		flex-shrink: 0;
-		transition: rotate 0.3s ease-in-out;
+		transition: rotate 0.3s ease-in;
 	}
 
 	.sidebar-group[data-collapsible='true'] > .sidebar-group-summary {
 		cursor: pointer;
 	}
 
+	.sidebar-group-title {
+		--flex-gap: var(--sidebar-group-title-gap);
+	}
+
+	.sidebar-group-summary {
+		font-size: var(--sidebar-group-font-size);
+		overflow: clip;
+	}
+
 	.sidebar-group-content {
 		display: grid;
 		gap: var(--sidebar-group-gap);
-		padding-inline-start: calc(var(--sidebar-group-inset) + (var(--sidebar-group-icon-size)));
+		padding-inline-start: calc(
+			var(--sidebar-group-inset) + var(--sidebar-group-title-gap) + var(--sidebar-group-icon-size) /
+				2
+		);
 		margin-inline: calc(
 			(var(--sidebar-group-icon-size) / 2) - (var(--sidebar-group-border-width) / 2)
 		);
 		border-left-style: var(--sidebar-group-border);
 		border-left-width: var(--sidebar-group-border-width);
 		border-color: var(--sidebar-border);
+		overflow-x: clip;
 	}
 </style>

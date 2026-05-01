@@ -72,16 +72,32 @@
 		anchor-scope: --sidebar-item;
 		list-style: none;
 
-		--_sidebar-item-width: min(100%, 100cqi - (var(--sidebar-section-padding-inline, 0px) * 2));
-		--_sidebar-padding-inline: calc(var(--sidebar-item-padding-inline) + var(--_sidebar-gate));
+		--_sidebar-item-width: min(
+			100%,
+			100cqi -
+				(var(--sidebar-section-padding-inline, var(--sidebar-footer-padding-inline, 0px)) * 2)
+		);
 		width: var(--_sidebar-item-width);
+
+		--_G: max(0px, (100cqi - var(--sidebar-icons-only-width, 3rem)) * 9999);
+		--_centered-inline: calc(
+			(
+					var(--sidebar-icons-only-width, 3rem) -
+						(2 * var(--sidebar-section-padding-inline, 0.5rem)) -
+						(2 * var(--sidebar-group-padding-inline, 0px)) - var(--sidebar-item-icon-size, 1rem)
+				) /
+				2
+		);
 	}
 
 	.sidebar-item {
 		width: inherit;
 		anchor-name: --sidebar-item;
 		padding-block: var(--sidebar-item-padding-block);
-		padding-inline: var(--sidebar-item-padding-inline);
+		padding-inline: calc(
+			var(--sidebar-item-padding-inline) +
+				max(0px, var(--_centered-inline) - var(--sidebar-item-padding-inline) - var(--_G))
+		);
 		border-radius: var(--sidebar-item-border-radius);
 		font-size: var(--sidebar-item-font-size);
 		appearance: none;
@@ -93,7 +109,8 @@
 		transition:
 			background-color 0.2s ease,
 			--sidebar-item-font-size 0.2s ease,
-			color 0.2s ease;
+			color 0.2s ease,
+			padding-inline 0.3s ease-in-out;
 
 		&:is(:hover, :focus-visible) {
 			background-color: var(--sidebar-item-hover-background, #{$clr-surface-200});
