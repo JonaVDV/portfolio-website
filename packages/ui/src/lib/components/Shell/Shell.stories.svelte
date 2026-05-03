@@ -20,6 +20,9 @@
 	import CircleChart from '~icons/lucide/pie-chart';
 	import Frame from '~icons/lucide/frame';
 	import Kebab from '~icons/lucide/ellipsis';
+	import Folder from '~icons/lucide/folder';
+	import Share from '~icons/lucide/share';
+	import Trash from '~icons/lucide/trash-2';
 	import Button from '$components/Button/Button.svelte';
 
 	const { Story } = defineMeta({
@@ -31,7 +34,7 @@
 
 {#snippet sidebar_item_action()}
 	<DropdownMenu
-		position="center right"
+		position="right span-bottom"
 		--popover-trigger-width="fit-content"
 		--popover-custom-fallbacks="none"
 	>
@@ -40,9 +43,19 @@
 				<Kebab />
 			</Button>
 		{/snippet}
-		<DropdownItem>Sub Action 1</DropdownItem>
-		<DropdownItem>Sub Action 2</DropdownItem>
-		<DropdownItem>Sub Action 3</DropdownItem>
+		<DropdownItem>
+			<Folder/>
+			View project
+		</DropdownItem>
+		<DropdownItem>
+			<Share/>
+			Share project
+		</DropdownItem>
+		<Separator />
+		<DropdownItem>
+			<Trash/>
+			Delete project
+		</DropdownItem>
 	</DropdownMenu>
 {/snippet}
 
@@ -249,7 +262,8 @@
 	img {
 		border-radius: 50%;
 		aspect-ratio: 1/1;
-		max-width: min(3rem, 100%);
+		width: 2rem;
+		max-width: unset;
 	}
 
 	.text-start {
@@ -257,8 +271,7 @@
 	}
 
 	.company-logo {
-		max-width: min(2.5rem, 100%);
-		width: 100%;
+		width: 2rem;
 		flex-shrink: 0;
 		display: grid;
 		place-items: center;
