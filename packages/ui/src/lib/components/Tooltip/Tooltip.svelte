@@ -87,7 +87,8 @@
 				onpointerleave: openOnHover ? scheduleClose : undefined,
 				onfocus: scheduleOpen,
 				onblur: scheduleClose,
-				popovertarget: props.popovertarget
+				popovertarget: props.popovertarget,
+				style: props.style
 			}
 		})}
 	{/snippet}
