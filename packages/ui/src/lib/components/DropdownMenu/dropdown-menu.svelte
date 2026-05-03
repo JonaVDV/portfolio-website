@@ -5,7 +5,7 @@
 	import type { HTMLButtonAttributes } from 'svelte/elements';
 
 	interface Props extends Omit<ComponentProps<typeof Popover>, 'position'> {
-		content: string | Snippet;
+		content?: string | Snippet;
 		position?: PopoverPosition;
 	}
 
