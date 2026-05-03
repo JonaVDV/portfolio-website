@@ -17,14 +17,17 @@
 	@use '../../styles/abstracts/' as *;
 
 	.sidebar-header {
+		--sidebar-header-padding-inline: 0.5rem;
+		--sidebar-header-padding-block: 0.5rem;
 		top: 0;
 		width: 100%;
-		/* Same gate as SidebarItem: preserves user-set padding when expanded,
-		   automatically zeroes at icon-rail width. */
-		padding-inline: min(
-			var(--sidebar-header-padding, 0.75rem),
-			max(0px, (100cqi - var(--sidebar-icons-only-width, 3rem)) * 9999)
-		);
+		/*
+		 * Declared as a custom property so nested SidebarItems can inherit it
+		 * and include it in their centering formula. Not gated — always 0.5rem,
+		 * matching SidebarSection and SidebarFooter behaviour.
+		 */
+		padding-inline: var(--sidebar-header-padding-inline, 0.5rem);
+		padding-block: var(--sidebar-header-padding-block, 0.5rem);
 		border-block-end: var(--sidebar-header-border-color) var(--sidebar-header-border-width, 1px)
 			solid;
 	}
