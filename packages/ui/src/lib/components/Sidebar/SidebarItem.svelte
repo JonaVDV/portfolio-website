@@ -39,7 +39,6 @@
 			{...rest}
 			class={['sidebar-item | flex-group nowrap', className]}
 			aria-pressed={active ? 'true' : 'false'}
-			data-collapsed={sidebar.collapsed ? 'true' : undefined}
 			data-active={active}
 		>
 			{@render children()}
@@ -56,19 +55,14 @@
 <style lang="scss">
 	@use '../../styles/abstracts/' as *;
 
-	@property --sidebar-item-font-size {
-		syntax: '<length>';
-		inherits: true;
-		initial-value: 1rem;
-	}
-
 	li {
 		--sidebar-item-padding-block: 0.5rem;
 		--sidebar-item-padding-inline: 0.5rem;
 		--sidebar-item-gap: 0.75rem;
 		--sidebar-item-icon-size: 1rem;
 		--sidebar-item-border-radius: 0.75rem;
-		--flex-gap: min(var(--sidebar-item-gap), var(--_sidebar-gate));
+		--sidebar-item-font-size: 0.875rem;
+		--flex-gap: min(var(--sidebar-item-gap), var(--_G));
 		anchor-scope: --sidebar-item;
 		list-style: none;
 
@@ -83,7 +77,17 @@
 		--_centered-inline: calc(
 			(
 					var(--sidebar-icons-only-width, 3rem) -
-						(2 * var(--sidebar-section-padding-inline, 0.5rem)) -
+						/*
+						 * Fallbacks are 0px (not 0.5rem): these variables are only
+						 * defined on their respective ancestor elements, so an item
+						 * outside that context correctly contributes 0 to the sum.
+						 * Using 0.5rem as fallback caused section padding to be
+						 * double-counted for footer/header items.
+						 */
+						(2 * var(--sidebar-section-padding-inline, 0px)) -
+						(2 * var(--sidebar-footer-padding-inline, 0px)) -
+						(2 * var(--sidebar-header-padding-inline, 0px)) -
+						(2 * var(--sidebar-item-padding-inline, 0px)) -
 						(2 * var(--sidebar-group-padding-inline, 0px)) - var(--sidebar-item-icon-size, 1rem)
 				) /
 				2
@@ -93,9 +97,18 @@
 	.sidebar-item {
 		width: inherit;
 		anchor-name: --sidebar-item;
-		padding-block: var(--sidebar-item-padding-block);
+		padding-block: max(
+			0px,
+			var(--sidebar-item-padding-block) - max(
+					0px,
+					var(--sidebar-footer-padding-block, 0px) - var(--_G)
+				) - max(0px, var(--sidebar-header-padding-block, 0px) - var(--_G))
+		);
 		padding-inline: calc(
-			var(--sidebar-item-padding-inline) +
+			var(--sidebar-item-padding-inline) - max(
+					0px,
+					var(--sidebar-footer-padding-inline, 0px) - var(--_G)
+				) - max(0px, var(--sidebar-header-padding-inline, 0px) - var(--_G)) +
 				max(0px, var(--_centered-inline) - var(--sidebar-item-padding-inline) - var(--_G))
 		);
 		border-radius: var(--sidebar-item-border-radius);
@@ -104,13 +117,15 @@
 		border: 0;
 		color: inherit;
 		text-decoration: none;
+		line-height: 1;
+
 		white-space: nowrap;
 		overflow: hidden;
 		transition:
+			padding-inline 0.3s ease-in-out,
 			background-color 0.2s ease,
 			--sidebar-item-font-size 0.2s ease,
-			color 0.2s ease,
-			padding-inline 0.3s ease-in-out;
+			color 0.2s ease;
 
 		&:is(:hover, :focus-visible) {
 			background-color: var(--sidebar-item-hover-background, #{$clr-surface-200});

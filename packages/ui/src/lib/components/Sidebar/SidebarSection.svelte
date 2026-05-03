@@ -18,12 +18,20 @@
 		action?: Snippet;
 	}
 
+	import { getSidebarState } from './context';
+
+	const sidebar = getSidebarState();
+
 	let { label, labelHidden = false, children, action }: Props = $props();
 
 	const id = $props.id();
 </script>
 
-<section class="sidebar-section" aria-labelledby="sidebar-section-label-{id}">
+<section
+	class="sidebar-section"
+	aria-labelledby="sidebar-section-label-{id}"
+	data-collapsed={sidebar.collapsed}
+>
 	<span
 		id="sidebar-section-label-{id}"
 		class="sidebar-section-label"
@@ -45,16 +53,6 @@
 <style lang="scss">
 	.sidebar-section {
 		--sidebar-section-padding-inline: 0.5rem;
-		/*
-		 * Gated: collapses to 0 at icon-rail width. Defining this as a separate
-		 * variable lets children reference the live computed value in their own
-		 * 100cqi-based width formulas so the 100cqi-indent arithmetic produces
-		 * the full rail width (not a reduced one) when fully collapsed.
-		 */
-		--_sidebar-section-indent: min(
-			var(--sidebar-section-padding-inline),
-			max(0px, (100cqi - var(--sidebar-icons-only-width, 3rem)) * 9999)
-		);
 		display: grid;
 		gap: var(--sidebar-section-gap, 0.25rem);
 		padding-block: var(--sidebar-section-padding-block, 0.75rem);
@@ -71,9 +69,8 @@
 		color: var(--sidebar-section-label-color, oklch(0.55 0 0));
 		letter-spacing: var(--sidebar-section-label-tracking, 0.05em);
 		text-transform: uppercase;
-		/* Clipped by the aside's overflow-x: hidden at icon-rail width. */
 		white-space: nowrap;
-		overflow: hidden;
+		overflow: clip;
 		margin: 0;
 		text-overflow: ellipsis;
 		/*
@@ -84,6 +81,26 @@
 			var(--sidebar-section-label-inset, 0.25rem),
 			max(0px, (100cqi - var(--sidebar-icons-only-width, 3rem)) * 9999)
 		);
+		visibility: visible;
+		transition-property: margin-block-start, opacity, visibility;
+		transition-duration: var(--sidebar-transition-duration);
+		/*
+		 * Enter: visibility snaps visible immediately so the fade-in is seen.
+		 * (Exit delay is set on the collapsed state below.)
+		 */
+		transition-delay: 0s;
+	}
+
+	[data-collapsed='true'] .sidebar-section-label {
+		margin-block-start: -1.5rem;
+		opacity: 0;
+		visibility: hidden;
+		/*
+		 * Exit: margin and opacity animate first; visibility only becomes hidden
+		 * after the transition completes so the element never obstructs pointers
+		 * or receives selection while the fade is playing.
+		 */
+		transition-delay: 0s, 0s, var(--sidebar-transition-duration);
 	}
 
 	.sidebar-section-content {
