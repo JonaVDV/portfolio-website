@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Tooltip from '$components/Tooltip/Tooltip.svelte';
+	import Tooltip from '../Tooltip/Tooltip.svelte';
 	import type { Snippet } from 'svelte';
 	import ChevronRight from '~icons/lucide/chevron-right';
 	import type { HTMLButtonAttributes, HTMLDetailsAttributes } from 'svelte/elements';
@@ -86,17 +86,17 @@
 
 	.sidebar-group {
 		// --- User settings ---
-		--sidebar-group-title-gap: 0.25rem;
-		--sidebar-group-inset: -0.25rem;
-		--sidebar-group-padding-block: 0.5rem;
-		--sidebar-group-padding-inline: 0.5rem;
-		--sidebar-group-gap: 0em;
-		--sidebar-group-icon-size: 1rem;
-		--sidebar-group-font-size: 0.875rem;
-		--sidebar-group-border: solid;
-		--sidebar-group-border-radius: 0.75rem;
-		--sidebar-group-background: transparent;
-		--sidebar-group-border-width: 1px;
+		--_sidebar-group-title-gap: var(--sidebar-group-title-gap, 0.25rem);
+		--_sidebar-group-inset: var(--sidebar-group-inset, -0.25rem);
+		--_sidebar-group-padding-block: var(--sidebar-group-padding-block, 0.5rem);
+		--_sidebar-group-padding-inline: var(--sidebar-group-padding-inline, 0.5rem);
+		--_sidebar-group-gap: var(--sidebar-group-gap, 0em);
+		--_sidebar-group-icon-size: var(--sidebar-group-icon-size, 1rem);
+		--_sidebar-group-font-size: var(--sidebar-group-font-size, 0.875rem);
+		--_sidebar-group-border: var(--sidebar-group-border, solid);
+		--_sidebar-group-border-radius: var(--sidebar-group-border-radius, 0.75rem);
+		--_sidebar-group-background: var(--sidebar-group-background, transparent);
+		--_sidebar-group-border-width: var(--sidebar-group-border-width, 1px);
 
 		/*
 		 * Gate: 0px at icon-rail width (collapsed), large when expanded.
@@ -110,16 +110,16 @@
 		--_centered-inline: calc(
 			(
 					var(--sidebar-icons-only-width, 3rem) - 2 *
-						var(--sidebar-section-padding-inline, 0.5rem) - var(--sidebar-group-icon-size, 1rem)
+						var(--_sidebar-section-padding-inline, 0.5rem) - var(--_sidebar-group-icon-size)
 				) /
 				2
 		);
-		--_sidebar-group-width: min(100%, 100cqi - (var(--sidebar-section-padding-inline, 0px) * 2));
+		--_sidebar-group-width: min(100%, 100cqi - (var(--_sidebar-section-padding-inline, 0px) * 2));
 		width: var(--_sidebar-group-width);
 	}
 
 	:global(.sidebar-group svg) {
-		width: var(--sidebar-group-icon-size);
+		width: var(--_sidebar-group-icon-size);
 		aspect-ratio: 1/1;
 		flex-shrink: 0;
 		transition: rotate 0.3s ease-in;
@@ -148,7 +148,7 @@
 		 * ensures <summary> also fills the group correctly.
 		 */
 		width: 100%;
-		font-size: var(--sidebar-group-font-size);
+		font-size: var(--_sidebar-group-font-size);
 		line-height: 1;
 		/*
 		 * clip instead of hidden: avoids creating a new BFC (which would break
@@ -156,7 +156,7 @@
 		 * the title text to the content box in icon-only mode.
 		 */
 		overflow: clip;
-		padding-block: var(--sidebar-group-padding-block);
+		padding-block: var(--_sidebar-group-padding-block);
 		/*
 		 * Formula: user_padding + max(0, centered - user_padding - G)
 		 *
@@ -168,10 +168,10 @@
 		 * inherited here, so the formula works without duplication.
 		 */
 		padding-inline: calc(
-			var(--sidebar-group-padding-inline) +
-				max(0px, var(--_centered-inline) - var(--sidebar-group-padding-inline) - var(--_G))
+			var(--_sidebar-group-padding-inline) +
+				max(0px, var(--_centered-inline) - var(--_sidebar-group-padding-inline) - var(--_G))
 		);
-		border-radius: var(--sidebar-group-border-radius);
+		border-radius: var(--_sidebar-group-border-radius);
 		transition:
 			padding-inline 0.3s ease-in-out,
 			background-color 0.2s ease;
@@ -183,17 +183,17 @@
 
 	.sidebar-group-content {
 		display: grid;
-		gap: var(--sidebar-group-gap);
+		gap: var(--_sidebar-group-gap);
 		padding-inline-start: calc(
-			var(--sidebar-group-inset) + var(--sidebar-group-title-gap) + var(--sidebar-group-icon-size) /
-				2
+			var(--_sidebar-group-inset) + var(--_sidebar-group-title-gap) +
+				var(--_sidebar-group-icon-size) / 2
 		);
 		margin-inline: calc(
-			(var(--sidebar-group-padding-inline) + var(--sidebar-group-icon-size) / 2) -
-				(var(--sidebar-group-border-width) / 2)
+			(var(--_sidebar-group-padding-inline) + var(--_sidebar-group-icon-size) / 2) -
+				(var(--_sidebar-group-border-width) / 2)
 		);
-		border-left-style: var(--sidebar-group-border);
-		border-left-width: var(--sidebar-group-border-width);
+		border-left-style: var(--_sidebar-group-border);
+		border-left-width: var(--_sidebar-group-border-width);
 		border-color: var(--sidebar-border);
 		overflow-x: clip;
 	}

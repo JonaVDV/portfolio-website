@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
 	import { getSidebarState } from './context';
+	import type { ClassValue } from 'svelte/elements';
 
 	interface Props {
 		header?: Snippet;
@@ -8,6 +9,7 @@
 		children?: Snippet;
 		collapsible?: 'icons-only' | 'off-canvas' | 'none';
 		ref?: HTMLElement | null;
+		class?: ClassValue;
 	}
 
 	const sidebar = getSidebarState();
@@ -21,6 +23,7 @@
 	let {
 		children,
 		header,
+		class: className,
 		footer,
 		collapsible = 'icons-only',
 		ref = $bindable(null)
@@ -30,7 +33,7 @@
 <svelte:window onkeydown={handleEscape} />
 
 <aside
-	class="sidebar padding-breakout"
+	class={['sidebar', className]}
 	bind:this={ref}
 	data-collapsible={collapsible}
 	data-collapsed={sidebar.collapsed}
@@ -45,9 +48,7 @@
 </aside>
 <div class="sidebar-overlay" aria-hidden="true" onclick={() => (sidebar.collapsed = true)}></div>
 
-<style lang="scss">
-	@use '../../styles/abstracts' as *;
-
+<style>
 	aside[data-collapsible='off-canvas'] {
 		&[data-collapsed='true'] {
 			position: fixed;
@@ -57,8 +58,8 @@
 	}
 
 	.sidebar-inner {
-		grid-column: full-width;
 		display: flex;
+		overflow-x: hidden;
 		flex-direction: column;
 	}
 
@@ -78,7 +79,7 @@
 		}
 	}
 
-	// this should be the same breakpoint as the one used in the Shell component for the mobile sidebar behavior
+	/** this should be the same breakpoint as the one used in the Shell component for the mobile sidebar behavior */
 	@media (max-width: 48rem) {
 		aside:not([data-collapsible='none']) {
 			position: fixed;
@@ -100,7 +101,7 @@
 		display: none;
 		position: fixed;
 		inset: 0;
-		
+
 		z-index: var(--sidebar-overlay-z-index, 1);
 		background-color: oklch(from var(--overlay-background) l c h / var(--overlay-opacity));
 	}
@@ -110,19 +111,20 @@
 	}
 
 	aside {
-		--sidebar-background: #{$clr-surface-100};
-		--sidebar-transition-duration: 0.3s;
-		--sidebar-transition-easing: ease-in-out;
-		--sidebar-transition: var(--sidebar-transition-duration) var(--sidebar-transition-easing);
+		--_sidebar-background: var(--sidebar-background, var(--clr-surface-100));
+		--_sidebar-transition-duration: var(--sidebar-transition-duration, 0.3s);
+		--_sidebar-transition-easing: var(--sidebar-transition-easing, ease-in-out);
+		--_sidebar-transition: var(--_sidebar-transition-duration) var(--_sidebar-transition-easing);
 		--popover-trigger-width: 100%;
+		
 		display: grid;
-		background-color: var(--sidebar-background);
+		background-color: var(--_sidebar-background);
 		transition:
-			translate var(--sidebar-transition),
-			max-width var(--sidebar-transition);
+			translate var(--_sidebar-transition),
+			max-width var(--_sidebar-transition);
 
 		@media (prefers-reduced-motion: reduce) {
-			--sidebar-transition-duration: 0.01ms;
+			--_sidebar-transition-duration: 0.01ms;
 		}
 		position: sticky;
 		container: sidebar / inline-size;
@@ -138,7 +140,7 @@
 		scrollbar-gutter: stable;
 		scrollbar-width: thin;
 		overflow-y: auto;
-		// we need 100svh here to ensure the sidebar takes up the full height of the viewport, but stays scrollable when the content exceeds the viewport height. This is especially important for mobile devices where the viewport height can change when the address bar shows/hides.
+		/** we need 100svh here to ensure the sidebar takes up the full height of the viewport, but stays scrollable when the content exceeds the viewport height. This is especially important for mobile devices where the viewport height can change when the address bar shows/hides. */
 		height: 100svh;
 		anchor-name: --sidebar;
 	}

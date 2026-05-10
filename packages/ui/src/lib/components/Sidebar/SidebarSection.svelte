@@ -52,7 +52,7 @@
 
 <style lang="scss">
 	.sidebar-section {
-		--sidebar-section-padding-inline: 0.5rem;
+		--_sidebar-section-padding-inline: var(--sidebar-section-padding-inline, 0.5rem);
 		display: grid;
 		gap: var(--sidebar-section-gap, 0.25rem);
 		padding-block: var(--sidebar-section-padding-block, 0.75rem);
@@ -60,7 +60,7 @@
 		 * Same gate as SidebarItem: collapses inline padding to zero at
 		 * icon-rail width, preserving user-set value when expanded.
 		 */
-		padding-inline: var(--sidebar-section-padding-inline, 0.5rem);
+		padding-inline: var(--_sidebar-section-padding-inline);
 	}
 
 	.sidebar-section-label {
@@ -104,7 +104,7 @@
 	}
 
 	.sidebar-section-content {
-		width: min(100%, 100cqi - (var(--sidebar-section-padding-inline, 0px) * 2));
+		width: min(100%, 100cqi - (var(--_sidebar-section-padding-inline, 0px) * 2));
 	}
 
 	.visually-hidden {

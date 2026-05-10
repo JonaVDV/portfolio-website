@@ -52,43 +52,43 @@
 	{/if}
 </li>
 
-<style lang="scss">
-	@use '../../styles/abstracts/' as *;
-
+<style>
 	li {
-		--sidebar-item-padding-block: 0.5rem;
-		--sidebar-item-padding-inline: 0.5rem;
-		--sidebar-item-gap: 0.75rem;
-		--sidebar-item-icon-size: 1rem;
-		--sidebar-item-border-radius: 0.75rem;
-		--sidebar-item-font-size: 0.875rem;
-		--flex-gap: min(var(--sidebar-item-gap), var(--_G));
+		--_sidebar-item-padding-block: var(--sidebar-item-padding-block, 0.5rem);
+		--_sidebar-item-padding-inline: var(--sidebar-item-padding-inline, 0.5rem);
+		--_sidebar-item-gap: var(--sidebar-item-gap, 0.75rem);
+		--_sidebar-item-icon-size: var(--sidebar-item-icon-size, 1rem);
+		--_sidebar-item-border-radius: var(--sidebar-item-border-radius, 0.75rem);
+		--_sidebar-item-font-size: var(--sidebar-item-font-size, 0.875rem);
+		--_sidebar-item-color: var(--sidebar-item-color, inherit);
+		--_sidebar-item-background: var(--sidebar-item-background, transparent);
+		--flex-gap: min(var(--_sidebar-item-gap), var(--_G));
 		anchor-scope: --sidebar-item;
 		list-style: none;
 
 		--_sidebar-item-width: min(
 			100%,
 			100cqi -
-				(var(--sidebar-section-padding-inline, var(--sidebar-footer-padding-inline, 0px)) * 2)
+				(var(--_sidebar-section-padding-inline, var(--_sidebar-footer-padding-inline, 0px)) * 2)
 		);
 		width: var(--_sidebar-item-width);
 
 		--_G: max(0px, (100cqi - var(--sidebar-icons-only-width, 3rem)) * 9999);
+		/*
+		* Fallbacks are 0px (not 0.5rem): these variables are only
+		* defined on their respective ancestor elements, so an item
+		* outside that context correctly contributes 0 to the sum.
+		* Using 0.5rem as fallback caused section padding to be
+		* double-counted for footer/header items.
+		*/
 		--_centered-inline: calc(
 			(
 					var(--sidebar-icons-only-width, 3rem) -
-						/*
-						 * Fallbacks are 0px (not 0.5rem): these variables are only
-						 * defined on their respective ancestor elements, so an item
-						 * outside that context correctly contributes 0 to the sum.
-						 * Using 0.5rem as fallback caused section padding to be
-						 * double-counted for footer/header items.
-						 */
-						(2 * var(--sidebar-section-padding-inline, 0px)) -
-						(2 * var(--sidebar-footer-padding-inline, 0px)) -
-						(2 * var(--sidebar-header-padding-inline, 0px)) -
-						(2 * var(--sidebar-item-padding-inline, 0px)) -
-						(2 * var(--sidebar-group-padding-inline, 0px)) - var(--sidebar-item-icon-size, 1rem)
+						(2 * var(--_sidebar-section-padding-inline, 0px)) -
+						(2 * var(--_sidebar-footer-padding-inline, 0px)) -
+						(2 * var(--_sidebar-header-padding-inline, 0px)) -
+						(2 * var(--_sidebar-item-padding-inline)) -
+						(2 * var(--_sidebar-group-padding-inline, 0px)) - var(--_sidebar-item-icon-size)
 				) /
 				2
 		);
@@ -99,23 +99,22 @@
 		anchor-name: --sidebar-item;
 		padding-block: max(
 			0px,
-			var(--sidebar-item-padding-block) - max(
-					0px,
-					var(--sidebar-footer-padding-block, 0px) - var(--_G)
-				) - max(0px, var(--sidebar-header-padding-block, 0px) - var(--_G))
+			var(--_sidebar-item-padding-block) -
+				max(0px, var(--_sidebar-footer-padding-block, 0px) - var(--_G)) -
+				max(0px, var(--_sidebar-header-padding-block, 0px) - var(--_G))
 		);
 		padding-inline: calc(
-			var(--sidebar-item-padding-inline) - max(
-					0px,
-					var(--sidebar-footer-padding-inline, 0px) - var(--_G)
-				) - max(0px, var(--sidebar-header-padding-inline, 0px) - var(--_G)) +
-				max(0px, var(--_centered-inline) - var(--sidebar-item-padding-inline) - var(--_G))
+			var(--_sidebar-item-padding-inline) -
+				max(0px, var(--_sidebar-footer-padding-inline, 0px) - var(--_G)) -
+				max(0px, var(--_sidebar-header-padding-inline, 0px) - var(--_G)) +
+				max(0px, var(--_centered-inline) - var(--_sidebar-item-padding-inline) - var(--_G))
 		);
-		border-radius: var(--sidebar-item-border-radius);
-		font-size: var(--sidebar-item-font-size);
+		border-radius: var(--_sidebar-item-border-radius);
+		font-size: var(--_sidebar-item-font-size);
+		color: var(--_sidebar-item-color);
+		background-color: var(--_sidebar-item-background);
 		appearance: none;
 		border: 0;
-		color: inherit;
 		text-decoration: none;
 		line-height: 1;
 
@@ -128,17 +127,18 @@
 			color 0.2s ease;
 
 		&:is(:hover, :focus-visible) {
-			background-color: var(--sidebar-item-hover-background, #{$clr-surface-200});
+			background-color: var(--sidebar-item-hover-background);
+			color: var(--sidebar-item-hover-color, inherit);
 		}
 
 		&[data-active='true'] {
-			background-color: var(--sidebar-item-active-background, #{$clr-brand-200});
-			color: var(--sidebar-item-active-color, #{$clr-brand-900});
+			background-color: var(--sidebar-item-active-background);
+			color: var(--sidebar-item-active-color);
 		}
 
 		& > :global(svg) {
 			flex-shrink: 0;
-			width: var(--sidebar-item-icon-size);
+			width: var(--_sidebar-item-icon-size);
 		}
 	}
 
@@ -151,7 +151,7 @@
 		position: absolute;
 		top: anchor(top);
 		bottom: anchor(bottom);
-		right: calc(anchor(right) + var(--sidebar-item-padding-inline));
+		right: calc(anchor(right) + var(--_sidebar-item-padding-inline));
 		transition: display 0.2s ease;
 		transition-behavior: allow-discrete;
 
