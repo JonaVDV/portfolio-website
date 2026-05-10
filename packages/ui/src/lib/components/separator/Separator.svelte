@@ -4,9 +4,10 @@
 		'--separator-margin'?: string;
 		'--separator-color'?: string;
 		'--separator-thickness'?: string;
+		layout?: 'content' | 'full-width' | string & {};
 	}
 
-	let { orientation = 'horizontal' }: Props = $props();
+	let { orientation = 'horizontal', layout = 'content' }: Props = $props();
 </script>
 
 <!-- 
@@ -15,7 +16,7 @@
 	A simple separator component that can be used to separate content. It can be used in both horizontal and vertical orientations. The appearance of the separator can be customized using CSS variables.
 -->
 
-<hr aria-orientation={orientation} data-orientation={orientation} />
+<hr aria-orientation={orientation} data-orientation={orientation} class={layout} />
 
 <style lang="scss">
 	@use '../../styles/abstracts/' as *;
