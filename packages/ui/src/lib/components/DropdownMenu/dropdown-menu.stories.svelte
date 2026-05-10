@@ -163,7 +163,7 @@
 					<Share />
 					Share…
 				</DropdownItem>
-				<DropdownSubmenu label="More actions" --popover-padding="8px 0px" --icon-size="1em">
+				<DropdownSubmenu label="More actions">
 					<DropdownGroup label="">
 						<DropdownItem>
 							<Settings />
