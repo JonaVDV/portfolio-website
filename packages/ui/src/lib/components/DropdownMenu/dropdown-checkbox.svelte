@@ -1,4 +1,5 @@
 <script lang="ts">
+	import DropdownItem from './dropdown-item.svelte';
 	import type { Snippet } from 'svelte';
 	import type { HTMLInputAttributes } from 'svelte/elements';
 
@@ -11,73 +12,38 @@
 		checked?: boolean;
 	}
 
-	let { children, checked = $bindable(false), keybind, ...rest }: Props = $props();
+	let {
+		children: childrenProp,
+		checked = $bindable(false),
+		keybind: keybindProp,
+		...rest
+	}: Props = $props();
 </script>
 
 <!--
-	The <li> is the ARIA menu item. The native <input type="checkbox"> inside
-	the <label> handles all checked state and keyboard toggling — no JS needed.
-	CSS :has(input:checked) drives the visual check indicator, and :focus-within
-	drives the hover highlight when keyboard focus lands on the input.
+	Delegates the <li>, layout, hover, and focus styles entirely to DropdownItem.
+	Only the indicator visuals live here. The role/aria-checked spread overrides
+	DropdownItem's default role="menuitem" at runtime via the {...rest} spread.
 
-	As a <li> living inside <ul class="popover-full-width">, this element
-	automatically sits in the `popover-content` grid column via the `> *` rule
-	in _wrapper.scss — no layout class required, matching regular dropdown items.
+	:has(input:checked) uses :global because the <li> is rendered by DropdownItem;
+	the scoped class on .dropdown-checkbox-indicator keeps the selector safe.
 -->
-<!-- svelte-ignore a11y_no_noninteractive_element_to_interactive_role -->
-<li class="flex-group | nowrap" role="menuitemcheckbox" aria-checked={checked}>
-	<label class="flex-group | nowrap | dropdown-checkbox-label">
+<DropdownItem role="menuitemcheckbox" aria-checked={checked} keybind={keybindProp}>
+	<label class="flex-group | nowrap">
 		<span class="dropdown-checkbox-indicator" aria-hidden="true"></span>
 		<input type="checkbox" bind:checked {...rest} />
-		{@render children?.()}
+		{@render childrenProp?.()}
 	</label>
-	{#if keybind}
-		{@render keybind()}
-	{/if}
-</li>
+</DropdownItem>
 
 <style lang="scss">
-	li {
-		--dropdown-item-padding: 0.5rem;
-		--dropdown-border-radius: 0.5rem;
-		--dropdown-item-background: transparent;
-		--dropdown-item-color: inherit;
-
-		--dropdown-item-hover-background: oklch(0.269 0 0);
-		--dropdown-item-hover-color: oklch(0.985 0 0);
-		--dropdown-item-font-size: 0.875rem;
-
-		/* Checkbox indicator */
-		--dropdown-checkbox-size: 1em;
-		--dropdown-checkbox-color: currentColor;
-		--dropdown-checkbox-border: 1.5px solid currentColor;
-		--dropdown-checkbox-radius: 0.25em;
-
-		--_flex-container-width: 100%;
-
-		border-radius: var(--dropdown-border-radius);
-		background-color: var(--dropdown-item-background);
-		color: var(--dropdown-item-color);
-		font-size: var(--dropdown-item-font-size);
-
-		&:is(:hover, :focus-within) {
-			--dropdown-item-background: var(--dropdown-item-hover-background);
-			--dropdown-item-color: var(--dropdown-item-hover-color);
-		}
-	}
-
 	label {
 		--_flex-container-width: 100%;
-		padding: var(--dropdown-item-padding);
 		cursor: pointer;
 		flex-grow: 1;
 	}
 
-	/*
-	 * Visually-hidden native checkbox: the browser still handles checked state,
-	 * keyboard toggling, and form submission. The .dropdown-checkbox-indicator
-	 * sibling provides the visible checkbox drawn entirely in CSS.
-	 */
+	/* Visually-hidden native checkbox — browser still owns checked state and keyboard toggling. */
 	input[type='checkbox'] {
 		position: absolute;
 		opacity: 0;
@@ -87,6 +53,11 @@
 	}
 
 	.dropdown-checkbox-indicator {
+		--dropdown-checkbox-size: 1em;
+		--dropdown-checkbox-color: currentColor;
+		--dropdown-checkbox-border: 1.5px solid currentColor;
+		--dropdown-checkbox-radius: 0.25em;
+
 		display: inline-flex;
 		align-items: center;
 		justify-content: center;
@@ -111,10 +82,11 @@
 	}
 
 	/*
-	 * :has() lets the <li> react to its descendant checkbox state — pure CSS,
-	 * no JS event listener needed to toggle the visual indicator.
+	 * The <li> is owned by DropdownItem so we need :global to reach it.
+	 * .dropdown-checkbox-indicator has a scoped hash, so this only targets
+	 * indicators rendered by this component — no unintended side-effects.
 	 */
-	li:has(input:checked) {
+	:global(li:has(input[type='checkbox']:checked)) {
 		.dropdown-checkbox-indicator {
 			background-color: var(--dropdown-checkbox-color);
 

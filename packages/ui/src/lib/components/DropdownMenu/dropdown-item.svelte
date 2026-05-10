@@ -38,7 +38,7 @@
 		color: var(--dropdown-item-color);
 		font-size: var(--dropdown-item-font-size);
 
-		&:is(:hover, :focus-visible) {
+		&:is(:hover, :focus-within) {
 			--dropdown-item-background: var(--dropdown-item-hover-background);
 			--dropdown-item-color: var(--dropdown-item-hover-color);
 		}

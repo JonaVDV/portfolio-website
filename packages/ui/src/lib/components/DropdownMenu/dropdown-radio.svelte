@@ -1,4 +1,5 @@
 <script lang="ts">
+	import DropdownItem from './dropdown-item.svelte';
 	import type { Snippet } from 'svelte';
 	import type { HTMLInputAttributes } from 'svelte/elements';
 
@@ -16,71 +17,33 @@
 		checked?: boolean;
 	}
 
-	let { children, checked = $bindable(false), keybind, ...rest }: Props = $props();
+	let { children: childrenProp, checked = false, keybind: keybindProp, ...rest }: Props = $props();
 </script>
 
 <!--
-	Radio items sharing the same `name` attribute are mutually exclusive by the
-	browser with zero JavaScript. The consumer provides `name` (and `value`) as
-	regular HTML attributes via {...rest}; the browser ensures only one radio in
-	the group can be checked at a time.
+	Delegates the <li>, layout, hover, and focus styles entirely to DropdownItem.
+	Only the indicator visuals live here. The role/aria-checked spread overrides
+	DropdownItem's default role="menuitem" at runtime via the {...rest} spread.
 
-	To read which option is selected, listen to the `change` event on the <ul>
-	or the individual items, or pass `checked={selectedValue === itemValue}` to
-	keep `aria-checked` in sync with your own reactive state.
-
-	Layout: sits in the `popover-content` grid column automatically (same as
-	other <li> items) because of the `> *` rule in _wrapper.scss.
+	:has(input:checked) uses :global because the <li> is rendered by DropdownItem;
+	the scoped class on .dropdown-radio-indicator keeps the selector safe.
 -->
-<!-- svelte-ignore a11y_no_noninteractive_element_to_interactive_role -->
-<li class="flex-group | nowrap" role="menuitemradio" aria-checked={checked}>
-	<label class="flex-group | nowrap | dropdown-radio-label">
+<DropdownItem role="menuitemradio" aria-checked={checked} keybind={keybindProp}>
+	<label class="flex-group | nowrap">
 		<span class="dropdown-radio-indicator" aria-hidden="true"></span>
 		<input type="radio" {checked} {...rest} />
-		{@render children?.()}
+		{@render childrenProp?.()}
 	</label>
-	{#if keybind}
-		{@render keybind()}
-	{/if}
-</li>
+</DropdownItem>
 
 <style lang="scss">
-	li {
-		--dropdown-item-padding: 0.5rem;
-		--dropdown-border-radius: 0.5rem;
-		--dropdown-item-background: transparent;
-		--dropdown-item-color: inherit;
-
-		--dropdown-item-hover-background: oklch(0.269 0 0);
-		--dropdown-item-hover-color: oklch(0.985 0 0);
-		--dropdown-item-font-size: 0.875rem;
-
-		/* Radio indicator */
-		--dropdown-radio-size: 1em;
-		--dropdown-radio-color: currentColor;
-		--dropdown-radio-border: 1.5px solid currentColor;
-
-		--_flex-container-width: 100%;
-
-		border-radius: var(--dropdown-border-radius);
-		background-color: var(--dropdown-item-background);
-		color: var(--dropdown-item-color);
-		font-size: var(--dropdown-item-font-size);
-
-		&:is(:hover, :focus-within) {
-			--dropdown-item-background: var(--dropdown-item-hover-background);
-			--dropdown-item-color: var(--dropdown-item-hover-color);
-		}
-	}
-
 	label {
 		--_flex-container-width: 100%;
-		padding: var(--dropdown-item-padding);
 		cursor: pointer;
 		flex-grow: 1;
 	}
 
-	/* Visually-hidden native radio — see checkbox component for rationale. */
+	/* Visually-hidden native radio — browser still owns checked state and keyboard toggling. */
 	input[type='radio'] {
 		position: absolute;
 		opacity: 0;
@@ -90,6 +53,10 @@
 	}
 
 	.dropdown-radio-indicator {
+		--dropdown-radio-size: 1em;
+		--dropdown-radio-color: currentColor;
+		--dropdown-radio-border: 1.5px solid currentColor;
+
 		display: inline-flex;
 		align-items: center;
 		justify-content: center;
@@ -111,8 +78,12 @@
 		}
 	}
 
-	/* CSS :has() reacts to descendant radio state — no JS needed. */
-	li:has(input:checked) {
+	/*
+	 * The <li> is owned by DropdownItem so we need :global to reach it.
+	 * .dropdown-radio-indicator has a scoped hash, so this only targets
+	 * indicators rendered by this component — no unintended side-effects.
+	 */
+	:global(li:has(input[type='radio']:checked)) {
 		.dropdown-radio-indicator {
 			border-color: var(--dropdown-radio-color);
 
