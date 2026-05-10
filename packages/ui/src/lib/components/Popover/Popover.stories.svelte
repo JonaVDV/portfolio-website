@@ -104,30 +104,38 @@
 <Story name="Multiple popovers">
 	{#snippet template()}
 		<div style="display: grid; place-content: center; block-size: 100svh; gap: 1rem;">
-			<Popover position="top">
-				{#snippet trigger({ props })}
-					<button {...props}>Top</button>
-				{/snippet}
-				Popover on top
-			</Popover>
-			<Popover position="bottom">
-				{#snippet trigger({ props })}
-					<button {...props}>Bottom</button>
-				{/snippet}
-				Popover on bottom
-			</Popover>
-			<Popover position="left">
-				{#snippet trigger({ props })}
-					<button {...props}>Left</button>
-				{/snippet}
-				Popover on the left
-			</Popover>
-			<Popover position="right">
-				{#snippet trigger({ props })}
-					<button {...props}>Right</button>
-				{/snippet}
-				Popover on the right
-			</Popover>
+			<div>
+				<Popover position="top">
+					{#snippet trigger({ props })}
+						<button {...props}>Top</button>
+					{/snippet}
+					Popover on top
+				</Popover>
+			</div>
+			<div>
+				<Popover position="bottom">
+					{#snippet trigger({ props })}
+						<button {...props}>Bottom</button>
+					{/snippet}
+					Popover on bottom
+				</Popover>
+			</div>
+			<div>
+				<Popover position="left">
+					{#snippet trigger({ props })}
+						<button {...props}>Left</button>
+					{/snippet}
+					Popover on the left
+				</Popover>
+			</div>
+			<div>
+				<Popover position="right">
+					{#snippet trigger({ props })}
+						<button {...props}>Right</button>
+					{/snippet}
+					Popover on the right
+				</Popover>
+			</div>
 		</div>
 	{/snippet}
 </Story>
