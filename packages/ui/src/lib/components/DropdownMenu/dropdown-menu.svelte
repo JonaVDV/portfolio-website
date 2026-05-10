@@ -26,7 +26,7 @@
 			props
 		})}
 	{/snippet}
-	<div class="dropdown-menu-content" role="menu">
+	<div class="dropdown-menu-content | popover-layout" role="menu">
 		{@render childrenProp?.()}
 	</div>
 </Popover>
