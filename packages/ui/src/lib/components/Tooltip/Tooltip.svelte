@@ -1,16 +1,15 @@
 <script lang="ts">
-	import type { PopoverPosition } from '$components/Popover/popover.svelte';
 	import Popover from '$components/Popover/popover.svelte';
 	import type { ComponentProps, Snippet } from 'svelte';
 	import type { HTMLButtonAttributes } from 'svelte/elements';
 
-	interface Props extends Omit<ComponentProps<typeof Popover>, 'position'> {
+	interface Props extends ComponentProps<typeof Popover> {
 		content: string | Snippet;
 		openOnHover?: boolean;
 		openDelay?: number;
 		closeDelay?: number;
 		skipDelayDuration?: number;
-		position?: PopoverPosition;
+		position?: string;
 	}
 
 	let {
