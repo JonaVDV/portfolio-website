@@ -12,7 +12,13 @@
 
 <style>
 	td {
-		padding: var(--table-cell-padding);
-        text-align: start;
+		padding: var(--_table-cell-padding);
+		text-align: var(--table-cell-text-align, start);
+		width: fit-content;
+		border: var(--_table-cell-border-width) solid var(--_table-border-color);
+	}
+
+	td :global(svg) {
+		max-width: revert;
 	}
 </style>
