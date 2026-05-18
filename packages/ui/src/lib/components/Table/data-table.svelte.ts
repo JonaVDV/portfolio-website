@@ -10,7 +10,13 @@ export interface ColumnDefinition<T extends Record<string, unknown>> {
 	 * Falls back to `String(accessor)` when omitted.
 	 */
 	id?: string;
+	/**
+	 * Whether this column can be hidden/shown by the user.
+	 */
 	enableHiding?: boolean;
+	/**
+	 * Whether this column can be sorted by the user. Sorting is disabled by default to avoid giving a false impression of built-in sorting when the table is used in manual mode (server-side processing).
+	 */
 	enableSorting?: boolean;
 	/** Pure function that converts the raw cell value to a display string. */
 	formatter?: (value: T[keyof T], row: T) => string;
@@ -66,21 +72,28 @@ export interface DataTableOptions<TData extends Record<string, unknown>> {
 	pagination?: {
 		pageSize?: number;
 	};
+	/**
+	 * Returns a stable unique key for a row. Strongly recommended in manual mode
+	 * so that row selection survives data replacements (pagination, re-fetches).
+	 * Falls back to the row's index in `data` when omitted.
+	 */
+	getRowId?: (row: TData) => string | number;
 }
 
 export class DataTable<TData extends Record<string, unknown>> {
 	// ── Public data ───────────────────────────────────────────────────────────
-	// Declared with $state so the parent can update data (e.g. in server-side mode)
-	// without requiring a full component re-mount.
-	data = $state<TData[]>([]);
-	columns = $state<ColumnDefinition<TData>[]>([]);
+	// $state.raw — these large arrays are replaced wholesale (never mutated in
+	// place), so there's no benefit to deep-proxying every row object. Avoiding
+	// the proxy removes all the trap overhead from the filter/sort pipelines.
+	data = $state.raw<TData[]>([]);
+	columns = $state.raw<ColumnDefinition<TData>[]>([]);
 
 	// ── Public reactive state ─────────────────────────────────────────────────
 
 	/** Controls which columns are visible. Set a key to `false` to hide that column. */
 	columnVisibility = $state<Record<string, boolean>>({});
-	/** Map of row-index → selected. Mutate to drive checkboxes; read to know what is selected. */
-	rowSelection = $state<Record<number, boolean>>({});
+	/** Map of rowKey → selected. Keys are stable row IDs (from `getRowId`) or data indices. */
+	rowSelection = $state<Record<string, boolean>>({});
 	/** Bound to the filter input. Filters across all string-serialisable cell values. */
 	globalFilter = $state('');
 	/**
@@ -98,9 +111,14 @@ export class DataTable<TData extends Record<string, unknown>> {
 
 	#currentPage = $state(1);
 	// Default of 10 ensures the $derived below never sees an uninitialised value.
-	#pageSize = 10;
+	#pageSize = $state(10);
 	#sorting = $state<{ id: string; direction: SortDirection } | null>(null);
 	#manual: boolean = false;
+	#getRowId?: (row: TData) => string | number;
+	// Holds the debounced copy of globalFilter actually used by the pipeline.
+	// The input binds to globalFilter for immediate feedback; the expensive
+	// filter derived only recomputes 150 ms after the last keystroke.
+	#debouncedFilter = $state('');
 
 	// ── Derived ───────────────────────────────────────────────────────────────
 
@@ -119,8 +137,8 @@ export class DataTable<TData extends Record<string, unknown>> {
 			});
 		}
 
-		// Apply global text filter.
-		const q = this.globalFilter.trim().toLowerCase();
+		// Use the debounced value so the pipeline only runs 150 ms after typing stops.
+		const q = this.#debouncedFilter.trim().toLowerCase();
 		if (q) {
 			rows = rows.filter((row) =>
 				Object.values(row).some((v) => String(v).toLowerCase().includes(q))
@@ -182,6 +200,9 @@ export class DataTable<TData extends Record<string, unknown>> {
 		return this.columns.find((col) => col.id === accessorOrId || col.accessor === accessorOrId);
 	}
 
+	/**
+	 * Whether there is a previous page. In manual mode, also check that the current page is greater than 1 so the parent can react (e.g. by fetching new data from the server).
+	 */
 	get hasPrevPage() {
 		return this.#currentPage > 1;
 	}
@@ -193,30 +214,48 @@ export class DataTable<TData extends Record<string, unknown>> {
 	get currentPage() {
 		return this.#currentPage;
 	}
-
+	/** Whether there is a next page. In manual mode, also check that the current page is less than the total pages so the parent can react (e.g. by fetching new data from the server). */
 	get hasNextPage() {
 		return this.#currentPage < this.#totalPages;
 	}
-
+	/**
+	 * The current page size. In manual mode, also update this value so the parent can react (e.g. by fetching new data from the server with the new page size).
+	 */
+	get pageSize() {
+		return this.#pageSize;
+	}
+	/**
+	 * returns the total number of rows derived from `data`
+	 */
 	get rowCount() {
 		return this.data.length;
 	}
-
+	/**
+	 * returns the number of rows after filtering (before pagination). In manual mode, returns `manualRowCount` if set, otherwise falls back to `data.length` since the server is responsible for filtering.
+	 */
 	get filteredRowCount() {
 		if (this.#manual && this.manualRowCount !== null) return this.manualRowCount;
 		return this.#filteredRows.length;
 	}
-
+	/**
+	 * the number of rows after filtering and sorting, but before pagination. In manual mode, returns `manualRowCount` if set, otherwise falls back to `data.length` since the server is responsible for filtering/sorting.
+	 */
 	get selectedRows(): TData[] {
-		return this.data.filter((_, i) => this.rowSelection[i] === true);
+		return this.data.filter((r) => this.rowSelection[this.getRowKey(r)] === true);
+	}
+
+	get selectedCount(): number {
+		return this.selectedRows.length;
 	}
 
 	get allSelected() {
-		return this.data.length > 0 && this.data.every((_, i) => this.rowSelection[i] === true);
+		return (
+			this.data.length > 0 && this.data.every((r) => this.rowSelection[this.getRowKey(r)] === true)
+		);
 	}
 
 	get someSelected() {
-		return this.data.some((_, i) => this.rowSelection[i] === true);
+		return this.data.some((r) => this.rowSelection[this.getRowKey(r)] === true);
 	}
 
 	/** Current sort state, or `null` when unsorted. In manual mode, read this to tell the server what to sort by. */
@@ -224,10 +263,9 @@ export class DataTable<TData extends Record<string, unknown>> {
 		return this.#sorting;
 	}
 
-	// ── Constructor ───────────────────────────────────────────────────────────
-
 	constructor(options: DataTableOptions<TData>) {
 		this.data = options.data;
+		this.#getRowId = options.getRowId;
 		// If selectable, prepend the built-in checkbox column. The component
 		// renders it internally — consumers never handle '__select__' in snippets.
 		const selectCol: ColumnDefinition<TData> = { id: '__select__', enableHiding: false };
@@ -236,16 +274,26 @@ export class DataTable<TData extends Record<string, unknown>> {
 		this.#manual = options.manual ?? false;
 		// Pre-populate columnVisibility so bind:checked always gets a boolean
 		// (undefined causes a Svelte runtime error when binding to a prop with a fallback).
-		for (const col of this.columns) {
+		for (const col of this.hidableColumns) {
 			const key = col.id ?? String(col.accessor ?? '');
 			this.columnVisibility[key] = true;
 		}
+		// Debounce globalFilter → #debouncedFilter (150 ms).
+		$effect(() => {
+			const value = this.globalFilter;
+			const timer = setTimeout(() => {
+				this.#debouncedFilter = value;
+			}, 150);
+			return () => clearTimeout(timer);
+		});
+
 		// Reset to page 1 whenever filters change so users don't end up on a
 		// non-existent page after narrowing the result set.
 		let filtersInitialized = false;
 		$effect(() => {
-			void this.globalFilter;
-			void JSON.stringify(this.columnFilters);
+			void this.#debouncedFilter;
+			// Iterate values to track deep mutations without a JSON.stringify allocation.
+			for (const v of Object.values(this.columnFilters)) void v;
 			if (!filtersInitialized) {
 				filtersInitialized = true;
 				return;
@@ -254,12 +302,13 @@ export class DataTable<TData extends Record<string, unknown>> {
 		});
 	}
 
-	// ── Methods ───────────────────────────────────────────────────────────────
-
+	/**
+	 * Go to the previous page if it exists. In manual mode, also update the current page so the parent can react (e.g. by fetching new data from the server).
+	 */
 	prevPage() {
 		if (this.hasPrevPage) this.#currentPage -= 1;
 	}
-
+	/** Go to the next page if it exists. In manual mode, also update the current page so the parent can react (e.g. by fetching new data from the server). */
 	nextPage() {
 		if (this.hasNextPage) this.#currentPage += 1;
 	}
@@ -267,6 +316,7 @@ export class DataTable<TData extends Record<string, unknown>> {
 	/**
 	 * Cycles the sort for `columnId`: unsorted → asc → desc → unsorted.
 	 * Only has an effect when the column has `enableSorting: true`.
+	 * @param columnId The ID of the column to toggle sorting for.
 	 */
 	toggleSort(columnId: string) {
 		if (this.#sorting?.id === columnId) {
@@ -281,15 +331,26 @@ export class DataTable<TData extends Record<string, unknown>> {
 	getSortDirection(columnId: string): SortDirection | false {
 		return this.#sorting?.id === columnId ? this.#sorting.direction : false;
 	}
-
-	toggleRowSelection(rowIndex: number) {
-		this.rowSelection[rowIndex] = !this.rowSelection[rowIndex];
+	/**
+	 * Toggle selection of a row by its stable key (from `getRowId`). In manual mode, relies on stable row keys to track selection across data replacements; ensure `getRowId` is set and returns consistent keys for this to work.
+	 * @param rowKey The stable key of the row to toggle selection for, derived from `getRowId` or falling back to the row's index in `data`.
+	 */
+	toggleRowSelection(rowKey: string) {
+		if (this.rowSelection[rowKey]) {
+			delete this.rowSelection[rowKey];
+		} else {
+			this.rowSelection[rowKey] = true;
+		}
 	}
-
+	/**
+	 * Clear all selected rows. In manual mode, also update the selection state so the parent can react (e.g. by fetching new data from the server).
+	 */
 	resetSelection() {
 		this.rowSelection = {};
 	}
-
+	/**
+	 * Clear sorting (set to unsorted). In manual mode, also update the sort state so the parent can react (e.g. by fetching new data from the server).
+	 */
 	resetSorting() {
 		this.#sorting = null;
 	}
@@ -310,15 +371,34 @@ export class DataTable<TData extends Record<string, unknown>> {
 	setSort(columnId: string, direction: SortDirection) {
 		this.#sorting = { id: columnId, direction };
 	}
-
+	/**
+	 * Toggle selection of all rows. Selects all when not all are selected, otherwise clears selection. In manual mode, relies on stable row keys (from `getRowId`) to track selection across data replacements; ensure `getRowId` is set and returns consistent keys for this to work.
+	 */
 	toggleAllRows() {
-		const allSelected = this.data.every((_, i) => this.rowSelection[i]);
-		if (allSelected) {
+		if (this.allSelected) {
 			this.rowSelection = {};
 		} else {
-			const next: Record<number, boolean> = {};
-			this.data.forEach((_, i) => (next[i] = true));
+			const next: Record<string, boolean> = {};
+			this.data.forEach((row) => (next[this.getRowKey(row)] = true));
 			this.rowSelection = next;
 		}
+	}
+	/**
+	 *
+	 * @param size the new page size.
+	 */
+	setPageSize(size: number) {
+		this.#pageSize = Math.max(1, Math.round(size));
+	}
+
+	/**
+	 * Returns a stable unique key for a row, used for tracking selection state across data updates.
+	 * @param row A row from `data`. In manual mode, this should be a row from the current page (i.e. `rows`) to ensure the key is correct for selection to work.
+	 * @returns A stable unique key for the row, derived from `getRowId` if provided or falling back to the row's index in `data`. Used for tracking selection state across data updates.
+	 */
+	getRowKey(row: TData): string {
+		if (this.#getRowId) return String(this.#getRowId(row));
+		const idx = this.data.indexOf(row);
+		return String(idx);
 	}
 }

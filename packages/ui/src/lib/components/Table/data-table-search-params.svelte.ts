@@ -12,6 +12,8 @@ export interface TableSearchParamsKeys {
 	sortDir?: string;
 	/** URL parameter key for the current page number. @default 'page' */
 	page?: string;
+	/** URL parameter key for the page size. @default 'pageSize' */
+	pageSize?: string;
 }
 
 export interface TableSearchParamsOptions {
@@ -77,7 +79,9 @@ export class TableSearchParams<
 			filter: options.keys?.filter ?? 'q',
 			sort: options.keys?.sort ?? 'sort',
 			sortDir: options.keys?.sortDir ?? 'dir',
-			page: options.keys?.page ?? 'page'
+			page: options.keys?.page ?? 'page',
+			pageSize: options.keys?.pageSize ?? 'pageSize',
+			...options.keys
 		};
 
 		// ── Read initial URL state → hydrate table ──────────────────────────
@@ -117,6 +121,9 @@ export class TableSearchParams<
 
 			if (table.currentPage > 1) this.set(keys.page, String(table.currentPage));
 			else this.delete(keys.page);
+
+			if (table.pageSize) this.set(keys.pageSize, String(table.pageSize));
+			else this.delete(keys.pageSize);
 		});
 	}
 }

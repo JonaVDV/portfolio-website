@@ -58,7 +58,6 @@
 	<TableHeader>
 		{#each table.visibleColumns as column (column.id ?? String(column.accessor ?? ''))}
 			{#if column.id === '__select__'}
-				<!-- Built-in select-all checkbox — rendered by DataTable, not by user snippets -->
 				<TableHead>
 					<input
 						type="checkbox"
@@ -82,6 +81,7 @@
 
 	<tbody>
 		{#each table.rows as row, pageIndex (pageIndex)}
+			{@const rowKey = table.getRowKey(row)}
 			{@const dataIndex = table.data.indexOf(row)}
 			<TableRow>
 				{#each table.visibleColumns as column (column.id ?? String(column.accessor ?? ''))}
@@ -92,8 +92,8 @@
 						<TableCell>
 							<input
 								type="checkbox"
-								checked={table.rowSelection[dataIndex] ?? false}
-								onchange={() => table.toggleRowSelection(dataIndex)}
+								checked={table.rowSelection[rowKey] ?? false}
+								onchange={() => table.toggleRowSelection(rowKey)}
 								aria-label="Select row"
 							/>
 						</TableCell>
