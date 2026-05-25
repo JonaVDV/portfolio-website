@@ -73,7 +73,7 @@ for grid there is also no component, but there are utility classes that you can 
 
 this will create a grid that adapts to the screen size, and will have a maximum of 4 columns, and the columns will have a minimum size of 200px, if the screen size is smaller than 800px, the grid will automatically reduce the number of columns to fit the screen size, and if the screen size is larger than 800px, the grid will have 4 columns, and the columns will have a size of 200px.
 
-**[!NOTE]**: this is excluding the gap between the columns, so if you have a gap of 1rem, the actual minimum size of the columns will be 200px + 1rem. but this is calculated automatically by the grid, so you don't have to worry about it.
+> [!NOTE]: this is excluding the gap between the columns, so if you have a gap of 1rem, the actual minimum size of the columns will be 200px + 1rem. but this is calculated automatically by the grid, so you don't have to worry about it.
 
 If you want to adjust the gap between the columns, you can set the `--gap` variable on the container, for example:
 

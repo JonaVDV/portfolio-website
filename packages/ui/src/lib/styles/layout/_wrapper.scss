@@ -71,3 +71,45 @@
 .full-content {
 	padding-inline: var(--minimum-content-padding);
 }
+
+.popover-layout,
+.popover-full-width {
+	--minimum-content-padding: 1rem;
+
+	--popover-full-max-width: min-content;
+	--popover-content-max-width: 100%;
+
+	--popover-full: minmax(var(--minimum-content-padding), var(--popover-full-max-width));
+	--popover-content: min(
+		var(--popover-content-max-width),
+		100% - var(--minimum-content-padding) * 2
+	);
+
+	display: grid;
+	/* prettier-ignore */
+	grid-template-columns:
+		[popover-full-width-start]
+		var(--popover-full)
+			[popover-content-start]
+			var(--popover-content)
+			[popover-content-end]
+		var(--popover-full)
+		[popover-full-width-end];
+}
+
+.popover-layout > *,
+.popover-full-width > * {
+	grid-column: popover-content;
+}
+
+.popover-full-width {
+	grid-column: popover-full-width;
+}
+
+.popover-full {
+	grid-column: popover-full-width;
+}
+
+.popover-content {
+	grid-column: popover-content;
+}
