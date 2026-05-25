@@ -7,6 +7,10 @@
 	gap: calc(var(--flex-gap) / 2) var(--flex-gap);
 }
 
+.flex-group > * {
+	align-self: var(--align-self, auto);
+}
+
 .flex-group.center {
 	--_flex-container-width: auto;
 	justify-content: center;
@@ -27,4 +31,8 @@
 
 .flex-group.push-last > :last-child {
 	margin-inline-start: auto;
+}
+
+.no-shrink {
+	flex-shrink: 0;
 }

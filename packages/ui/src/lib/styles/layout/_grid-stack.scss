@@ -1,0 +1,8 @@
+.grid-stack {
+	display: grid;
+	gap: var(--grid-gap, 1rem);
+	grid-template-areas: 'stack';
+	& > * {
+		grid-area: stack;
+	}
+}
