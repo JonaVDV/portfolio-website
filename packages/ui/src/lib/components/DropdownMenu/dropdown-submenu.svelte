@@ -23,7 +23,7 @@
 	let {
 		label,
 		children,
-		position = 'right span-bottom',
+		position = 'right',
 		ref = $bindable(null),
 		...rest
 	}: Props = $props();
@@ -57,7 +57,7 @@
 		}
 	}}
 >
-	<Popover bind:ref {position} hasArrow={false} {...rest}>
+	<Popover bind:ref {position} hasArrow={false} {...rest} --popover-offset="16px">
 		{#snippet trigger({ props })}
 			<button type="button" {...props} class="dropdown-submenu-button | flex-group nowrap">
 				{#if typeof label === 'string'}
