@@ -13,7 +13,7 @@
 	import DropdownGroup from '$components/DropdownMenu/dropdown-group.svelte';
 	import DropdownItem from '$components/DropdownMenu/dropdown-item.svelte';
 	import Kbd, { cmd } from '$components/Kbd/Kbd.svelte';
-	import Separator from '$components/separator/Separator.svelte';
+	import Separator from '$components/Separator/Separator.svelte';
 	import CMD from '~icons/lucide/command';
 	import Acme from '~icons/lucide/audio-waveform';
 	import Travel from '~icons/lucide/map';

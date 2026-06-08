@@ -8,7 +8,7 @@
 	import DropdownRadio from './dropdown-radio.svelte';
 	import DropdownSubmenu from './dropdown-submenu.svelte';
 	import Kbd, { cmd } from '$components/Kbd/Kbd.svelte';
-	import Separator from '$components/separator/Separator.svelte';
+	import Separator from '$components/Separator/Separator.svelte';
 	import Gallery from '~icons/lucide/gallery-vertical-end';
 	import CMD from '~icons/lucide/command';
 	import Acme from '~icons/lucide/audio-waveform';

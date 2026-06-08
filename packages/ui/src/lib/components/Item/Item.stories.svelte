@@ -2,7 +2,7 @@
 	import { defineMeta } from '@storybook/addon-svelte-csf';
 	import Item from './Item.svelte';
 	import Heading from '$components/Heading/Heading.svelte';
-	import Separator from '$components/separator/Separator.svelte';
+	import Separator from '$components/Separator/Separator.svelte';
 	import CheckIcon from '~icons/lucide/badge-check';
 	import Button from '$components/Button/Button.svelte';
 	// More on how to set up stories at: https://storybook.js.org/docs/writing-stories
@@ -85,7 +85,7 @@
 	{#snippet template()}
 		<div class="primary-layout">
 			<div class="">
-				{#each { length: 3 } as _, index (index)}
+				{#each { length: 3 }, index (index)}
 					<Item --align-self="start">
 						{#snippet media()}
 							<CheckIcon />

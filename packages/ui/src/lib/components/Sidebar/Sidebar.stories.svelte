@@ -5,7 +5,7 @@
 	import SidebarGroup from './SidebarGroup.svelte';
 	import SidebarItem from './SidebarItem.svelte';
 	import DropdownMenu from '$components/DropdownMenu/dropdown-menu.svelte';
-	import Separator from '$components/separator/Separator.svelte';
+	import Separator from '$components/Separator/Separator.svelte';
 	import Button from '$components/Button/Button.svelte';
 	import { Root } from './exports';
 	const { Story } = defineMeta({
