@@ -75,25 +75,29 @@
 <Story name="Multiple tooltips">
 	{#snippet template(args)}
 		<div class="wrapper">
-			<Tooltip position="top" {...args}>
-				{#snippet trigger({ props })}
-					<button {...props}>Tooltip 1</button>
-				{/snippet}
+			<div>
+				<Tooltip position="top" {...args}>
+					{#snippet trigger({ props })}
+						<button {...props}>Tooltip 1</button>
+					{/snippet}
 
-				{#snippet content()}
-					<p>This is the first tooltip!</p>
-				{/snippet}
-			</Tooltip>
+					{#snippet content()}
+						<p>This is the first tooltip!</p>
+					{/snippet}
+				</Tooltip>
+			</div>
 
-			<Tooltip position="bottom" {...args}>
-				{#snippet trigger({ props })}
-					<button {...props}>Tooltip 2</button>
-				{/snippet}
+			<div>
+				<Tooltip position="bottom" {...args}>
+					{#snippet trigger({ props })}
+						<button {...props}>Tooltip 2</button>
+					{/snippet}
 
-				{#snippet content()}
-					<p>This is the second tooltip!</p>
-				{/snippet}
-			</Tooltip>
+					{#snippet content()}
+						<p>This is the second tooltip!</p>
+					{/snippet}
+				</Tooltip>
+			</div>
 		</div>
 	{/snippet}
 </Story>
