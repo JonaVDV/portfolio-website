@@ -20,36 +20,44 @@
 	}: Props = $props();
 </script>
 
-<svelte:element this={as} data-component="item" class={[className, 'flex-group nowrap']} {...rest}>
-	{#if header}
-		<div class="item-header">
-			{@render header()}
+<svelte:element
+	this={as}
+	data-component="item"
+	class={[className]}
+	data-variant="default"
+	{...rest}
+>
+	<div class="item-inner flex-group nowrap">
+		{#if header}
+			<div class="item-header">
+				{@render header()}
+			</div>
+		{/if}
+		{#if media}
+			<div class="item-media">
+				{@render media()}
+			</div>
+		{/if}
+		<div class="item-content | flow">
+			{@render children?.()}
 		</div>
-	{/if}
-	{#if media}
-		<div class="item-media">
-			{@render media()}
-		</div>
-	{/if}
-	<div class="item-content | flow">
-		{@render children?.()}
+		{#if actions}
+			<div class="item-actions">
+				{@render actions()}
+			</div>
+		{/if}
 	</div>
-	{#if actions}
-		<div class="item-actions">
-			{@render actions()}
-		</div>
-	{/if}
 </svelte:element>
 
 <style>
 	[data-component='item'] {
-		--_item-background: var(--item-background, oklch(27.685% 0.01 271));
-		--_item-background-base: var(--item-background, oklch(27.685% 0.01 271));
+		--_item-background: var(--item-background, transparent);
+		--_item-background-base: var(--item-background, transparent);
 		--_item-padding: var(--item-padding, 0.5rem 1rem);
 		--_item-border-radius: var(--item-border-radius, 0.5rem);
-		--_item-border-width: var(--item-border-width, 1px);
+		--_item-border-width: var(--item-border-width, 0px);
 		--_item-border-color: var(--item-border-color, oklch(73.481% 0.00008 271.152));
-		--_item-color: var(--item-color, oklch(100% 0.00011 271.152));
+		--_item-color: var(--item-color, currentColor);
 		--_item-gap: var(--item-gap, 0.5rem);
 		--_item-media-size: var(--item-media-size, 4rem);
 
@@ -60,11 +68,14 @@
 		padding: var(--_item-padding);
 		border-radius: var(--_item-border-radius);
 		border: var(--_item-border-width) solid var(--_item-border-color);
+	}
+
+	.item-inner {
 		gap: var(--_item-gap);
 	}
 
 	/* when a header slot is present, allow wrapping so header spans the full row */
-	[data-component='item']:has(.item-header) {
+	.item-inner:has(.item-header) {
 		flex-wrap: wrap;
 	}
 
@@ -72,29 +83,28 @@
 		flex: 0 0 100%;
 	}
 
-	/* for if the component is an a tag */
-	[data-component='item']:is(:hover, :focus-visible) {
+	/* only apply hover/active styles to interactive elements */
+	[data-component='item']:is(a, button):is(:hover, :focus-visible) {
 		--_item-background: var(
 			--item-background-hover,
 			oklch(from var(--_item-background-base) calc(l - 10) c h)
 		);
 		--_item-border-color: var(--item-border-color-hover, oklch(73.481% 0.00008 271.152));
-		--_item-color: var(--item-color-hover, oklch(100% 0.00011 271.152));
+		--_item-color: var(--item-color-hover, currentColor);
 		cursor: pointer;
 	}
 
-	[data-component='item']:is(:active) {
+	[data-component='item']:is(a, button):active {
 		--_item-background: var(
 			--item-background-active,
 			oklch(from var(--_item-background-base) calc(l + 10) c h)
 		);
 		--_item-border-color: var(--item-border-color-active, oklch(73.481% 0.00008 271.152));
-		--_item-color: var(--item-color-active, oklch(100% 0.00011 271.152));
+		--_item-color: var(--item-color-active, currentColor);
 	}
 
 	.item-media {
 		flex-shrink: 0;
-		/* background-color: oklab(from color l a b); */
 		max-width: var(--_item-media-size);
 	}
 
