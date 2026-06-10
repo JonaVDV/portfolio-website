@@ -143,16 +143,14 @@
 <Story name="Overflow handling">
 	{#snippet template()}
 		<div
-			style="display: grid; place-items: center; block-size: 200px; overflow: auto; border: 2px solid var(--clr-surface-300);"
+			style="display: grid; place-items: center; block-size: 200px; inline-size: 200px; overflow: scroll; border: 2px solid var(--clr-surface-300); resize: both;"
 		>
-			<div style="block-size: 400px; display: grid; place-items: center;">
-				<Popover position="top">
-					{#snippet trigger({ props })}
-						<button {...props}>Hover me</button>
-					{/snippet}
-					This popover tries to appear above, but there's not enough space, so it flips to the bottom.
-				</Popover>
-			</div>
+			<Popover position="top">
+				{#snippet trigger({ props })}
+					<button {...props}>Hover me</button>
+				{/snippet}
+				This popover tries to appear above, but there's not enough space, so it flips to the bottom.
+			</Popover>
 		</div>
 	{/snippet}
 </Story>
