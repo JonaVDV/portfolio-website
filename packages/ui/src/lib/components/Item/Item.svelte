@@ -38,7 +38,7 @@
 				{@render media()}
 			</div>
 		{/if}
-		<div class="item-content | flow">
+		<div class="item-content flex-group">
 			{@render children?.()}
 		</div>
 		{#if actions}
@@ -84,7 +84,10 @@
 	}
 
 	/* only apply hover/active styles to interactive elements */
-	[data-component='item']:is(a, button):is(:hover, :focus-visible) {
+	[data-component='item']:is(a, button, [role='option'], [tabindex='0'], option):is(
+			:hover,
+			:focus-visible
+		) {
 		--_item-background: var(
 			--item-background-hover,
 			oklch(from var(--_item-background-base) calc(l - 10) c h)
@@ -94,7 +97,7 @@
 		cursor: pointer;
 	}
 
-	[data-component='item']:is(a, button):active {
+	[data-component='item']:is(a, button, [role='option'], [tabindex='0'], option):active {
 		--_item-background: var(
 			--item-background-active,
 			oklch(from var(--_item-background-base) calc(l + 10) c h)
@@ -110,6 +113,7 @@
 
 	.item-content {
 		container: item / inline-size;
+		gap: var(--_item-gap);
 		width: var(--_flex-container-width);
 	}
 
