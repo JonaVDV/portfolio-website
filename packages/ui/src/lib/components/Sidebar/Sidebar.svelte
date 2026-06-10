@@ -116,7 +116,7 @@
 		--_sidebar-transition-easing: var(--sidebar-transition-easing, ease-in-out);
 		--_sidebar-transition: var(--_sidebar-transition-duration) var(--_sidebar-transition-easing);
 		--popover-trigger-width: 100%;
-		
+
 		display: grid;
 		background-color: var(--_sidebar-background);
 		transition:
