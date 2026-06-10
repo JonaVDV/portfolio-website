@@ -15,14 +15,16 @@
 
 	let { level, sizeOf, children, ...rest }: Props = $props();
 
-	function headingClass(level: string | undefined) {
-		return level ? 'heading-' + level.split('h')[1] : '';
+	function headingClass() {
+		return level
+			? 'heading-' + level.split('h')[1]
+			: sizeOf
+				? 'heading-' + sizeOf.split('h')[1]
+				: '';
 	}
-
-	const heading = $derived(headingClass(sizeOf) || headingClass(level));
 </script>
 
-<svelte:element this={level} class={[heading, rest.class]} {...rest}>
+<svelte:element this={level} class={[headingClass(), rest.class]} {...rest}>
 	{@render children?.()}
 </svelte:element>
 
