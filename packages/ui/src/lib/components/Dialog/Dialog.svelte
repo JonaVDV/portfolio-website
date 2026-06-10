@@ -4,7 +4,7 @@
 	import type { HTMLAttributes } from 'svelte/elements';
 
 	interface Props extends Omit<HTMLAttributes<HTMLElement>, 'children'> {
-		ref: HTMLDialogElement | null;
+		ref?: HTMLDialogElement | null;
 		/**
 		 * The trigger that opens the dialog.
 		 */
@@ -29,6 +29,7 @@
 			]
 		>;
 		lightDismiss?: boolean;
+		closeButton?: boolean;
 		/**
 		 * The content of the dialog.
 		 */
@@ -48,7 +49,15 @@
 		>;
 	}
 
-	let { trigger, children, footer, ref = $bindable(null), lightDismiss, ...rest }: Props = $props();
+	let {
+		trigger,
+		children,
+		closeButton,
+		footer,
+		ref = $bindable(null),
+		lightDismiss,
+		...rest
+	}: Props = $props();
 
 	let dialogId = $props.id();
 
@@ -76,19 +85,21 @@
 	bind:this={ref}
 	{...rest}
 >
-	<Button
-		class="close-dialog"
-		variant="stripped"
-		commandfor={dialogId}
-		command="request-close"
-		data-testid="close-dialog-button"
-		aria-label="Close dialog"
-		onclick={close}
-		--button-padding=".25rem"
-	>
-		<!-- Replace with icon later -->
-		X
-	</Button>
+	{#if closeButton}
+		<Button
+			class="close-dialog"
+			variant="stripped"
+			commandfor={dialogId}
+			command="request-close"
+			data-testid="close-dialog-button"
+			aria-label="Close dialog"
+			onclick={close}
+			--button-padding=".25rem"
+		>
+			<!-- Replace with icon later -->
+			X
+		</Button>
+	{/if}
 	<div class="dialog-content">
 		{@render children?.({ open })}
 	</div>
