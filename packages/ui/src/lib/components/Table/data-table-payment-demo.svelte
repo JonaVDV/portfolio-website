@@ -47,7 +47,7 @@
 	import ChevronDown from '~icons/lucide/chevron-down';
 	import Ellipsis from '~icons/lucide/ellipsis';
 	import DropdownGroup from '$components/DropdownMenu/dropdown-group.svelte';
-	import Separator from '$components/separator/Separator.svelte';
+	import Separator from '$components/Separator/Separator.svelte';
 	import TableHead from './TableHead.svelte';
 	import TableCell from './TableCell.svelte';
 
