@@ -1,7 +1,7 @@
 <script lang="ts" module>
 	import { defineMeta } from '@storybook/addon-svelte-csf';
 	import InputGroup from './InputGroup.svelte';
-	import Textarea from '../Textarea.svelte';
+	import Textarea from '../Textarea/';
 	import InputGroupAddon from './InputGroupAddon.svelte';
 	import Input from '../Input.svelte';
 	import SearchIcon from '~icons/lucide/search';
