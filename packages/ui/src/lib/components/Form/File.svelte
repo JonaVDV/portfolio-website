@@ -14,11 +14,6 @@
 		stroke-dashoffset: 5px;
 		text-align: center;
 
-		> :global(label) {
-			display: none;
-			color: transparent;
-		}
-
 		&:hover {
 			border-color: $clr-brand-500;
 		}
