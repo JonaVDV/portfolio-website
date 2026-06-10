@@ -1,52 +1,47 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
 	import type { HTMLButtonAttributes, HTMLAnchorAttributes } from 'svelte/elements';
+	import { type ConditionalProps } from '../../types';
 
 	/**
 	 * Edit this type to add more variants
 	 */
 	type ButtonVariant = 'stripped' | 'primary' | (string & {});
+	type ButtonSize = 'icon' | 'small' | 'large' | (string & {});
 
 	interface BaseProps {
 		children: Snippet;
 		variant?: ButtonVariant;
+		size?: ButtonSize;
+		as?: 'button' | 'link';
 	}
 
-	type ButtonProps = BaseProps &
-		HTMLButtonAttributes & {
-			as?: 'button';
-		};
+	type Props = ConditionalProps<
+		BaseProps,
+		'as',
+		'link',
+		HTMLAnchorAttributes,
+		HTMLButtonAttributes
+	>;
 
-	type LinkProps = BaseProps &
-		HTMLAnchorAttributes & {
-			as: 'link';
-		};
-
-	type Props = ButtonProps | LinkProps;
-
-	let props: Props = $props();
+	let { children, variant, as = 'button', ...rest }: Props = $props();
 </script>
 
-{#if props.as === 'link'}
-	{@const { children, variant, as, ...rest } = props as LinkProps}
-	<a {...rest} class={[rest.class, 'button']} data-variant={variant}>
-		<div aria-hidden="true" class="outline-supporter"></div>
-		{@render children()}
-	</a>
-{:else}
-	{@const { children, variant, as, ...rest } = props as ButtonProps}
-	<button {...rest} class={[rest.class, 'button']} data-variant={variant}>
-		<div aria-hidden="true" class="outline-supporter"></div>
-		{@render children()}
-	</button>
-{/if}
+<svelte:element
+	this={as === 'link' ? 'a' : 'button'}
+	{...rest}
+	class={[rest.class, 'button']}
+	data-variant={variant}
+>
+	<div aria-hidden="true" class="outline-supporter"></div>
+	{@render children()}
+</svelte:element>
 
 <style lang="scss">
 	@use '../../styles/abstracts/' as *;
 
 	.button[data-variant] {
 		/* Base settings */
-		--button-border-radius: 0;
 		--button-font-size: 1.125rem;
 		--button-font-weight: 600;
 		border: var(--button-border, 0);

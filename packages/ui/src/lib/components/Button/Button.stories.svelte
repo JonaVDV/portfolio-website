@@ -1,7 +1,8 @@
 <script module>
 	import { defineMeta } from '@storybook/addon-svelte-csf';
-	import Button from './Button.svelte';
+	import Button from './index';
 	import { fn } from 'storybook/test';
+	import { ButtonGroup } from './exports';
 
 	// More on how to set up stories at: https://storybook.js.org/docs/writing-stories
 	const { Story } = defineMeta({
@@ -48,4 +49,10 @@
 	}}
 >
 	test
+</Story>
+
+<Story name="Button group">
+	<Button as="link" variant="primary">Primary</Button>
+	<Button>Default</Button>
+	<Button variant="stripped">Stripped</Button>
 </Story>
