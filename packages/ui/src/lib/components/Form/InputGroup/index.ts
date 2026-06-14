@@ -1,1 +1,1 @@
-export * as InputGroup from './exports';
+export * as InputGroup from "./exports";

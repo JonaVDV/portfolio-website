@@ -1,1 +1,1 @@
-export { default } from './Spinner.svelte';
+export { default } from "./Spinner.svelte";

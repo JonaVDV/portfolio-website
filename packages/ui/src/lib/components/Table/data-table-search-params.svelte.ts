@@ -1,39 +1,39 @@
-import { SvelteURLSearchParams } from 'svelte/reactivity';
-import type { DataTable, SortDirection } from './data-table.svelte.ts';
+import { SvelteURLSearchParams } from "svelte/reactivity";
+import type { DataTable, SortDirection } from "./data-table.svelte.ts";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
 export interface TableSearchParamsKeys {
-	/** URL parameter key for the global filter value. @default 'q' */
-	filter?: string;
-	/** URL parameter key for the active sort column id. @default 'sort' */
-	sort?: string;
-	/** URL parameter key for the sort direction. @default 'dir' */
-	sortDir?: string;
-	/** URL parameter key for the current page number. @default 'page' */
-	page?: string;
-	/** URL parameter key for the page size. @default 'pageSize' */
-	pageSize?: string;
+  /** URL parameter key for the global filter value. @default 'q' */
+  filter?: string;
+  /** URL parameter key for the active sort column id. @default 'sort' */
+  sort?: string;
+  /** URL parameter key for the sort direction. @default 'dir' */
+  sortDir?: string;
+  /** URL parameter key for the current page number. @default 'page' */
+  page?: string;
+  /** URL parameter key for the page size. @default 'pageSize' */
+  pageSize?: string;
 }
 
 export interface TableSearchParamsOptions {
-	/**
-	 * Initial URL or URLSearchParams to read state from on construction.
-	 *
-	 * @example SvelteKit
-	 * ```ts
-	 * import { page } from '$app/state';
-	 * new TableSearchParams(table, { initial: page.url });
-	 * ```
-	 * @example Vanilla
-	 * ```ts
-	 * new TableSearchParams(table, { initial: new URL(location.href) });
-	 * ```
-	 */
-	initial?: URLSearchParams | URL;
+  /**
+   * Initial URL or URLSearchParams to read state from on construction.
+   *
+   * @example SvelteKit
+   * ```ts
+   * import { page } from '$app/state';
+   * new TableSearchParams(table, { initial: page.url });
+   * ```
+   * @example Vanilla
+   * ```ts
+   * new TableSearchParams(table, { initial: new URL(location.href) });
+   * ```
+   */
+  initial?: URLSearchParams | URL;
 
-	/** Override the default URL parameter key names. */
-	keys?: TableSearchParamsKeys;
+  /** Override the default URL parameter key names. */
+  keys?: TableSearchParamsKeys;
 }
 
 // ── Class ─────────────────────────────────────────────────────────────────────
@@ -70,60 +70,60 @@ export interface TableSearchParamsOptions {
  * ```
  */
 export class TableSearchParams<
-	TData extends Record<string, unknown>
+  TData extends Record<string, unknown>,
 > extends SvelteURLSearchParams {
-	constructor(table: DataTable<TData>, options: TableSearchParamsOptions = {}) {
-		super();
+  constructor(table: DataTable<TData>, options: TableSearchParamsOptions = {}) {
+    super();
 
-		const keys = {
-			filter: options.keys?.filter ?? 'q',
-			sort: options.keys?.sort ?? 'sort',
-			sortDir: options.keys?.sortDir ?? 'dir',
-			page: options.keys?.page ?? 'page',
-			pageSize: options.keys?.pageSize ?? 'pageSize',
-			...options.keys
-		};
+    const keys = {
+      filter: options.keys?.filter ?? "q",
+      sort: options.keys?.sort ?? "sort",
+      sortDir: options.keys?.sortDir ?? "dir",
+      page: options.keys?.page ?? "page",
+      pageSize: options.keys?.pageSize ?? "pageSize",
+      ...options.keys,
+    };
 
-		// ── Read initial URL state → hydrate table ──────────────────────────
-		const initial =
-			options.initial instanceof URL ? options.initial.searchParams : (options.initial ?? null);
+    // ── Read initial URL state → hydrate table ──────────────────────────
+    const initial =
+      options.initial instanceof URL ? options.initial.searchParams : (options.initial ?? null);
 
-		if (initial) {
-			const q = initial.get(keys.filter);
-			if (q) table.globalFilter = q;
+    if (initial) {
+      const q = initial.get(keys.filter);
+      if (q) table.globalFilter = q;
 
-			const sortId = initial.get(keys.sort);
-			const sortDir = initial.get(keys.sortDir) as SortDirection | null;
-			if (sortId && (sortDir === 'asc' || sortDir === 'desc')) table.setSort(sortId, sortDir);
+      const sortId = initial.get(keys.sort);
+      const sortDir = initial.get(keys.sortDir) as SortDirection | null;
+      if (sortId && (sortDir === "asc" || sortDir === "desc")) table.setSort(sortId, sortDir);
 
-			const pageStr = initial.get(keys.page);
-			if (pageStr) {
-				const p = parseInt(pageStr, 10);
-				if (!isNaN(p) && p > 0) table.goToPage(p);
-			}
-		}
+      const pageStr = initial.get(keys.page);
+      if (pageStr) {
+        const p = parseInt(pageStr, 10);
+        if (!isNaN(p) && p > 0) table.goToPage(p);
+      }
+    }
 
-		// ── Keep self in sync with table state ──────────────────────────────
-		// set/delete only increment #version when the value actually changes,
-		// so this is efficient even if the effect re-runs frequently.
-		$effect(() => {
-			if (table.globalFilter) this.set(keys.filter, table.globalFilter);
-			else this.delete(keys.filter);
+    // ── Keep self in sync with table state ──────────────────────────────
+    // set/delete only increment #version when the value actually changes,
+    // so this is efficient even if the effect re-runs frequently.
+    $effect(() => {
+      if (table.globalFilter) this.set(keys.filter, table.globalFilter);
+      else this.delete(keys.filter);
 
-			const sorting = table.sorting;
-			if (sorting) {
-				this.set(keys.sort, sorting.id);
-				this.set(keys.sortDir, sorting.direction);
-			} else {
-				this.delete(keys.sort);
-				this.delete(keys.sortDir);
-			}
+      const sorting = table.sorting;
+      if (sorting) {
+        this.set(keys.sort, sorting.id);
+        this.set(keys.sortDir, sorting.direction);
+      } else {
+        this.delete(keys.sort);
+        this.delete(keys.sortDir);
+      }
 
-			if (table.currentPage > 1) this.set(keys.page, String(table.currentPage));
-			else this.delete(keys.page);
+      if (table.currentPage > 1) this.set(keys.page, String(table.currentPage));
+      else this.delete(keys.page);
 
-			if (table.pageSize) this.set(keys.pageSize, String(table.pageSize));
-			else this.delete(keys.pageSize);
-		});
-	}
+      if (table.pageSize) this.set(keys.pageSize, String(table.pageSize));
+      else this.delete(keys.pageSize);
+    });
+  }
 }

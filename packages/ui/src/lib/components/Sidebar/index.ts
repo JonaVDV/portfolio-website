@@ -1,1 +1,1 @@
-export * as Sidebar from './exports';
+export * as Sidebar from "./exports";
