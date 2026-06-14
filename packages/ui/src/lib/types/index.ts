@@ -1,2 +1,2 @@
-export * from './conditional-props';
-export * from './discriminate';
+export * from "./conditional-props";
+export * from "./discriminate";
