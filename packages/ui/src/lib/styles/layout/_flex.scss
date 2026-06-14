@@ -1,38 +1,38 @@
 .flex-group {
-	--flex-gap: 1em;
-	display: flex;
-	width: var(--_flex-container-width, fit-content);
-	flex-wrap: wrap;
-	align-items: center;
-	gap: calc(var(--flex-gap) / 2) var(--flex-gap);
+  --flex-gap: 1em;
+  display: flex;
+  width: var(--_flex-container-width, fit-content);
+  flex-wrap: wrap;
+  align-items: center;
+  gap: calc(var(--flex-gap) / 2) var(--flex-gap);
 }
 
 .flex-group > * {
-	align-self: var(--align-self, auto);
+  align-self: var(--align-self, auto);
 }
 
 .flex-group.center {
-	--_flex-container-width: auto;
-	justify-content: center;
+  --_flex-container-width: auto;
+  justify-content: center;
 }
 
 .space-between {
-	--_flex-container-width: 100%;
-	justify-content: space-between;
+  --_flex-container-width: 100%;
+  justify-content: space-between;
 }
 
 .flex-group.nowrap {
-	flex-wrap: nowrap;
+  flex-wrap: nowrap;
 }
 
 .flex-group.push-first > :first-child {
-	margin-inline-end: auto;
+  margin-inline-end: auto;
 }
 
 .flex-group.push-last > :last-child {
-	margin-inline-start: auto;
+  margin-inline-start: auto;
 }
 
 .no-shrink {
-	flex-shrink: 0;
+  flex-shrink: 0;
 }
