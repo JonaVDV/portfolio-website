@@ -10,10 +10,8 @@
 	import SettingsIcon from '~icons/lucide/settings';
 	import CalculatorIcon from '~icons/lucide/calculator';
 	import Kbd from '$components/Kbd/Kbd.svelte';
-	import { cmd } from '$lib/components/Kbd/Kbd.svelte';
+	import { cmd } from '$components/Kbd/Kbd.svelte';
 	import CommandGroup from './CommandGroup.svelte';
-	import Separator from '$components/Separator/Separator.svelte';
-	import CommandDialog from './CommandDialog.svelte';
 
 	const { Story } = defineMeta({
 		title: 'Components/Command',
@@ -23,46 +21,38 @@
 
 <Story name="Default">
 	{#snippet template()}
-		<CommandDialog>
-			{#snippet trigger(props)}
-				<button onclick={props.openFn}>
-					Open Command Palette <Kbd>{cmd} + K</Kbd>
-				</button>
-			{/snippet}
-			<Command>
-				<CommandInput placeholder="Type a command or search..." />
-				<div role="listbox">
-					<CommandGroup label="Suggestions">
-						<CommandItem>
-							<CalendarIcon />
-							<span> Calendar </span>
-						</CommandItem>
-						<CommandItem>
-							<EmojiIcon />
-							<span> Search Emoji </span>
-						</CommandItem>
-						<CommandItem>
-							<CalculatorIcon />
-							<span> Calculator </span>
-						</CommandItem>
-					</CommandGroup>
-					<Separator />
-					<CommandGroup label="Settings">
-						<CommandItem>
-							<ProfileIcon />
-							<span> Profile </span>
-						</CommandItem>
-						<CommandItem>
-							<CreditCardIcon />
-							<span> Billing </span>
-						</CommandItem>
-						<CommandItem>
-							<SettingsIcon />
-							<span> Settings </span>
-						</CommandItem>
-					</CommandGroup>
-				</div>
-			</Command>
-		</CommandDialog>
+		<Command>
+			<CommandInput placeholder="Type a command or search..." />
+			<div role="listbox">
+				<CommandGroup label="Suggestions">
+					<CommandItem value="calendar">
+						<CalendarIcon />
+						<span> Calendar </span>
+					</CommandItem>
+					<CommandItem value="search-emoji">
+						<EmojiIcon />
+						<span> Search Emoji </span>
+					</CommandItem>
+					<CommandItem value="calculator">
+						<CalculatorIcon />
+						<span> Calculator </span>
+					</CommandItem>
+				</CommandGroup>
+				<CommandGroup label="Settings">
+					<CommandItem value="profile">
+						<ProfileIcon />
+						<span> Profile </span>
+					</CommandItem>
+					<CommandItem value="billing">
+						<CreditCardIcon />
+						<span> Billing </span>
+					</CommandItem>
+					<CommandItem value="settings">
+						<SettingsIcon />
+						<span> Settings </span>
+					</CommandItem>
+				</CommandGroup>
+			</div>
+		</Command>
 	{/snippet}
 </Story>

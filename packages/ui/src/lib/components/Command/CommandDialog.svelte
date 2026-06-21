@@ -1,20 +1,28 @@
 <script lang="ts">
-	import Dialog from '$components/Dialog/Dialog.svelte';
-	import type { ComponentProps } from 'svelte';
+	import DialogRoot from '$components/Dialog/Dialog.svelte';
+	import type { Snippet } from 'svelte';
 
-	// extends the dialog component to be used for the command palette, which will be built on top of the Command component
+	interface Props {
+		open?: boolean;
+		children?: Snippet;
+	}
 
-	interface Props extends ComponentProps<typeof Dialog> {}
-
-	let { trigger: triggerProp, ref = $bindable(null), children: childrenProp, ...rest }: Props = $props();
+	let { open = $bindable(false), children: childrenProp }: Props = $props();
 </script>
 
-<Dialog bind:ref lightDismiss {...rest}>
-	{#snippet trigger(props)}
-		{@render triggerProp?.(props)}
-	{/snippet}
+<DialogRoot
+	bind:open
+	lightDismiss
+	class="command-palette-dialog"
+	--dialog-max-width="38rem"
+	--dialog-padding="0"
+>
+	{@render childrenProp?.()}
+</DialogRoot>
 
-    {#snippet children(props)}
-        {@render childrenProp?.(props)}
-    {/snippet}
-</Dialog>
+<style>
+	:global(dialog.command-palette-dialog:modal) {
+		margin-block-start: 10vh;
+		margin-inline: auto;
+	}
+</style>

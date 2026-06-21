@@ -1,42 +1,55 @@
 <script lang="ts">
 	import SearchIcon from '~icons/lucide/search';
-	import { InputGroup } from '$components/Form/InputGroup';
-	import Input from '$components/Form/Input.svelte';
-	import Button from '$components/Button';
+	import Button from '$components/Button/Button.svelte';
 	import XIcon from '~icons/lucide/x';
-	import type { HTMLFormAttributes, HTMLInputAttributes } from 'svelte/elements';
-
-	interface Props extends HTMLInputAttributes {
-		ref?: HTMLElement | null;
+	import type { HTMLInputAttributes } from 'svelte/elements';
+	import { CommandState } from './command.svelte';
+	import { InputGroup } from '$components/Form/InputGroup';
+	import { Input } from '$components/Form/Input';
+	interface Props extends Omit<HTMLInputAttributes, 'type'> {
+		ref?: HTMLInputElement | null;
 		value?: string;
-		action?: HTMLFormAttributes['action'];
-		method?: HTMLFormAttributes['method'];
+		placeholder?: string;
 	}
 
-	let {
-		ref = $bindable(null),
-		action,
-		method,
-		value = $bindable(''),
-		...restProps
-	}: Props = $props();
+	let { ref = $bindable(null), value = $bindable(''), placeholder, ...restProps }: Props = $props();
+
+	const commandState = CommandState.get();
 </script>
 
 <div class="command-input">
-	<form {action} {method}>
-		<InputGroup.Root>
-			<Input bind:value bind:ref {...restProps} />
-			<InputGroup.Addon align="inline-start">
-				<SearchIcon />
+	<InputGroup.Root>
+		<InputGroup.Addon align="inline-start">
+			<SearchIcon aria-hidden="true" />
+		</InputGroup.Addon>
+		<Input
+			bind:ref
+			bind:value={commandState.search}
+			type="search"
+			autocomplete="off"
+			autocorrect="off"
+			spellcheck={false}
+			role="combobox"
+			aria-expanded="true"
+			aria-autocomplete="list"
+			aria-activedescendant={commandState.selectedId}
+			{placeholder}
+			{...restProps}
+			class="command-search-input"
+		/>
+		{#if commandState.search.trim() !== ''}
+			<InputGroup.Addon align="inline-end">
+				<Button type="button" variant="stripped" onclick={() => (commandState.search = '')}>
+					<XIcon />
+					<span class="sr-only">Clear input</span>
+				</Button>
 			</InputGroup.Addon>
-			{#if value.trim() !== ''}
-				<InputGroup.Addon align="inline-end">
-					<Button type="reset" variant="stripped" onclick={() => (value = '')}>
-						<XIcon />
-						<span class="sr-only"> Clear input </span>
-					</Button>
-				</InputGroup.Addon>
-			{/if}
-		</InputGroup.Root>
-	</form>
+		{/if}
+	</InputGroup.Root>
 </div>
+
+<style>
+	.command-input {
+		padding: 0.25rem 0.5rem;
+	}
+</style>
