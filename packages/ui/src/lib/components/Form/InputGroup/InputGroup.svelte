@@ -8,6 +8,7 @@
 
 	let { addon, children, ...rest }: Props = $props();
 </script>
+
 <!-- Inputgroup -->
 <div class={[rest.class, 'input-group']} {...rest}>
 	{@render children?.()}
@@ -38,6 +39,7 @@
 		display: flex;
 		flex-wrap: nowrap;
 		width: 100%;
+		overflow: clip;
 		border-radius: var(--_input-group-border-radius);
 		border: var(--_input-group-border-width, 1px) solid var(--_input-group-border-color, #ccc);
 	}
@@ -67,7 +69,7 @@
 		--_textarea-focus-outline-width: 0px;
 		--_textarea-focus-outline-color: transparent;
 		--_textarea-resize: none;
-		
+
 		anchor-name: --input-group-input;
 	}
 </style>
