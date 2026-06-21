@@ -1,0 +1,55 @@
+/*
+ * Textarea theming — consumer-owned.
+ * Copy this file into your project and edit freely.
+ *
+ * Textarea falls back to --input-* vars for every property, so setting
+ * Input.variants.css on :root automatically themes both components.
+ * Use --textarea-* to override the textarea individually.
+ *
+ * ════════════════════════════════════════════════════════════════════════════
+ * FULL PUBLIC API
+ * ════════════════════════════════════════════════════════════════════════════
+ *
+ * -- Background (falls back to --input-* equivalents)
+ * --textarea-background: var(--input-background, #fff);
+ * --textarea-background-hover: var(--input-background-hover, oklch(from <background> calc(l - 0.02) c h));
+ * --textarea-background-disabled: var(--input-background-disabled, oklch(from <background> calc(l - 0.03) c h));
+ *
+ * -- Border (falls back to --input-* equivalents)
+ * --textarea-border-color: var(--input-border-color, #ccc);
+ * --textarea-border-hover-color: var(--input-border-hover-color, #999);
+ * --textarea-border-width: var(--input-border-width, 1px);
+ * --textarea-border-radius: var(--input-border-radius, 4px);
+ *
+ * -- Focus ring (falls back to --input-* equivalents)
+ * --textarea-focus-outline-color: var(--input-focus-outline-color);
+ * --textarea-focus-outline-width: var(--input-focus-outline-width, 1px);
+ *
+ * -- Invalid state (falls back to --input-* equivalents)
+ * --textarea-border-invalid-color: var(--input-border-invalid-color);
+ * --textarea-focus-outline-invalid-color: var(--input-focus-outline-invalid-color);
+ *
+ * -- Valid state (falls back to --input-border-valid-color)
+ * --textarea-border-valid-color: var(--input-border-valid-color);
+ *
+ * -- Spacing (falls back to --input-padding)
+ * --textarea-padding: var(--input-padding, 0.5rem 0.75rem);
+ *
+ * -- Text (falls back to --input-text-color)
+ * --textarea-text-color: var(--input-text-color, currentColor);
+ *
+ * -- Sizing
+ * --textarea-resize: vertical;           (none | both | horizontal | vertical)
+ * --textarea-min-block-size: 4lh;        (minimum height before content grows it)
+ */
+
+/* ════════════════════════════════════════════════════════════════════════════
+ * EXAMPLE: textarea-specific overrides (Input.variants.css handles the rest)
+ * ════════════════════════════════════════════════════════════════════════════ */
+
+/*
+:root {
+  --textarea-min-block-size: 6lh;
+  --textarea-resize: none;
+}
+*/
