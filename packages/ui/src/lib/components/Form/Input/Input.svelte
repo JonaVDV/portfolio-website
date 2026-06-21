@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { HTMLInputAttributes } from 'svelte/elements';
-	import { type ConditionalProps } from '../../types';
+	import { type ConditionalProps } from '$lib/types';
 
 	interface BaseProps extends HTMLInputAttributes {
 		ref?: HTMLElement | null;
@@ -64,12 +64,14 @@ A text input field for forms. This component encapsulates the styling and behavi
 
 		/* miscellaneous */
 		--_input-width: var(--input-width, auto);
+		--_input-background: var(--input-background, var(--clr-surface-000, #fff));
 
 		border: var(--_input-border-width) solid var(--_input-border-color);
 		border-radius: var(--_input-border-radius);
 		padding: var(--_input-padding);
 		color: var(--_input-text-color);
 		width: var(--_input-width);
+		background-color: var(--_input-background);
 
 		&::placeholder {
 			color: var(--_input-placeholder-color);
@@ -77,6 +79,10 @@ A text input field for forms. This component encapsulates the styling and behavi
 
 		&:hover {
 			--_input-border-color: var(--input-border-hover-color, #999);
+			background-color: var(
+				--input-background-hover,
+				oklch(from var(--_input-background) calc(l - 0.02) c h)
+			);
 		}
 
 		&:focus-visible {
@@ -87,7 +93,25 @@ A text input field for forms. This component encapsulates the styling and behavi
 		&:disabled {
 			--_input-border-color: var(--input-border-disabled-color, #ccc);
 			--_input-text-color: var(--input-text-disabled-color, #888);
+			--_input-background: var(
+				--input-background-disabled,
+				oklch(from var(--_input-background) calc(l - 0.03) c h)
+			);
 			cursor: not-allowed;
+		}
+
+		/* define user-valid first to make sure the invalid state takes precedence */
+		&:user-valid {
+			--_input-border-color: var(--input-border-valid-color, oklch(0.55 0.17 145));
+		}
+
+		&[aria-invalid='true'] {
+			--_input-border-invalid-color: var(--input-border-invalid-color, oklch(0.55 0.22 25));
+			--_input-border-color: var(--_input-border-invalid-color);
+			--_input-focus-outline-color: var(
+				--input-focus-outline-invalid-color,
+				var(--_input-border-invalid-color)
+			);
 		}
 	}
 

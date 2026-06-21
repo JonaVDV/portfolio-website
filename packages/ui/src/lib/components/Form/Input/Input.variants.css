@@ -1,0 +1,67 @@
+/*
+ * Input theming — consumer-owned.
+ * Copy this file into your project and edit freely.
+ *
+ * Set these on any ancestor element (e.g. :root, a form, a fieldset).
+ * All properties cascade normally — no data-variant needed.
+ *
+ * Textarea falls back to these same vars, so setting them here themes both
+ * simultaneously. Use --textarea-* to override textarea individually.
+ *
+ * ════════════════════════════════════════════════════════════════════════════
+ * FULL PUBLIC API
+ * ════════════════════════════════════════════════════════════════════════════
+ *
+ * -- Background
+ * --input-background: var(--clr-surface-000, #fff);
+ * --input-background-hover: oklch(from <background> calc(l - 0.02) c h);  (derived)
+ * --input-background-disabled: oklch(from <background> calc(l - 0.03) c h);  (derived)
+ *
+ * -- Border
+ * --input-border-color: #ccc;
+ * --input-border-hover-color: #999;
+ * --input-border-width: 1px;
+ * --input-border-radius: 4px;
+ *
+ * -- Focus ring
+ * --input-focus-outline-color: var(--clr-brand-400);
+ * --input-focus-outline-width: 1px;
+ *
+ * -- Invalid state  (set aria-invalid="true" on the input — form libraries do this automatically)
+ * --input-border-invalid-color: oklch(0.55 0.22 25);   (red)
+ * --input-focus-outline-invalid-color: var(--input-border-invalid-color);
+ *
+ * -- Valid state  (:user-valid fires only after the user has touched the field)
+ * --input-border-valid-color: oklch(0.55 0.17 145);   (green)
+ *
+ * -- Spacing
+ * --input-padding: 0.5rem 0.75rem;       (shorthand — overrides block/inline)
+ * --input-padding-block: 0.5rem;
+ * --input-padding-inline: 0.75rem;
+ *
+ * -- Text
+ * --input-text-color: #000;
+ * --input-placeholder-color: #888;
+ *
+ * -- Disabled
+ * --input-border-disabled-color: #ccc;
+ * --input-text-disabled-color: #888;
+ *
+ * -- Layout
+ * --input-width: auto;
+ */
+
+/* ════════════════════════════════════════════════════════════════════════════
+ * EXAMPLE THEME
+ * ════════════════════════════════════════════════════════════════════════════ */
+
+:root {
+	--input-border-color: var(--clr-surface-300);
+	--input-border-hover-color: var(--clr-surface-400);
+	--input-border-radius: 6px;
+	--input-focus-outline-color: var(--clr-brand-400);
+	--input-text-color: var(--clr-surface-900);
+	--input-placeholder-color: var(--clr-surface-500);
+	--input-border-disabled-color: var(--clr-surface-200);
+	--input-text-disabled-color: var(--clr-surface-400);
+}
