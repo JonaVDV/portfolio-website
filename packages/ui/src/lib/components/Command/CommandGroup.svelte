@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
-	import { CommandGroupContext, CommandState } from './command.svelte';
+	import { setCommandGroupContext, CommandState } from './command.svelte';
 
 	interface Props {
 		children?: Snippet;
@@ -11,7 +11,6 @@
 	const commandState = CommandState.get();
 	const groupId = $props.id();
 
-	const [, setCommandGroupContext] = CommandGroupContext;
 	setCommandGroupContext(groupId);
 
 	const isVisible = $derived(commandState.shouldRenderGroup(groupId));

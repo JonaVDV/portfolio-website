@@ -12,6 +12,7 @@
 	import Kbd from '$components/Kbd/Kbd.svelte';
 	import { cmd } from '$components/Kbd/Kbd.svelte';
 	import CommandGroup from './CommandGroup.svelte';
+	import Separator from '$components/Separator/Separator.svelte';
 
 	const { Story } = defineMeta({
 		title: 'Components/Command',
@@ -23,36 +24,42 @@
 	{#snippet template()}
 		<Command>
 			<CommandInput placeholder="Type a command or search..." />
-			<div role="listbox">
-				<CommandGroup label="Suggestions">
-					<CommandItem value="calendar">
-						<CalendarIcon />
-						<span> Calendar </span>
-					</CommandItem>
-					<CommandItem value="search-emoji">
-						<EmojiIcon />
-						<span> Search Emoji </span>
-					</CommandItem>
-					<CommandItem value="calculator">
-						<CalculatorIcon />
-						<span> Calculator </span>
-					</CommandItem>
-				</CommandGroup>
-				<CommandGroup label="Settings">
-					<CommandItem value="profile">
-						<ProfileIcon />
-						<span> Profile </span>
-					</CommandItem>
-					<CommandItem value="billing">
-						<CreditCardIcon />
-						<span> Billing </span>
-					</CommandItem>
-					<CommandItem value="settings">
-						<SettingsIcon />
-						<span> Settings </span>
-					</CommandItem>
-				</CommandGroup>
-			</div>
+			<CommandGroup label="Suggestions">
+				<CommandItem value="calendar">
+					<CalendarIcon />
+					<span> Calendar </span>
+				</CommandItem>
+				<CommandItem value="search-emoji">
+					<EmojiIcon />
+					<span> Search Emoji </span>
+				</CommandItem>
+				<CommandItem value="calculator">
+					<CalculatorIcon />
+					<span> Calculator </span>
+				</CommandItem>
+			</CommandGroup>
+			<Separator />
+			<CommandGroup label="Settings">
+				<CommandItem value="profile">
+					<ProfileIcon />
+					<span> Profile </span>
+				</CommandItem>
+				<CommandItem value="billing">
+					<CreditCardIcon />
+					<span> Billing </span>
+				</CommandItem>
+				<CommandItem value="settings" href="/settings">
+					<SettingsIcon />
+					<span> Settings </span>
+					<Kbd
+						--kbd-background="transparent"
+						--kbd-color="currentColor"
+						--kbd-font-size="0.8em"
+						style="margin-inline-start: auto;"
+						class="">{cmd} + S</Kbd
+					>
+				</CommandItem>
+			</CommandGroup>
 		</Command>
 	{/snippet}
 </Story>

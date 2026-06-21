@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { type Snippet } from 'svelte';
-	import { CommandGroupContext, CommandState } from './command.svelte';
+	import { getCommandGroupContext, CommandState } from './command.svelte';
 
 	interface Props {
 		children?: Snippet;
@@ -14,8 +14,6 @@
 	let { children, class: className, value, onselect, keywords, href }: Props = $props();
 
 	const commandState = CommandState.get();
-	const [getCommandGroupContext] = CommandGroupContext;
-
 	const groupId = getCommandGroupContext();
 	const id = $props.id();
 
@@ -28,7 +26,6 @@
 	const order = $derived(commandState.getItemOrder(id));
 </script>
 
-<!-- TODO There must be a better way to render this right?? -->
 <!-- svelte-ignore a11y_click_events_have_key_events -->
 <li
 	{id}
@@ -42,6 +39,8 @@
 	onmouseenter={(e) => commandState.onPointerMove(id, e)}
 	onclick={() => {
 		commandState.selectedIdState = id;
+		console.log('selected' + id);
+		
 		onselect?.();
 	}}
 >

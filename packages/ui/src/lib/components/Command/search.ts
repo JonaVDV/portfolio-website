@@ -51,99 +51,99 @@ const IS_SPACE_REGEXP = /[\s-]/;
 const COUNT_SPACE_REGEXP = /[\s-]/g;
 
 function computeCommandScoreInner(
-	string: string,
-	abbreviation: string,
-	lowerString: string,
-	lowerAbbreviation: string,
-	stringIndex: number,
-	abbreviationIndex: number,
-	memoizedResults: Record<string, number>
+  string: string,
+  abbreviation: string,
+  lowerString: string,
+  lowerAbbreviation: string,
+  stringIndex: number,
+  abbreviationIndex: number,
+  memoizedResults: Record<string, number>,
 ) {
-	if (abbreviationIndex === abbreviation.length) {
-		if (stringIndex === string.length) return SCORE_CONTINUE_MATCH;
-		return PENALTY_NOT_COMPLETE;
-	}
+  if (abbreviationIndex === abbreviation.length) {
+    if (stringIndex === string.length) return SCORE_CONTINUE_MATCH;
+    return PENALTY_NOT_COMPLETE;
+  }
 
-	const memoizeKey = `${stringIndex},${abbreviationIndex}`;
-	if (memoizedResults[memoizeKey] !== undefined) return memoizedResults[memoizeKey];
+  const memoizeKey = `${stringIndex},${abbreviationIndex}`;
+  if (memoizedResults[memoizeKey] !== undefined) return memoizedResults[memoizeKey];
 
-	const abbreviationChar = lowerAbbreviation.charAt(abbreviationIndex);
-	let index = lowerString.indexOf(abbreviationChar, stringIndex);
-	let highScore = 0;
+  const abbreviationChar = lowerAbbreviation.charAt(abbreviationIndex);
+  let index = lowerString.indexOf(abbreviationChar, stringIndex);
+  let highScore = 0;
 
-	let score: number,
-		transposedScore: number,
-		wordBreaks: RegExpMatchArray | null,
-		spaceBreaks: RegExpMatchArray | null;
+  let score: number,
+    transposedScore: number,
+    wordBreaks: RegExpMatchArray | null,
+    spaceBreaks: RegExpMatchArray | null;
 
-	while (index >= 0) {
-		score = computeCommandScoreInner(
-			string,
-			abbreviation,
-			lowerString,
-			lowerAbbreviation,
-			index + 1,
-			abbreviationIndex + 1,
-			memoizedResults
-		);
-		if (score > highScore) {
-			if (index === stringIndex) {
-				score *= SCORE_CONTINUE_MATCH;
-			} else if (IS_GAP_REGEXP.test(string.charAt(index - 1))) {
-				score *= SCORE_NON_SPACE_WORD_JUMP;
-				wordBreaks = string.slice(stringIndex, index - 1).match(COUNT_GAPS_REGEXP);
-				if (wordBreaks && stringIndex > 0) {
-					score *= PENALTY_SKIPPED ** wordBreaks.length;
-				}
-			} else if (IS_SPACE_REGEXP.test(string.charAt(index - 1))) {
-				score *= SCORE_SPACE_WORD_JUMP;
-				spaceBreaks = string.slice(stringIndex, index - 1).match(COUNT_SPACE_REGEXP);
-				if (spaceBreaks && stringIndex > 0) {
-					score *= PENALTY_SKIPPED ** spaceBreaks.length;
-				}
-			} else {
-				score *= SCORE_CHARACTER_JUMP;
-				if (stringIndex > 0) {
-					score *= PENALTY_SKIPPED ** (index - stringIndex);
-				}
-			}
+  while (index >= 0) {
+    score = computeCommandScoreInner(
+      string,
+      abbreviation,
+      lowerString,
+      lowerAbbreviation,
+      index + 1,
+      abbreviationIndex + 1,
+      memoizedResults,
+    );
+    if (score > highScore) {
+      if (index === stringIndex) {
+        score *= SCORE_CONTINUE_MATCH;
+      } else if (IS_GAP_REGEXP.test(string.charAt(index - 1))) {
+        score *= SCORE_NON_SPACE_WORD_JUMP;
+        wordBreaks = string.slice(stringIndex, index - 1).match(COUNT_GAPS_REGEXP);
+        if (wordBreaks && stringIndex > 0) {
+          score *= PENALTY_SKIPPED ** wordBreaks.length;
+        }
+      } else if (IS_SPACE_REGEXP.test(string.charAt(index - 1))) {
+        score *= SCORE_SPACE_WORD_JUMP;
+        spaceBreaks = string.slice(stringIndex, index - 1).match(COUNT_SPACE_REGEXP);
+        if (spaceBreaks && stringIndex > 0) {
+          score *= PENALTY_SKIPPED ** spaceBreaks.length;
+        }
+      } else {
+        score *= SCORE_CHARACTER_JUMP;
+        if (stringIndex > 0) {
+          score *= PENALTY_SKIPPED ** (index - stringIndex);
+        }
+      }
 
-			if (string.charAt(index) !== abbreviation.charAt(abbreviationIndex)) {
-				score *= PENALTY_CASE_MISMATCH;
-			}
-		}
+      if (string.charAt(index) !== abbreviation.charAt(abbreviationIndex)) {
+        score *= PENALTY_CASE_MISMATCH;
+      }
+    }
 
-		if (
-			(score < SCORE_TRANSPOSITION &&
-				lowerString.charAt(index - 1) === lowerAbbreviation.charAt(abbreviationIndex + 1)) ||
-			(lowerAbbreviation.charAt(abbreviationIndex + 1) ===
-				lowerAbbreviation.charAt(abbreviationIndex) &&
-				lowerString.charAt(index - 1) !== lowerAbbreviation.charAt(abbreviationIndex))
-		) {
-			transposedScore = computeCommandScoreInner(
-				string,
-				abbreviation,
-				lowerString,
-				lowerAbbreviation,
-				index + 1,
-				abbreviationIndex + 2,
-				memoizedResults
-			);
+    if (
+      (score < SCORE_TRANSPOSITION &&
+        lowerString.charAt(index - 1) === lowerAbbreviation.charAt(abbreviationIndex + 1)) ||
+      (lowerAbbreviation.charAt(abbreviationIndex + 1) ===
+        lowerAbbreviation.charAt(abbreviationIndex) &&
+        lowerString.charAt(index - 1) !== lowerAbbreviation.charAt(abbreviationIndex))
+    ) {
+      transposedScore = computeCommandScoreInner(
+        string,
+        abbreviation,
+        lowerString,
+        lowerAbbreviation,
+        index + 1,
+        abbreviationIndex + 2,
+        memoizedResults,
+      );
 
-			if (transposedScore * SCORE_TRANSPOSITION > score) {
-				score = transposedScore * SCORE_TRANSPOSITION;
-			}
-		}
+      if (transposedScore * SCORE_TRANSPOSITION > score) {
+        score = transposedScore * SCORE_TRANSPOSITION;
+      }
+    }
 
-		if (score > highScore) {
-			highScore = score;
-		}
+    if (score > highScore) {
+      highScore = score;
+    }
 
-		index = lowerString.indexOf(abbreviationChar, index + 1);
-	}
+    index = lowerString.indexOf(abbreviationChar, index + 1);
+  }
 
-	memoizedResults[memoizeKey] = highScore;
-	return highScore;
+  memoizedResults[memoizeKey] = highScore;
+  return highScore;
 }
 
 /**
@@ -152,8 +152,8 @@ function computeCommandScoreInner(
  * @returns
  */
 function formatInput(string: string): string {
-	// convert all valid space characters to space so they match each other
-	return string.toLowerCase().replace(COUNT_SPACE_REGEXP, ' ');
+  // convert all valid space characters to space so they match each other
+  return string.toLowerCase().replace(COUNT_SPACE_REGEXP, " ");
 }
 
 /**
@@ -182,26 +182,26 @@ function formatInput(string: string): string {
  * command (and keywords)
  */
 export function computeCommandScore(
-	command: string,
-	search: string,
-	commandKeywords?: string[]
+  command: string,
+  search: string,
+  commandKeywords?: string[],
 ): number {
-	/**
-	 * NOTE: We used to do lower-casing on each recursive call, but this meant that `toLowerCase()`
-	 * was the dominating cost in the algorithm. Passing both is a little ugly, but considerably
-	 * faster.
-	 */
-	command =
-		commandKeywords && commandKeywords.length > 0
-			? `${`${command} ${commandKeywords?.join(' ')}`}`
-			: command;
-	return computeCommandScoreInner(
-		command,
-		search,
-		formatInput(command),
-		formatInput(search),
-		0,
-		0,
-		{}
-	);
+  /**
+   * NOTE: We used to do lower-casing on each recursive call, but this meant that `toLowerCase()`
+   * was the dominating cost in the algorithm. Passing both is a little ugly, but considerably
+   * faster.
+   */
+  command =
+    commandKeywords && commandKeywords.length > 0
+      ? `${`${command} ${commandKeywords?.join(" ")}`}`
+      : command;
+  return computeCommandScoreInner(
+    command,
+    search,
+    formatInput(command),
+    formatInput(search),
+    0,
+    0,
+    {},
+  );
 }
