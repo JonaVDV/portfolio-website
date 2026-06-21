@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Button from '$components/Button/Button.svelte';
+	import Button from '../Button/Button.svelte';
 	import type { Snippet } from 'svelte';
 	import type { HTMLAttributes } from 'svelte/elements';
 	import X from '~icons/lucide/x';
@@ -75,7 +75,7 @@
 	let {
 		trigger,
 		children,
-		closeButton,
+		closeButton = true,
 		header,
 		footer,
 		ref = $bindable(null),
@@ -141,24 +141,24 @@
 	bind:this={ref}
 	aria-labelledby={header ? `${dialogId}-header` : undefined}
 >
-	{#if header}
+	<div id="{dialogId}-header" class="dialog-header">
 		{#if closeButton}
 			<Button
 				class="close-dialog"
 				variant="stripped"
+				data-dialog-close
 				commandfor={dialogId}
 				command="close"
-				data-testid="close-dialog-button"
 				aria-label="Close dialog"
 				onclick={handleClose}
 			>
 				<X />
 			</Button>
 		{/if}
-		<div id="{dialogId}-header" class="dialog-header">
+		{#if header}
 			{@render header?.()}
-		</div>
-	{/if}
+		{/if}
+	</div>
 
 	<div class="dialog-content">
 		{@render children?.()}
@@ -180,16 +180,40 @@
 		--_dialog-padding: var(--dialog-padding, 1.5rem);
 		--_dialog-border-radius: var(--dialog-border-radius, 8px);
 		--_dialog-border-width: var(--dialog-border-width, 1px);
-		--_dialog-border-color: var(--dialog-border-color, var(--clr-surface-300, oklch(83.57% 0.00308 264.751)));
+		--_dialog-border-color: var(
+			--dialog-border-color,
+			var(--clr-surface-300, oklch(83.57% 0.00308 264.751))
+		);
 		--_dialog-max-width: var(--dialog-max-width, 30rem);
+		--_dialog-spacing: var(--dialog-spacing, 1.5rem);
 		--_dialog-max-height: var(--dialog-max-height, 90vh);
 		--_dialog-box-shadow: var(--dialog-box-shadow, 0 10px 15px -3px rgb(0 0 0 / 0.1));
+
+		/** Header */
+		--_dialog-header-background: var(--dialog-header-background, inherit);
+		--_dialog-header-color: var(--dialog-header-color, inherit);
+		--_dialog-header-padding: var(--dialog-header-padding, var(--_dialog-padding));
+		--_dialog-header-border-bottom: var(--dialog-header-border-bottom, none);
+		--_dialog-header-gap: var(--dialog-header-gap, 0.5rem);
+		--_dialog-header-align: var(--dialog-header-align, center);
+
+		/** Content */
+		--_dialog-content-background: var(--dialog-content-background, inherit);
+        --_dialog-content-padding: var(--dialog-content-padding, var(--_dialog-padding));
+
+		/** Footer */
+		--_dialog-footer-background: var(--dialog-footer-background, inherit);
+		--_dialog-footer-color: var(--dialog-footer-color, inherit);
+		--_dialog-footer-padding: var(--dialog-footer-padding, var(--_dialog-padding));
+		--_dialog-footer-border-top: var(--dialog-footer-border-top, none);
+		--_dialog-footer-gap: var(--dialog-footer-gap, 0.75rem);
+		--_dialog-footer-justify: var(--dialog-footer-justify, flex-end);
 
 		/** --- Layout ---*/
 		margin: auto;
 		width: min(calc(100% - 2rem), var(--_dialog-max-width));
 		max-height: min(calc(100% - 2rem), var(--_dialog-max-height));
-		padding: var(--_dialog-padding);
+		padding: 0; /** Padding moved to sub-elements for edge-to-edge borders */
 
 		/** --- Appearance ---*/
 		background: var(--_dialog-background);
@@ -201,6 +225,9 @@
 		/** --- Behavior ---*/
 		overflow: hidden;
 		isolation: isolate;
+		display: flex;
+		flex-direction: column;
+		gap: var(--_dialog-spacing);
 
 		/** --- Transitions ---*/
 		/** Modern CSS: allow transitions on display property (all browsers except firefox) */
@@ -214,6 +241,34 @@
 		&[open] {
 			opacity: 1;
 		}
+	}
+
+	.dialog-header {
+		background: var(--_dialog-header-background);
+		color: var(--_dialog-header-color);
+		padding: var(--_dialog-header-padding);
+		padding-bottom: 0;
+		border-bottom: var(--_dialog-header-border-bottom);
+		gap: var(--_dialog-header-gap);
+		position: relative;
+	}
+
+	.dialog-content {
+		background: var(--_dialog-content-background);
+		padding-inline: var(--_dialog-content-padding);
+		overflow-y: auto;
+		overscroll-behavior: contain;
+	}
+
+	.dialog-footer {
+		background: var(--_dialog-footer-background);
+		color: var(--_dialog-footer-color);
+		padding: var(--_dialog-footer-padding);
+		padding-top: 0;
+		border-top: var(--_dialog-footer-border-top);
+		display: flex;
+		justify-content: var(--_dialog-footer-justify);
+		gap: var(--_dialog-footer-gap);
 	}
 
 	/**
@@ -250,14 +305,14 @@
 
 	/**
 	 * Close Button
-	 * Positioned in the top-right corner of the dialog header
-	 * Uses float to avoid disrupting flex/grid layouts
+	 * Positioned in the top-right corner of the dialog
+	 * Explicitly positioned to avoid header content collision
 	 */
-	dialog > :global(.close-dialog) {
-		--_dialog-close-margin-inline-start: var(--dialog-close-margin-inline-start, 0.5rem);
+	dialog:modal :global([data-dialog-close]) {
+		--_dialog-close-margin: var(--dialog-close-margin, 0.5rem);
 
 		float: inline-end;
-		margin-inline-start: var(--_dialog-close-margin-inline-start);
-		z-index: 1;
+        margin-inline-start: var(--_dialog-close-margin);
+		z-index: 2;
 	}
 </style>
