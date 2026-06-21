@@ -1,0 +1,47 @@
+/*
+ * Switch theming — consumer-owned.
+ * Copy this file into your project and edit freely.
+ *
+ * Set these on any ancestor element (e.g. :root, a form, a fieldset).
+ * The thumb position animates automatically via @property — no JS needed.
+ *
+ * ════════════════════════════════════════════════════════════════════════════
+ * FULL PUBLIC API
+ * ════════════════════════════════════════════════════════════════════════════
+ *
+ * -- Track (unchecked)
+ * --switch-background-color: oklch(0.197 0.008 264);
+ * --switch-border-color: oklch(0.256 0.011 264);
+ *
+ * -- Track (checked)
+ * --switch-checked-background-color: oklch(0.5 0.2 286);
+ * --switch-checked-border-color: oklch(0.45 0.2 286);
+ *
+ * -- Focus ring
+ * --switch-focus-color: oklch(0.5 0.2 286);
+ *
+ * -- Thumb
+ * --switch-thumb-color: oklch(0.932 0.004 256);
+ * --switch-thumb-border-color: oklch(0.86 0.008 256);
+ * --switch-thumb-border-radius: 50%;
+ * --switch-thumb-offset-sides: 0.125em;           (gap between thumb and track edge)
+ *
+ * -- Sizing (em = scales with font-size of the component)
+ * --switch-width: 2.5em;
+ * --switch-height: 1.25em;
+ * --switch-border-radius: 100vw;                  (pill shape by default)
+ */
+
+/* ════════════════════════════════════════════════════════════════════════════
+ * EXAMPLE THEME
+ * ════════════════════════════════════════════════════════════════════════════ */
+
+:root {
+  --switch-background-color: var(--clr-surface-300);
+  --switch-border-color: var(--clr-surface-400);
+  --switch-checked-background-color: var(--clr-brand-400);
+  --switch-checked-border-color: var(--clr-brand-500);
+  --switch-focus-color: var(--clr-brand-400);
+  --switch-thumb-color: var(--clr-surface-000);
+  --switch-thumb-border-color: var(--clr-surface-200);
+}
