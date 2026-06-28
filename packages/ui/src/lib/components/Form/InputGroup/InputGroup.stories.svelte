@@ -3,7 +3,7 @@
 	import InputGroup from './InputGroup.svelte';
 	import Textarea from '../Textarea/';
 	import InputGroupAddon from './InputGroupAddon.svelte';
-	import Input from '../Input.svelte';
+	import { Input } from '../Input/';
 	import SearchIcon from '~icons/lucide/search';
 	import InfoIcon from '~icons/lucide/info';
 	import Tooltip from '$components/Tooltip/Tooltip.svelte';
