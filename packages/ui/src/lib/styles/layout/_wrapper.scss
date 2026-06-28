@@ -1,115 +1,86 @@
-.primary-layout-sidebar {
-  /* prettier-ignore */
-  grid-template-columns:
-		[sidebar] auto 
-		[full-width-start] 
-			var(--full) 
-				[content-start] 
-					var(--content) 
-				[content-end] 
-			var(--full) 
+/*
+ * One configurable grid engine for every named-track layout.
+ *
+ * Public knobs (override per layout, or per instance via inline style):
+ *   --minimum-content-padding  min gutter on each outer edge
+ *   --content-max-width        max width of the centred content track
+ *   --full-max-width           max width of each outer (full) track
+ *
+ * Private tracks (--_layout-*) consume those publics + sensible defaults
+ * (STYLE.md §1). To make a new layout, don't write a new grid — apply
+ * `.layout` and override the knobs you need (the popover/dropdown surfaces do
+ * exactly this). Line *names* are shared, so the `.full`/`.content` breakout
+ * helpers below work inside any `.layout`.
+ *
+ * `.primary-layout` is the page-level alias; Shell.svelte layers its
+ * container-query + sidebar behaviour on top of it.
+ */
+:where(.layout, .primary-layout) {
+	--_layout-padding: var(--minimum-content-padding, 2rem);
+	--_layout-content-width: var(--content-max-width, 65ch);
+	--_layout-full-width: var(--full-max-width, 1fr);
+
+	--_layout-full: minmax(var(--_layout-padding), var(--_layout-full-width));
+	--_layout-content: min(var(--_layout-content-width), 100% - var(--_layout-padding) * 2);
+
+	display: grid;
+	/* prettier-ignore */
+	grid-template-columns:
+		[full-width-start] var(--_layout-full)
+		[content-start]    var(--_layout-content)
+		[content-end]      var(--_layout-full)
 		[full-width-end];
 }
 
-.primary-layout > *,
-.full-width > * {
-  grid-column: content;
-}
-.primary-layout,
-.full-width {
-  --minimum-content-padding: 2rem;
-
-  /** TRACK WIDTHS **/
-  --full-max-width: 1fr;
-  --content-max-width: 65ch;
-
-  /** TRACK SIZES **/
-  --full: minmax(var(--minimum-content-padding), 1fr);
-  --content: min(var(--content-max-width), 100% - var(--minimum-content-padding) * 2);
-
-  display: grid;
-  /* prettier-ignore */
-  grid-template-columns: 
-        [full-width-start]
-        var(--full)
-            [content-start]
-            var(--content)
-            [content-end]
-        var(--full)
-        [full-width-end]
-  ;
+/** DEFAULT CHILD PLACEMENT **/
+.layout > *,
+.primary-layout > * {
+	grid-column: content;
 }
 
-/** CLASSES **/
-.full {
-  grid-column: full-width;
+/** BREAKOUT HELPERS **/
+.full,
+.full-width,
+.full-content,
+.full-content-nopadding {
+	grid-column: full-width;
 }
 .full-start {
-  grid-column-start: full-width-start;
+	grid-column-start: full-width-start;
 }
 .full-end {
-  grid-column-end: full-width-end;
+	grid-column-end: full-width-end;
+}
+.full-content {
+	padding-inline: var(--_layout-padding);
 }
 
 .content {
-  grid-column: content;
+	grid-column: content;
 }
 .content-start {
-  grid-column-start: content-start;
+	grid-column-start: content-start;
 }
 .content-end {
-  grid-column-end: content-end;
+	grid-column-end: content-end;
 }
 
-.full-width {
-  grid-column: full-width;
+/*
+ * Subgrid passthrough breakout. A wrapper (group, list) doesn't re-create its
+ * own grid — it passes the parent layout's tracks straight through via
+ * subgrid. This is what lets a deeply-nested descendant reach the layout's
+ * *true* full-width edges no matter how deeply it is nested, without the
+ * content padding stacking per level.
+ *
+ * Progressive enhancement: without subgrid support the wrapper degrades to a
+ * normal block flow — items still render, they just lose the edge-aligned
+ * breakout.
+ */
+.full-width-subgrid.full-width-subgrid {
+	grid-column: full-width;
+	display: grid;
+	grid-template-columns: subgrid;
 }
-.full-content,
-.full-content-nopadding {
-  grid-column: full-width;
-}
-.full-content {
-  padding-inline: var(--minimum-content-padding);
-}
-
-.popover-layout,
-.popover-full-width {
-  --minimum-content-padding: 1rem;
-
-  --popover-full-max-width: min-content;
-  --popover-content-max-width: 100%;
-
-  --popover-full: minmax(var(--minimum-content-padding), var(--popover-full-max-width));
-  --popover-content: min(
-    var(--popover-content-max-width),
-    100% - var(--minimum-content-padding) * 2
-  );
-
-  display: grid;
-  /* prettier-ignore */
-  grid-template-columns:
-		[popover-full-width-start]
-		var(--popover-full)
-			[popover-content-start]
-			var(--popover-content)
-			[popover-content-end]
-		var(--popover-full)
-		[popover-full-width-end];
-}
-
-.popover-layout > *,
-.popover-full-width > * {
-  grid-column: popover-content;
-}
-
-.popover-full-width {
-  grid-column: popover-full-width;
-}
-
-.popover-full {
-  grid-column: popover-full-width;
-}
-
-.popover-content {
-  grid-column: popover-content;
+.full-width-subgrid > * {
+	grid-column: content;
 }
