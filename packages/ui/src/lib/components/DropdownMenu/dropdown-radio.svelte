@@ -28,10 +28,12 @@
 	:has(input:checked) uses :global because the <li> is rendered by DropdownItem;
 	the scoped class on .dropdown-radio-indicator keeps the selector safe.
 -->
-<DropdownItem role="menuitemradio" aria-checked={checked} keybind={keybindProp}>
+<DropdownItem raw keybind={keybindProp}>
 	<label class="flex-group | nowrap">
 		<span class="dropdown-radio-indicator" aria-hidden="true"></span>
-		<input type="radio" {checked} {...rest} />
+		<!-- The native input is the focusable menu item: role="menuitemradio"
+		     makes it announce correctly, and focusgroup roves to it. -->
+		<input type="radio" role="menuitemradio" aria-checked={checked} {checked} {...rest} />
 		{@render childrenProp?.()}
 	</label>
 </DropdownItem>

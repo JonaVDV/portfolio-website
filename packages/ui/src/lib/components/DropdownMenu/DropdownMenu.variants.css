@@ -1,0 +1,63 @@
+/*
+ * DropdownMenu theme — consumer-owned. Copy this file into your project and
+ * edit freely. The :root block below mirrors the component's built-in defaults,
+ * so importing it changes nothing until you start tweaking values.
+ *
+ * The menu and submenu are two stacked surfaces. The submenu hooks fall back to
+ * the menu hooks, so set --dropdown-menu-* to theme both at once, and reach for
+ * --dropdown-submenu-* only when you want the nested menu to differ.
+ *
+ * ════════════════════════════════════════════════════════════════════════════
+ * FULL PUBLIC API
+ * ════════════════════════════════════════════════════════════════════════════
+ *
+ *  Menu surface
+ *  --dropdown-menu-background        <color>            menu fill
+ *  --dropdown-menu-color             <color>            menu text
+ *  --dropdown-menu-border            <border>           e.g. 1px solid …; set to `none` to remove
+ *  --dropdown-menu-border-radius     <length>
+ *  --dropdown-menu-padding           <length>{1,4}      block padding only by default so full-width items reach the edges
+ *
+ *  Submenu surface (each falls back to the matching --dropdown-menu-* value)
+ *  --dropdown-submenu-background      <color>
+ *  --dropdown-submenu-color          <color>
+ *  --dropdown-submenu-border         <border>
+ *  --dropdown-submenu-border-radius  <length>
+ *  --dropdown-submenu-padding        <length>{1,4}
+ *
+ *  Items (shared by item / checkbox / radio / submenu trigger)
+ *  --dropdown-item-padding           <length>{1,4}
+ *  --dropdown-item-border-radius     <length>
+ *  --dropdown-item-background        <color>
+ *  --dropdown-item-color             <color>
+ *  --dropdown-item-font-size         <length>
+ *  --dropdown-item-gap               <length>
+ *  --dropdown-item-hover-background  <color>
+ *  --dropdown-item-hover-color       <color>
+ *
+ *  Indicators
+ *  --dropdown-checkbox-size / -color / -check-color / -border / -radius
+ *  --dropdown-radio-size  / -color  / -border
+ */
+
+:root {
+	/* ── Menu surface ─────────────────────────────────────────── */
+	--dropdown-menu-background: #000;
+	--dropdown-menu-color: #ffffff;
+	--dropdown-menu-border: 1px solid color-mix(in oklcb, var(--dropdown-menu-color) 18%, transparent);
+	--dropdown-menu-border-radius: 1rem;
+	--dropdown-menu-padding: 0.25rem 0;
+
+	/* ── Submenu surface ──────────────────────────────────────────
+	   A brighter border than the menu so the nested surface reads as
+	   separate where they overlap. */
+	--dropdown-submenu-border: 1px solid
+		color-mix(in oklcb, var(--dropdown-menu-color) 35%, transparent);
+
+	/* ── Items ────────────────────────────────────────────────── */
+	--dropdown-item-padding: 0.25rem 0.5rem;
+	--dropdown-item-border-radius: 0.5rem;
+	--dropdown-item-gap: 0.5rem;
+	--dropdown-item-hover-background: oklch(0.269 0 0);
+	--dropdown-item-hover-color: oklch(0.985 0 0);
+}

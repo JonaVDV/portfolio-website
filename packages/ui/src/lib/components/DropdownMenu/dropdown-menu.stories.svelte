@@ -18,13 +18,20 @@
 	import Settings from '~icons/lucide/settings';
 	import Trash from '~icons/lucide/trash-2';
 	import Share from '~icons/lucide/share';
+	import './DropdownMenu.variants.css';
 
 	const { Story } = defineMeta({
 		title: 'Components/Dropdown Menu',
 		component: DropdownMenu,
+		parameters: {
+			layout: 'centered',
+		},
 		argTypes: {
 			position: {
-				control: { type: 'select' }
+				/**
+				 * The position of the popover relative to the trigger. See (position-area)[https://developer.mozilla.org/en-US/docs/Web/CSS/position-area] for details.
+				*/
+				control: { type: 'text' }
 			}
 		},
 		tags: ['autodocs']
@@ -34,12 +41,7 @@
 <!-- ─── 1. Plain items (existing baseline) ─────────────────────────────────── -->
 <Story name="Items">
 	{#snippet template()}
-		<DropdownMenu
-			position="right span-bottom"
-			inheritTriggerWidth={true}
-			--popover-padding="8px 0px"
-			--icon-size="1em"
-		>
+		<DropdownMenu position="right span-bottom" --icon-size="1em">
 			{#snippet trigger({ props })}
 				<button {...props} type="button">Switch workspace</button>
 			{/snippet}
@@ -65,7 +67,7 @@
 						<Kbd --kbd-background="transparent">{cmd} 3</Kbd>
 					{/snippet}
 				</DropdownItem>
-				<Separator layout="popover-full-width" />
+				<Separator layout="full-width" />
 				<DropdownItem>Add item</DropdownItem>
 			</DropdownGroup>
 		</DropdownMenu>
@@ -78,17 +80,12 @@
 	<input type="checkbox">. CSS :has(input:checked) on the <li> drives the visual
 	indicator — no Svelte state wiring needed unless you want to read the value.
 
-	The separator stretches to the full popover width via `layout="popover-full-width"`,
-	while the items sit within the `popover-content` column boundary automatically.
+	The separator stretches to the full popover width via `layout="full-width"`,
+	while the items sit within the `content` column boundary automatically.
 -->
 <Story name="Checkboxes">
 	{#snippet template()}
-		<DropdownMenu
-			position="right span-bottom"
-			inheritTriggerWidth={true}
-			--popover-padding="8px 0px"
-			--icon-size="1em"
-		>
+		<DropdownMenu position="right span-bottom" --icon-size="1em">
 			{#snippet trigger({ props })}
 				<button {...props} type="button">View options</button>
 			{/snippet}
@@ -96,7 +93,7 @@
 				<DropdownCheckbox name="show-sidebar">Sidebar</DropdownCheckbox>
 				<DropdownCheckbox name="show-toolbar" checked>Toolbar</DropdownCheckbox>
 				<DropdownCheckbox name="show-statusbar">Status bar</DropdownCheckbox>
-				<Separator layout="popover-full-width" />
+				<Separator layout="full-width" />
 				<DropdownCheckbox name="show-minimap">Minimap</DropdownCheckbox>
 				<DropdownCheckbox name="show-breadcrumbs" checked>Breadcrumbs</DropdownCheckbox>
 			</DropdownGroup>
@@ -112,30 +109,23 @@
 -->
 <Story name="Radios">
 	{#snippet template()}
-		<DropdownMenu
-			position="right span-bottom"
-			inheritTriggerWidth={true}
-			--popover-padding="8px 0px"
-			--icon-size="1em"
-		>
+		<DropdownMenu position="right span-bottom" --icon-size="1em">
 			{#snippet trigger({ props })}
 				<button {...props} type="button">Layout</button>
 			{/snippet}
 			<DropdownGroup label="Layout">
-				<ul>
-					<DropdownRadio name="layout-view" value="list" checked>
-						<List />
-						List
-					</DropdownRadio>
-					<DropdownRadio name="layout-view" value="grid">
-						<Grid />
-						Grid
-					</DropdownRadio>
-					<DropdownRadio name="layout-view" value="columns">
-						<Columns />
-						Columns
-					</DropdownRadio>
-				</ul>
+				<DropdownRadio name="layout-view" value="list" checked>
+					<List />
+					List
+				</DropdownRadio>
+				<DropdownRadio name="layout-view" value="grid">
+					<Grid />
+					Grid
+				</DropdownRadio>
+				<DropdownRadio name="layout-view" value="columns">
+					<Columns />
+					Columns
+				</DropdownRadio>
 			</DropdownGroup>
 		</DropdownMenu>
 	{/snippet}
@@ -149,12 +139,7 @@
 -->
 <Story name="Submenu">
 	{#snippet template()}
-		<DropdownMenu
-			position="right span-bottom"
-			inheritTriggerWidth={true}
-			--popover-padding="8px 0px"
-			--icon-size="1em"
-		>
+		<DropdownMenu position="right span-bottom" --icon-size="1em">
 			{#snippet trigger({ props })}
 				<button {...props} type="button">File options</button>
 			{/snippet}
@@ -169,7 +154,7 @@
 							<Settings />
 							Properties
 						</DropdownItem>
-						<Separator layout="popover-full-width" />
+						<Separator layout="full-width" />
 						<DropdownItem>
 							<Trash />
 							Move to trash
@@ -184,18 +169,13 @@
 <!-- ─── 5. Kitchen sink — all item types together ──────────────────────────── -->
 <!--
 	Tests that separator full-width breakout, checkbox items, radio items, plain
-	items and a nested submenu all compose correctly inside one popover-layout grid.
+	items and a nested submenu all compose correctly inside one `.layout` grid.
 	All interactive state (checkbox ticks, radio selection) is owned by the native
 	<input> elements — no Svelte state wiring needed.
 -->
 <Story name="Kitchen sink">
 	{#snippet template()}
-		<DropdownMenu
-			position="right span-bottom"
-			inheritTriggerWidth={true}
-			--popover-padding="8px 0px"
-			--icon-size="1em"
-		>
+		<DropdownMenu position="right span-bottom" --icon-size="1em">
 			{#snippet trigger({ props })}
 				<button {...props} type="button">Options</button>
 			{/snippet}
@@ -214,40 +194,38 @@
 				</DropdownItem>
 			</DropdownGroup>
 
-			<Separator layout="popover-full-width" />
+			<Separator layout="full-width" />
 
 			<DropdownGroup label="View">
 				<DropdownCheckbox name="ks-sidebar" checked>Sidebar</DropdownCheckbox>
 				<DropdownCheckbox name="ks-minimap">Minimap</DropdownCheckbox>
 
-				<Separator layout="popover-full-width" />
+				<Separator layout="full-width" />
 
-				<ul>
-					<DropdownRadio name="ks-view" value="list" checked>
-						<List />
-						List
-					</DropdownRadio>
-					<DropdownRadio name="ks-view" value="grid">
-						<Grid />
-						Grid
-					</DropdownRadio>
-					<DropdownRadio name="ks-view" value="columns">
-						<Columns />
-						Columns
-					</DropdownRadio>
-				</ul>
+				<DropdownRadio name="ks-view" value="list" checked>
+					<List />
+					List
+				</DropdownRadio>
+				<DropdownRadio name="ks-view" value="grid">
+					<Grid />
+					Grid
+				</DropdownRadio>
+				<DropdownRadio name="ks-view" value="columns">
+					<Columns />
+					Columns
+				</DropdownRadio>
 			</DropdownGroup>
 
-			<Separator layout="popover-full-width" />
+			<Separator layout="full-width" />
 
 			<DropdownGroup label="">
-				<DropdownSubmenu label="More actions">
+				<DropdownSubmenu label="More actions" position="right span-bottom">
 					<DropdownGroup label="">
 						<DropdownItem>
 							<Settings />
 							Properties
 						</DropdownItem>
-						<Separator layout="popover-full-width" />
+						<Separator layout="full-width" />
 						<DropdownItem>
 							<Trash />
 							Move to trash

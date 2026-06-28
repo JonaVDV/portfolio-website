@@ -9,19 +9,13 @@
 	let { label, children }: Props = $props();
 </script>
 
-<div class="dropdown-group | popover-full-width">
+<div class="dropdown-group | full-width-subgrid">
 	{#if typeof label === 'string'}
 		<p class="dropdown-group-label">{label}</p>
 	{:else}
 		<p class="dropdown-group-label">{@render label?.()}</p>
 	{/if}
-	<ul class="popover-full-width">
+	<ul class="full-width-subgrid">
 		{@render children?.()}
 	</ul>
 </div>
-
-<style>
-	.dropdown-group {
-		display: grid;
-	}
-</style>

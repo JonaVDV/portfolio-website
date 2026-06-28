@@ -28,10 +28,12 @@
 	:has(input:checked) uses :global because the <li> is rendered by DropdownItem;
 	the scoped class on .dropdown-checkbox-indicator keeps the selector safe.
 -->
-<DropdownItem role="menuitemcheckbox" aria-checked={checked} keybind={keybindProp}>
+<DropdownItem raw keybind={keybindProp}>
 	<label class="flex-group | nowrap">
 		<span class="dropdown-checkbox-indicator" aria-hidden="true"></span>
-		<input type="checkbox" bind:checked {...rest} />
+		<!-- The native input is the focusable menu item: role="menuitemcheckbox"
+		     makes it announce correctly, and focusgroup roves to it. -->
+		<input type="checkbox" role="menuitemcheckbox" aria-checked={checked} bind:checked {...rest} />
 		{@render childrenProp?.()}
 	</label>
 </DropdownItem>
@@ -55,6 +57,7 @@
 	.dropdown-checkbox-indicator {
 		--dropdown-checkbox-size: 1em;
 		--dropdown-checkbox-color: currentColor;
+		--dropdown-checkbox-check-color: oklch(0.145 0 0);
 		--dropdown-checkbox-border: 1.5px solid currentColor;
 		--dropdown-checkbox-radius: 0.25em;
 
@@ -91,7 +94,7 @@
 			background-color: var(--dropdown-checkbox-color);
 
 			&::after {
-				border-color: oklch(0.145 0 0);
+				border-color: var(--dropdown-checkbox-check-color);
 				opacity: 1;
 			}
 		}
