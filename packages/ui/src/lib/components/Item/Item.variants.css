@@ -1,0 +1,52 @@
+/*
+ * Item variant definitions — consumer-owned.
+ * Copy this file into your project and edit freely.
+ *
+ * Item is a layout primitive, so it ships transparent by default. Set a base
+ * --item-background and the hover/active states are derived from it in oklch.
+ * Reach for layer 3 (--item-background-hover / -active) only when the
+ * derivation isn't enough.
+ *
+ * ════════════════════════════════════════════════════════════════════════════
+ * FULL PUBLIC API
+ * ════════════════════════════════════════════════════════════════════════════
+ *
+ * [data-variant='your-variant'] {
+ *
+ *   -- Colors
+ *   --item-background: transparent;            (layer 1: base fill; hover/active derived)
+ *   --item-color: currentColor;
+ *   --item-hover-l: -0.04;                     (layer 2: oklch lightness delta on hover)
+ *   --item-active-l: 0.04;                     (layer 2: oklch lightness delta on active)
+ *   --item-background-hover: <color>;          (layer 3: full hover override)
+ *   --item-background-active: <color>;         (layer 3: full active override)
+ *   --item-color-hover: currentColor;
+ *   --item-color-active: currentColor;
+ *
+ *   -- Border
+ *   --item-border-width: 0px;
+ *   --item-border-color: oklch(73.481% 0.00008 271.152);
+ *   --item-border-color-hover: <color>;
+ *   --item-border-color-active: <color>;
+ *
+ *   -- Shape & spacing
+ *   --item-padding: 0.5rem 1rem;
+ *   --item-gap: 0.5rem;
+ *   --item-border-radius: 0.5rem;
+ *   --item-media-size: 4rem;
+ * }
+ */
+
+/* ════════════════════════════════════════════════════════════════════════════
+ * VARIANTS
+ * ════════════════════════════════════════════════════════════════════════════ */
+
+[data-variant='default'] {
+	/* transparent base; hover/active derive from it once a consumer sets a fill */
+	--item-background: transparent;
+}
+
+/* [data-variant='muted'] {
+	--item-background: var(--clr-surface-100);
+	--item-border-width: 1px;
+} */

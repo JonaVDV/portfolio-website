@@ -1,9 +1,11 @@
 <script lang="ts" generics="TTag extends keyof SvelteHTMLElements">
 	import type { Snippet } from 'svelte';
 	import type { SvelteHTMLElements } from 'svelte/elements';
+	import './Item.variants.css';
 
 	type Props = SvelteHTMLElements[TTag] & {
 		as?: TTag;
+		variant?: string;
 		header?: Snippet;
 		actions?: Snippet;
 		media?: Snippet;
@@ -11,6 +13,7 @@
 
 	let {
 		as = 'div' as TTag,
+		variant = 'default',
 		header,
 		actions,
 		media,
@@ -24,7 +27,7 @@
 	this={as}
 	data-component="item"
 	class={[className]}
-	data-variant="default"
+	data-variant={variant}
 	{...rest}
 >
 	<div class="item-inner flex-group nowrap">
@@ -61,6 +64,10 @@
 		--_item-gap: var(--item-gap, 0.5rem);
 		--_item-media-size: var(--item-media-size, 4rem);
 
+		/* oklch delta defaults — tunable per variant (layer 2). oklch lightness is 0–1. */
+		--_item-hover-l: var(--item-hover-l, -0.04);
+		--_item-active-l: var(--item-active-l, 0.04);
+
 		--_flex-container-width: 100%;
 		--flow-spacer: var(--_item-gap, 0.5rem);
 		background: var(--_item-background);
@@ -90,7 +97,7 @@
 		) {
 		--_item-background: var(
 			--item-background-hover,
-			oklch(from var(--_item-background-base) calc(l - 10) c h)
+			oklch(from var(--_item-background-base) calc(l + var(--_item-hover-l)) c h)
 		);
 		--_item-border-color: var(--item-border-color-hover, oklch(73.481% 0.00008 271.152));
 		--_item-color: var(--item-color-hover, currentColor);
@@ -100,7 +107,7 @@
 	[data-component='item']:is(a, button, [role='option'], [tabindex='0'], option):active {
 		--_item-background: var(
 			--item-background-active,
-			oklch(from var(--_item-background-base) calc(l + 10) c h)
+			oklch(from var(--_item-background-base) calc(l + var(--_item-active-l)) c h)
 		);
 		--_item-border-color: var(--item-border-color-active, oklch(73.481% 0.00008 271.152));
 		--_item-color: var(--item-color-active, currentColor);
