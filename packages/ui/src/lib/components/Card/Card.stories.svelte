@@ -19,8 +19,19 @@
 				<p>This is a simple card component.</p>
 			{/snippet}
 
+
+			<p>
+				Cards are a flexible and extensible content container. They include options for headers and
+				footers, a wide variety of content, contextual background colors, and powerful display
+				options.
+			</p>
+
 			{#snippet action()}
 				<Button variant="ghost">Action</Button>
+			{/snippet}
+
+			{#snippet footer()}
+				<Button variant="primary">Primary action</Button>
 			{/snippet}
 		</Card>
 	{/snippet}
@@ -31,17 +42,7 @@
 <!-- Login card: form on the right, decorative panel on the left -->
 <Story name="Media / Login">
 	{#snippet template()}
-		<Card --card-max-width="40em" --card-padding="0" --card-gap="0" --card-border-radius="0.5rem">
-			{#snippet media()}
-				<div
-					style="
-						width: 14em;
-						height: 100%;
-						min-height: 20em;
-						background: linear-gradient(160deg, oklch(0.5 0.2 290), oklch(0.4 0.18 240));
-					"
-				></div>
-			{/snippet}
+		<Card --card-max-width="40em" --card-border-radius="0.5rem">
 
 			{#snippet header()}
 				<div style="padding: 2rem 2rem 1rem;">

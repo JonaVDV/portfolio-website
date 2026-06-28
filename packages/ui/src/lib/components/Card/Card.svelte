@@ -16,9 +16,6 @@
 </script>
 
 <article class="card" data-subgrid={subgrid || undefined} bind:this={ref} {...rest}>
-	{#if media}
-		<div class="card-media">{@render media()}</div>
-	{/if}
 	{#if header || action}
 		<div class="card-header">
 			<div class="card-action">
@@ -47,12 +44,14 @@
 		--_card-radius: var(--card-border-radius, var(--radius-medium));
 		--_card-padding: var(--card-padding, 1rem);
 		--_card-max-width: var(--card-max-width, none);
-		--_card-gap: var(--card-gap, 1em);
+		--_card-gap: var(--card-gap, 0.5rem);
 
 		background-color: var(--_card-background);
 		border: var(--_card-border);
 		border-radius: var(--_card-radius);
-		/* padding lives on sections so header/footer backgrounds extend edge-to-edge */
+		/* padding lives on sections so header/footer backgrounds extend edge-to-edge.
+		   spacing is owned entirely by section padding (no gap), so the model needs
+		   no style queries or :has() to look right whether or not sections are styled. */
 		padding: 0;
 		max-width: var(--_card-max-width);
 		container-type: inline-size;
@@ -65,33 +64,42 @@
 
 	/* ── Sections ────────────────────────────────────────────────────────────── */
 
+	/* Header & footer always carry full padding, so any background/border they
+	   get fills edge-to-edge and reads as a distinct section. */
 	.card-header {
-		--_card-header-background: var(--card-header-background, inherit);
+		--_card-header-background: var(--card-header-background, transparent);
 		--_card-header-color: var(--card-header-color, inherit);
 
 		padding-inline: var(--card-header-padding-inline, var(--_card-padding));
 		padding-block-start: var(--card-header-padding-block-start, var(--_card-padding));
+		padding-block-end: var(--card-header-padding-block-end, var(--_card-padding));
 		background: var(--_card-header-background);
 		color: var(--_card-header-color);
 		border-bottom: var(--card-header-border-bottom, none);
 		position: relative;
+	}
 
-		@container not style(--_card-header-background: inherit) {
-			padding-block-end: var(--card-header-padding-block-end, var(--_card-padding));
+	/* Content's vertical space comes from its neighbours' inner padding; it only
+	   pads its own block edge when it's the first/last section (no neighbour there). */
+	.card-content {
+		padding-inline: var(--card-content-padding-inline, var(--_card-padding));
+		padding-block: var(--card-content-padding-block, 0);
+
+		&:first-child {
+			padding-block-start: var(--card-content-padding-block-start, var(--_card-padding));
+		}
+		&:last-child {
+			padding-block-end: var(--card-content-padding-block-end, var(--_card-padding));
 		}
 	}
 
-	.card-content {
-		padding-inline: var(--card-content-padding-inline, var(--_card-padding));
-	}
-
 	.card-footer {
-		--_card-footer-background: var(--card-footer-background);
+		--_card-footer-background: var(--card-footer-background, transparent);
 		--_card-footer-color: var(--card-footer-color, inherit);
 
 		padding-inline: var(--card-footer-padding-inline, var(--_card-padding));
-		padding-block-end: var(--card-footer-padding-block-end, var(--_card-padding));
 		padding-block-start: var(--card-footer-padding-block-start, var(--_card-padding));
+		padding-block-end: var(--card-footer-padding-block-end, var(--_card-padding));
 		background: var(--_card-footer-background);
 		color: var(--_card-footer-color);
 		border-top: var(--card-footer-border-top, none);
