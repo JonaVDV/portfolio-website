@@ -141,24 +141,26 @@
 	bind:this={ref}
 	aria-labelledby={header ? `${dialogId}-header` : undefined}
 >
-	<div id="{dialogId}-header" class="dialog-header">
-		{#if closeButton}
-			<Button
-				class="close-dialog"
-				variant="stripped"
-				data-dialog-close
-				commandfor={dialogId}
-				command="close"
-				aria-label="Close dialog"
-				onclick={handleClose}
-			>
-				<X />
-			</Button>
-		{/if}
-		{#if header}
-			{@render header?.()}
-		{/if}
-	</div>
+	{#if closeButton || header}
+		<div id="{dialogId}-header" class="dialog-header">
+			{#if closeButton}
+				<Button
+					class="close-dialog"
+					variant="stripped"
+					data-dialog-close
+					commandfor={dialogId}
+					command="close"
+					aria-label="Close dialog"
+					onclick={handleClose}
+				>
+					<X />
+				</Button>
+			{/if}
+			{#if header}
+				{@render header?.()}
+			{/if}
+		</div>
+	{/if}
 
 	<div class="dialog-content">
 		{@render children?.()}
@@ -185,7 +187,8 @@
 			var(--clr-surface-300, oklch(83.57% 0.00308 264.751))
 		);
 		--_dialog-max-width: var(--dialog-max-width, 30rem);
-		--_dialog-spacing: var(--dialog-spacing, 1.5rem);
+		/* spacing is owned by section padding (same model as Card), so default to 0 */
+		--_dialog-spacing: var(--dialog-spacing, 0);
 		--_dialog-max-height: var(--dialog-max-height, 90vh);
 		--_dialog-box-shadow: var(--dialog-box-shadow, 0 10px 15px -3px rgb(0 0 0 / 0.1));
 
@@ -243,28 +246,37 @@
 		}
 	}
 
+	/* Header & footer carry full padding so any background/border fills edge-to-edge. */
 	.dialog-header {
 		background: var(--_dialog-header-background);
 		color: var(--_dialog-header-color);
 		padding: var(--_dialog-header-padding);
-		padding-bottom: 0;
 		border-bottom: var(--_dialog-header-border-bottom);
 		gap: var(--_dialog-header-gap);
 		position: relative;
 	}
 
+	/* Content takes its vertical space from neighbours; pads its own edge only
+	   when it's the first/last section. */
 	.dialog-content {
 		background: var(--_dialog-content-background);
 		padding-inline: var(--_dialog-content-padding);
+		padding-block: var(--dialog-content-padding-block, 0);
 		overflow-y: auto;
 		overscroll-behavior: contain;
+
+		&:first-child {
+			padding-block-start: var(--_dialog-content-padding);
+		}
+		&:last-child {
+			padding-block-end: var(--_dialog-content-padding);
+		}
 	}
 
 	.dialog-footer {
 		background: var(--_dialog-footer-background);
 		color: var(--_dialog-footer-color);
 		padding: var(--_dialog-footer-padding);
-		padding-top: 0;
 		border-top: var(--_dialog-footer-border-top);
 		display: flex;
 		justify-content: var(--_dialog-footer-justify);

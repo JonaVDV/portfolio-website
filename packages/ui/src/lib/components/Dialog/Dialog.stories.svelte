@@ -4,7 +4,7 @@
 	import Button from '../Button/Button.svelte';
 	import UserPlus from '~icons/lucide/user-plus';
 	import Trash from '~icons/lucide/trash-2';
-	import Input from '$components/Form/Input.svelte';
+	import { Input } from '$components/Form/Input';
 	import Label from '$components/Form/Label/Label.svelte';
 
 	const { Story } = defineMeta({
@@ -89,12 +89,8 @@
 
 			<div style="display: grid; gap: 1.5rem;">
 				<div style="display: grid; gap: 0.5rem;">
-					<Label for="email">Email Address</Label
-					>
-					<Input
-                        type="email"
-                        id="email"
-                        placeholder=""/>
+					<Label for="email">Email Address</Label>
+					<Input type="email" id="email" placeholder="" />
 				</div>
 				<div style="display: grid; gap: 0.5rem;">
 					<label style="font-weight: var(--fw-bold); font-size: var(--fs-200);">Role</label>
