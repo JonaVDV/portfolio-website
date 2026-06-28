@@ -1,0 +1,39 @@
+/*
+ * Popover theme — consumer-owned. Copy this file into your project and edit
+ * freely. The :root block mirrors the component's built-in defaults, so
+ * importing it changes nothing until you start tweaking values.
+ *
+ * Popover is a display-only surface (no hover/active states), so only the base
+ * layer applies — set the values you want and you're done.
+ *
+ * ════════════════════════════════════════════════════════════════════════════
+ * FULL PUBLIC API
+ * ════════════════════════════════════════════════════════════════════════════
+ *
+ *  Surface
+ *  --popover-background      <color>        fill (also the arrow's fill)
+ *  --popover-color           <color>        text
+ *  --popover-border          <border>       e.g. 1px solid …; `none` to remove
+ *  --popover-border-radius   <length>
+ *  --popover-padding         <length>{1,4}
+ *  --popover-width           <length> | auto inline size of the content box. tip: use `anchor-size()` to match the trigger's width.
+ *
+ *  Tether (the arrow) & spacing
+ *  --popover-arrow-size             <length>       arrow size; 0px hides it (set via hasArrow={false})
+ *  --popover-offset          <length>       extra gap between the popover and its trigger
+ *
+ *  Advanced positioning
+ *  --popover-custom-fallbacks  <dashed-ident>#  overrides the position-try fallback chain
+ *                                               (defaults to top → bottom → left → right)
+ */
+:root {
+	--popover-background: #000;
+	--popover-color: #fff;
+	--popover-border: none;
+	--popover-border-radius: 1rem;
+	--popover-padding: 0.5rem;
+	--popover-width: auto;
+
+	--popover-offset: 0px;
+	/* --popover-arrow-size: 8px;  (registered via @property; uncomment to override) */
+}
