@@ -121,8 +121,15 @@ export function focusgroup<const T extends FocusGroupOptions>(options: T): Attac
 				console.warn(
 					'focusgroup: No focusable elements found within the container. Please ensure that there are focusable elements (e.g., buttons, links) inside the focus group container.'
 				);
+			// Candidates rendered in a *different* popover than the group root belong to
+			// a nested focusgroup scope shown in its own top layer (e.g. an open
+			// submenu). Per the explainer, nested scopes and top-layer elements are
+			// excluded from the parent group. No-op when nothing is inside a popover.
+			const rootPopover = node.closest('[popover]');
 			return elements.filter(
-				(el) => ![...UNFOCUSABLE_ATTRIBUTES].some((attr) => el.hasAttribute(attr))
+				(el) =>
+					![...UNFOCUSABLE_ATTRIBUTES].some((attr) => el.hasAttribute(attr)) &&
+					el.closest('[popover]') === rootPopover
 			);
 		}
 
