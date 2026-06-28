@@ -2,7 +2,7 @@
 	import { defineMeta } from '@storybook/addon-svelte-csf';
 	import Button from './index';
 	import { fn } from 'storybook/test';
-	import { ButtonGroup } from './exports';
+	import ButtonGroup from '../ButtonGroup/ButtonGroup.svelte';
 	import PlusIcon from '~icons/lucide/plus';
 
 	const { Story } = defineMeta({

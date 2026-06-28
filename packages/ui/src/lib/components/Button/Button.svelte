@@ -2,6 +2,7 @@
 	import type { Snippet } from 'svelte';
 	import type { HTMLButtonAttributes, HTMLAnchorAttributes } from 'svelte/elements';
 	import { type ConditionalProps } from '../../types';
+	import './Button.variants.css';
 
 	/**
 	 * Edit this type to add more variants
@@ -100,7 +101,7 @@
 	.button:disabled,
 	.button[aria-disabled='true'] {
 		--_button-disabled-opacity: var(--button-disabled-opacity, 0.45);
-		
+
 		opacity: var(--_button-disabled-opacity);
 		cursor: not-allowed;
 		pointer-events: none;
