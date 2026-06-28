@@ -1,0 +1,55 @@
+/*
+ * Toggle variant definitions — consumer-owned.
+ * Copy this file into your project and edit freely.
+ *
+ * Set --toggle-pressed-background for the "on" fill; the pressed-hover state is
+ * derived from it automatically in oklch. Reach for layer 3 overrides only when
+ * the derivation isn't enough.
+ *
+ * ════════════════════════════════════════════════════════════════════════════
+ * FULL PUBLIC API
+ * ════════════════════════════════════════════════════════════════════════════
+ *
+ * [data-variant='your-variant'] {
+ *
+ *   -- Colors
+ *   --toggle-color: inherit;                    (text, unpressed)
+ *   --toggle-border-color: var(--clr-surface-300);
+ *   --toggle-pressed-background: <color>;       (layer 1: "on" fill; hover derived)
+ *   --toggle-pressed-color: inherit;            (text when pressed)
+ *   --toggle-active-l: -0.06;                    (layer 2: oklch lightness delta on pressed-hover)
+ *   --toggle-hover-background: var(--clr-surface-200);  (layer 3: unpressed hover fill)
+ *   --toggle-disabled-opacity: 0.5;
+ *
+ *   -- Focus ring
+ *   --toggle-focus-color: var(--clr-brand-400);
+ *   --toggle-focus-width: 2px;
+ *   --toggle-focus-offset: 2px;
+ *
+ *   -- Shape & type
+ *   --toggle-padding: 0.5em 0.75em;
+ *   --toggle-gap: 0.5em;
+ *   --toggle-border-width: 1px;
+ *   --toggle-border-radius: var(--radius-2);
+ *   --toggle-font-weight: 500;
+ *
+ *   -- Size (data-size="sm|md|lg"; padding is em-based so font-size scales it all)
+ *   --toggle-font-size: inherit;     (md / base)
+ *   --toggle-font-size-sm: var(--fs-300);
+ *   --toggle-font-size-lg: var(--fs-500);
+ * }
+ */
+
+/* ════════════════════════════════════════════════════════════════════════════
+ * VARIANTS
+ * ════════════════════════════════════════════════════════════════════════════ */
+
+[data-variant='default'] {
+	--toggle-pressed-background: var(--clr-surface-300);
+}
+
+/* [data-variant='brand'] {
+	--toggle-pressed-background: var(--clr-brand-400);
+	--toggle-pressed-color: var(--clr-brand-000);
+	--toggle-border-color: var(--clr-brand-400);
+} */
