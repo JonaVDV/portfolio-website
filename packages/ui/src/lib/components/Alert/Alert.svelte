@@ -1,17 +1,18 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
+	import type { HTMLAttributes } from 'svelte/elements';
 
-	interface Props {
+	interface Props extends HTMLAttributes<HTMLDivElement> {
 		children?: Snippet;
 		actions?: Snippet;
 		ref?: HTMLElement | null;
 		variant?: 'default' | 'success' | 'error' | 'warning' | 'info';
 	}
 
-	let { children, actions, variant = 'default', ref = $bindable(null) }: Props = $props();
+	let { children, actions, variant = 'default', ref = $bindable(null), ...rest }: Props = $props();
 </script>
 
-<div role="alert" aria-live="assertive" aria-atomic="true" data-variant={variant} bind:this={ref}>
+<div role="alert" aria-live="assertive" aria-atomic="true" data-variant={variant} bind:this={ref} {...rest}>
 	{@render children?.()}
 
 	<div class="alert-actions">
@@ -21,57 +22,39 @@
 
 <style>
 	[role='alert'] {
-		--_alert-background: var(--alert-background, #f0f0f0);
-		--_alert-color: var(--alert-color, #000);
-		--_alert-border: var(--alert-border-width, 1px) var(--alert-border-style, solid)
-			var(--alert-border-color, #000);
+		--_alert-background: var(--alert-background, var(--clr-surface-100, #f0f0f0));
 		--_alert-border-radius: var(--alert-border-radius, 4px);
 		--_alert-padding: var(--alert-padding, 16px);
 		--_alert-gap: var(--alert-gap, 12px);
+
 		background: var(--_alert-background);
-		color: var(--_alert-color);
-		border: var(--_alert-border);
+		color: var(--_alert-color, currentColor);
+		border: var(--alert-border-width, 1px) var(--alert-border-style, solid)
+			var(--_alert-border-color, currentColor);
 		border-radius: var(--_alert-border-radius);
 		padding: var(--_alert-padding);
 		display: inline-grid;
 		grid-auto-flow: column;
 		align-items: start;
+		width: fit-content;
 		gap: var(--_alert-gap);
-		/* for the color and border color derive the colors using the background color if provided (use relative colors with oklch) */
-		&[data-variant='success'] {
-			--_alert-background: var(--alert-success-background, #d1fae5);
-			--_alert-color: var(--alert-success-color, oklch(from var(--_alert-background) 5% c h / 1));
-			--_alert-border-color: var(
-				--alert-success-border-color,
-				oklch(from var(--_alert-background) 80% c h / 1)
-			);
-		}
+		max-inline-size: var(--alert-max-width, none);
+	}
 
-		&[data-variant='error'] {
-			--_alert-background: var(--alert-error-background, #fee2e2);
-			--_alert-color: var(--alert-error-color, oklch(from var(--_alert-background) 5% c h / 1));
-			--_alert-border-color: var(
-				--alert-error-border-color,
-				oklch(from var(--_alert-background) 80% c h / 1)
-			);
-		}
+	[role='alert'][data-variant] {
+		--_alert-color-l: var(--alert-color-l, 5%);
+		--_alert-color-c: var(--alert-color-c, 0);
+		--_alert-color-h: var(--alert-color-h, 0);
+		--_alert-border-l: var(--alert-border-l, 80%);
+		--_alert-border-c: var(--alert-border-c, 0);
+		--_alert-border-h: var(--alert-border-h, 0);
+		--_alert-color: var(--alert-color, oklch(from var(--_alert-background) var(--_alert-color-l) calc(c + var(--_alert-color-c)) calc(h + var(--_alert-color-h)) / 1));
+		--_alert-border-color: var(--alert-border-color, oklch(from var(--_alert-background) var(--_alert-border-l) calc(c + var(--_alert-border-c)) calc(h + var(--_alert-border-h)) / 1));
+	}
 
-		&[data-variant='warning'] {
-			--_alert-background: var(--alert-warning-background, #fef3c7);
-			--_alert-color: var(--alert-warning-color, oklch(from var(--_alert-background) 5% c h / 1));
-			--_alert-border-color: var(
-				--alert-warning-border-color,
-				oklch(from var(--_alert-background) 80% c h / 1)
-			);
-		}
-
-		&[data-variant='info'] {
-			--_alert-background: var(--alert-info-background, #dbeafe);
-			--_alert-color: var(--alert-info-color, oklch(from var(--_alert-background) 5% c h / 1));
-			--_alert-border-color: var(
-				--alert-info-border-color,
-				oklch(from var(--_alert-background) 80% c h / 1)
-			);
-		}
+	.alert-actions {
+		display: flex;
+		gap: var(--alert-actions-gap, 0.5rem);
+		align-items: center;
 	}
 </style>
