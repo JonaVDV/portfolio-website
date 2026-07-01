@@ -1,0 +1,30 @@
+/*
+ * Avatar theming — consumer-owned.
+ * Copy this file into your project and edit freely.
+ *
+ * Set these on any ancestor element (e.g. :root, or a wrapper around a group).
+ * Properties set here apply to all Avatar components within that scope.
+ *
+ * ════════════════════════════════════════════════════════════════════════════
+ * FULL PUBLIC API
+ * ════════════════════════════════════════════════════════════════════════════
+ *
+ * -- Shape & size
+ * --avatar-size: 2.5rem;                            (width and height; font-size derives from it)
+ * --avatar-radius: 50%;                             (use e.g. 0.5rem for the "rounded square" look)
+ * --avatar-border: 0px;                             (shorthand, e.g. 2px solid white)
+ * --avatar-image-filter: none;                      (CSS filter applied to the image layer)
+ *
+ * -- Fallback (shown when no image is loaded)
+ * --avatar-fallback-background: oklch(0.9 0 0);
+ * --avatar-fallback-color: oklch(0.4 0 0);
+ */
+
+/* ════════════════════════════════════════════════════════════════════════════
+ * EXAMPLE THEME
+ * ════════════════════════════════════════════════════════════════════════════ */
+
+:root {
+	--avatar-fallback-background: var(--clr-brand-100, oklch(0.92 0.04 264));
+	--avatar-fallback-color: var(--clr-brand-700, oklch(0.45 0.12 264));
+}
