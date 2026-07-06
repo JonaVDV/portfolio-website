@@ -1,0 +1,29 @@
+{
+  "name": "@SCOPE/cli",
+  "version": "0.0.1",
+  "description": "CLI for @SCOPE/ui — copy component styles or vendor whole components into your project.",
+  "license": "MIT",
+  "keywords": [
+    "svelte",
+    "ui",
+    "cli"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JonaVDV/portfolio-website.git",
+    "directory": "packages/cli"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "type": "module",
+  "bin": {
+    "scope-ui": "./src/cli.js"
+  },
+  "files": [
+    "src"
+  ],
+  "engines": {
+    "node": ">=20"
+  }
+}
