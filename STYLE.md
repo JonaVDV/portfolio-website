@@ -289,4 +289,85 @@ For complex systems where multiple parts need to share state or react to each ot
 
 ### Pattern C: Progressive Hybrids
 
-The most powerful components often combine both. For example, `Sidebar.svelte` uses snippets for its own `header` and `footer` areas while simultaneously participating in the broader compound component state. This allows for a declarative API that feels native to HTML.
+The most powerful components often combine both. For example, `Sidebar.svelte` uses snippets for its own `header` and `footer` areas while simultaneously participating in the broader compound component state. This allows for a declarative API that feels clean and declarative.
+
+---
+
+## 10. Component Variant Theming (The 3-Layer Color System)
+
+Components that have visual variants (different colors, moods, or semantic meanings) follow a consistent 3-layer customization pattern. This is deliberately implemented **per component** rather than shared globally, because each component uses component-namespaced CSS custom properties — sharing a single selector across components would cause variable name collisions and make nesting impossible.
+
+The pattern is a convention; the 15-or-so implementation lines are intentionally copy-pasted per component.
+
+### How it works
+
+The component owns the **mechanism**: oklch-based hover/active derivation lives inside the component's `<style>` block. A consumer-owned `{Component}.variants.css` file owns the **palette**: it just sets base colors. Hover and active states are derived automatically.
+
+```css
+/* Inside the component's <style> — applied to every variant automatically */
+.button[data-variant] {
+  --_button-hover-l: var(--button-hover-l, -0.08);  /* layer 2 default delta */
+  --_button-hover-c: var(--button-hover-c, 0);
+  --_button-hover-h: var(--button-hover-h, 0);
+  --_button-active-l: var(--button-active-l, -0.16);
+  --_button-active-c: var(--button-active-c, 0);
+  --_button-active-h: var(--button-active-h, 0);
+
+  background-color: var(--button-background);
+
+  &:is(:hover, :focus-visible) {
+    background-color: var(
+      --button-hover-background,        /* layer 3: full override */
+      oklch(
+        from var(--button-background)
+        calc(l + var(--_button-hover-l))  /* layer 2: tunable deltas */
+        calc(c + var(--_button-hover-c))
+        calc(h + var(--_button-hover-h))
+      )
+    );
+  }
+}
+```
+
+The consumer's variants file is minimal — just base colors:
+
+```css
+/* Button.variants.css — consumer-owned */
+[data-variant='primary'] {
+  --button-background: var(--clr-brand-400);
+  --button-color: var(--clr-brand-000);
+}
+```
+
+### The three layers
+
+| Layer | Consumer sets | Effect |
+|-------|---------------|--------|
+| **1 — Base** | `--{component}-background` | Changes base color; hover/active derived automatically |
+| **2 — Deltas** | `--{component}-hover-l`, `-c`, `-h` | Tunes how far hover/active shift in oklch space |
+| **3 — Override** | `--{component}-hover-background` | Bypasses derivation entirely for a specific state |
+
+Layers are applied in priority order: layer 3 wins over layer 2 which wins over the default. Consumers only need to reach for the next layer when the previous one is insufficient.
+
+### Why per component, not a shared selector
+
+A shared `[data-has-variants]` selector would force all components to use the same generic var names (e.g., `--component-background`). That breaks as soon as two components are nested — the inner component would inherit and potentially clobber the outer one's values. Component-namespaced vars (`--button-background` vs `--alert-background`) are what makes the cascade safe.
+
+The implementation overhead is low: the oklch block is ~15 lines and the pattern is identical across components. For this reason the pattern is intentionally copy-pasted rather than abstracted.
+
+### Variants file convention
+
+Every component with variants ships a `{Component}.variants.css` file next to the component. This file is:
+
+- **Consumer-owned**: designed to be copied into the consumer's project and edited freely
+- **Minimal**: only base colors (layer 1), with commented-out layer 2/3 examples
+- **Self-documenting**: includes the full public API as a comment block at the top
+
+For display-only components (no hover/active), the same file convention applies but the oklch derivation block is omitted from the component's style — only layer 1 and 3 are relevant.
+
+### Applying to a new component
+
+1. Add `data-variant={variant}` to the root element and `variant?: string` to props
+2. In `<style>`: add the `[data-component][data-variant]` base block with the oklch hover/active derivation
+3. Create `{Component}.variants.css` with at minimum a `primary` variant and the full API comment block
+4. Import the variants file in `{Component}.stories.svelte` as a side-effect import
