@@ -5,7 +5,6 @@
   *::after {
     box-sizing: border-box;
   }
-
   /**
     * Reset default styles for all elements
     * make sure font properties are inherited for all elements (this is not the case by default for things like inputs)
@@ -15,7 +14,6 @@
     padding: 0;
     font: inherit;
   }
-
   /* Newer image reset that accounts for inline images*/
   img,
   picture,
@@ -28,23 +26,16 @@
     shape-margin: var(--image-shape-margin);
     vertical-align: middle;
   }
-
   ul[role="list"],
   ol[role="list"] {
     list-style: none;
   }
-
   svg {
     max-width: 100%;
     height: auto;
     vertical-align: middle;
   }
-
   p {
     text-wrap: pretty;
-  }
-
-  html {
-    // color-scheme: light dark;
   }
 }

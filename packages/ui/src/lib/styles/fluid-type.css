@@ -1,0 +1,203 @@
+/* ════════════════════════════════════════════════════════════════════════════
+ * FLUID TYPE SCALE
+ * ════════════════════════════════════════════════════════════════════════════
+ *
+ * A Utopia-style fluid type scale in pure CSS — no build step, no SCSS
+ * functions. Every size interpolates smoothly between a min and max viewport
+ * using clamp(), and the whole scale is derived from a ratio via pow(), so you
+ * only ever tune the 6 knobs below.
+ *
+ * This is settings, not a design system: it hands you tokens (--fs-300 …
+ * --fs-900) and a `.fluid` utility, and you decide what to do with them.
+ *
+ * ── The 6 knobs ─────────────────────────────────────────────────────────────
+ *
+ * All numbers are UNITLESS REM (widths included). Rem keeps the scale
+ * zoom-consistent for accessibility — don't put px/vw/cqi in a knob.
+ *
+ *   --fluid-min-vw     viewport (rem) where sizes stop shrinking   (23.4375 = 375px)
+ *   --fluid-max-vw     viewport (rem) where sizes stop growing     (90      = 1440px)
+ *   --fluid-min-size   base size (rem) at min viewport
+ *   --fluid-max-size   base size (rem) at max viewport
+ *   --fluid-min-ratio  type-scale ratio at min viewport            (1.414 = √2)
+ *   --fluid-max-ratio  type-scale ratio at max viewport
+ *   --fluid-unit       what the fluid middle tracks (see below)
+ *
+ * Keep --fluid-max-size ≥ --fluid-min-size and both ratios ≥ 1, or a step's
+ * min can exceed its max and clamp() silently pins to the min. (CSS has no
+ * if() yet to guard this.)
+ *
+ * ── Viewport vs container ───────────────────────────────────────────────────
+ *
+ * --fluid-unit defaults to 1vi (viewport, works everywhere, no setup).
+ * Set it to 1cqi to make the scale respond to a CONTAINER's width instead —
+ * but cqi needs a `container-type: inline-size` ancestor, else it falls back
+ * to the viewport. The previous scale in this project used cqi, so to
+ * reproduce it exactly:  :root { --fluid-unit: 1cqi; }
+ *
+ * ── Accessibility ───────────────────────────────────────────────────────────
+ *
+ * The fluid term always sits beside a rem term (the clamp bounds and intercept
+ * are rem), so text still scales on zoom — this passes WCAG 1.4.4. Never strip
+ * the rem part down to a bare viewport unit.
+ * ════════════════════════════════════════════════════════════════════════════ */
+
+:root {
+  --fluid-min-vw: 23.4375; /* 375px  */
+  --fluid-max-vw: 90; /* 1440px */
+  --fluid-min-size: 1; /* 16px   */
+  --fluid-max-size: 1.25; /* 20px   */
+  --fluid-min-ratio: 1.414; /* √2, minor scale  */
+  --fluid-max-ratio: 1.414; /* √2, major scale  */
+  --fluid-unit: 1cqi; /* set 1cqi for container-relative sizing */
+}
+
+/* ── Named tokens ────────────────────────────────────────────────────────────
+ * Each token is one step on the scale. The three --_ helpers per token
+ * (min size, max size, slope) are the whole Utopia formula; the token itself
+ * is the clamp built from them. Only the step number changes per token. */
+
+:root {
+  /* step -1 */
+  --_fs-300-min: calc(var(--fluid-min-size) * pow(var(--fluid-min-ratio), -1));
+  --_fs-300-max: calc(var(--fluid-max-size) * pow(var(--fluid-max-ratio), -1));
+  --_fs-300-slope: calc(
+    (var(--_fs-300-max) - var(--_fs-300-min)) / (var(--fluid-max-vw) - var(--fluid-min-vw))
+  );
+  --fs-300: clamp(
+    calc(var(--_fs-300-min) * 1rem),
+    calc(
+      (var(--_fs-300-min) - var(--_fs-300-slope) * var(--fluid-min-vw)) * 1rem +
+        var(--_fs-300-slope) * 100 * var(--fluid-unit)
+    ),
+    calc(var(--_fs-300-max) * 1rem)
+  );
+
+  /* step 0 (base) */
+  --_fs-400-min: calc(var(--fluid-min-size) * pow(var(--fluid-min-ratio), 0));
+  --_fs-400-max: calc(var(--fluid-max-size) * pow(var(--fluid-max-ratio), 0));
+  --_fs-400-slope: calc(
+    (var(--_fs-400-max) - var(--_fs-400-min)) / (var(--fluid-max-vw) - var(--fluid-min-vw))
+  );
+  --fs-400: clamp(
+    calc(var(--_fs-400-min) * 1rem),
+    calc(
+      (var(--_fs-400-min) - var(--_fs-400-slope) * var(--fluid-min-vw)) * 1rem +
+        var(--_fs-400-slope) * 100 * var(--fluid-unit)
+    ),
+    calc(var(--_fs-400-max) * 1rem)
+  );
+
+  /* step 1 */
+  --_fs-500-min: calc(var(--fluid-min-size) * pow(var(--fluid-min-ratio), 1));
+  --_fs-500-max: calc(var(--fluid-max-size) * pow(var(--fluid-max-ratio), 1));
+  --_fs-500-slope: calc(
+    (var(--_fs-500-max) - var(--_fs-500-min)) / (var(--fluid-max-vw) - var(--fluid-min-vw))
+  );
+  --fs-500: clamp(
+    calc(var(--_fs-500-min) * 1rem),
+    calc(
+      (var(--_fs-500-min) - var(--_fs-500-slope) * var(--fluid-min-vw)) * 1rem +
+        var(--_fs-500-slope) * 100 * var(--fluid-unit)
+    ),
+    calc(var(--_fs-500-max) * 1rem)
+  );
+
+  /* step 2 */
+  --_fs-600-min: calc(var(--fluid-min-size) * pow(var(--fluid-min-ratio), 2));
+  --_fs-600-max: calc(var(--fluid-max-size) * pow(var(--fluid-max-ratio), 2));
+  --_fs-600-slope: calc(
+    (var(--_fs-600-max) - var(--_fs-600-min)) / (var(--fluid-max-vw) - var(--fluid-min-vw))
+  );
+  --fs-600: clamp(
+    calc(var(--_fs-600-min) * 1rem),
+    calc(
+      (var(--_fs-600-min) - var(--_fs-600-slope) * var(--fluid-min-vw)) * 1rem +
+        var(--_fs-600-slope) * 100 * var(--fluid-unit)
+    ),
+    calc(var(--_fs-600-max) * 1rem)
+  );
+
+  /* step 3 */
+  --_fs-700-min: calc(var(--fluid-min-size) * pow(var(--fluid-min-ratio), 3));
+  --_fs-700-max: calc(var(--fluid-max-size) * pow(var(--fluid-max-ratio), 3));
+  --_fs-700-slope: calc(
+    (var(--_fs-700-max) - var(--_fs-700-min)) / (var(--fluid-max-vw) - var(--fluid-min-vw))
+  );
+  --fs-700: clamp(
+    calc(var(--_fs-700-min) * 1rem),
+    calc(
+      (var(--_fs-700-min) - var(--_fs-700-slope) * var(--fluid-min-vw)) * 1rem +
+        var(--_fs-700-slope) * 100 * var(--fluid-unit)
+    ),
+    calc(var(--_fs-700-max) * 1rem)
+  );
+
+  /* step 4 */
+  --_fs-800-min: calc(var(--fluid-min-size) * pow(var(--fluid-min-ratio), 4));
+  --_fs-800-max: calc(var(--fluid-max-size) * pow(var(--fluid-max-ratio), 4));
+  --_fs-800-slope: calc(
+    (var(--_fs-800-max) - var(--_fs-800-min)) / (var(--fluid-max-vw) - var(--fluid-min-vw))
+  );
+  --fs-800: clamp(
+    calc(var(--_fs-800-min) * 1rem),
+    calc(
+      (var(--_fs-800-min) - var(--_fs-800-slope) * var(--fluid-min-vw)) * 1rem +
+        var(--_fs-800-slope) * 100 * var(--fluid-unit)
+    ),
+    calc(var(--_fs-800-max) * 1rem)
+  );
+
+  /* step 5 */
+  --_fs-900-min: calc(var(--fluid-min-size) * pow(var(--fluid-min-ratio), 5));
+  --_fs-900-max: calc(var(--fluid-max-size) * pow(var(--fluid-max-ratio), 5));
+  --_fs-900-slope: calc(
+    (var(--_fs-900-max) - var(--_fs-900-min)) / (var(--fluid-max-vw) - var(--fluid-min-vw))
+  );
+  --fs-900: clamp(
+    calc(var(--_fs-900-min) * 1rem),
+    calc(
+      (var(--_fs-900-min) - var(--_fs-900-slope) * var(--fluid-min-vw)) * 1rem +
+        var(--_fs-900-slope) * 100 * var(--fluid-unit)
+    ),
+    calc(var(--_fs-900-max) * 1rem)
+  );
+
+  /* Body-text tokens were hand-capped below the geometric scale for
+	   readability (the scale would make them 16→20px / 11.3→14.1px). Delete
+	   these two lines to let the engine drive them geometrically. */
+  --fs-400: clamp(1rem, calc(0.912rem + 0.3756 * var(--fluid-unit)), 1.125rem);
+  --fs-300: clamp(0.75rem, calc(0.645rem + 0.2656 * var(--fluid-unit)), 0.875rem);
+}
+
+/* ── The `.fluid` utility ─────────────────────────────────────────────────────
+ * The same formula, but parameterized by --step so any element can pull an
+ * arbitrary size off the scale without a named token:
+ *
+ *   <p class="fluid" style="--step: 1.5">Off-scale size</p>
+ *
+ * Text and Heading get fluidity for free through the --fs-* tokens above, so
+ * reach for this only for one-off sizes between or beyond the named steps. */
+
+@property --step {
+  syntax: "<number>";
+  inherits: false;
+  initial-value: 0;
+}
+
+.fluid {
+  --_fluid-min: calc(var(--fluid-min-size) * pow(var(--fluid-min-ratio), var(--step)));
+  --_fluid-max: calc(var(--fluid-max-size) * pow(var(--fluid-max-ratio), var(--step)));
+  --_fluid-slope: calc(
+    (var(--_fluid-max) - var(--_fluid-min)) / (var(--fluid-max-vw) - var(--fluid-min-vw))
+  );
+
+  font-size: clamp(
+    calc(var(--_fluid-min) * 1rem),
+    calc(
+      (var(--_fluid-min) - var(--_fluid-slope) * var(--fluid-min-vw)) * 1rem + var(--_fluid-slope) *
+        100 * var(--fluid-unit)
+    ),
+    calc(var(--_fluid-max) * 1rem)
+  );
+}

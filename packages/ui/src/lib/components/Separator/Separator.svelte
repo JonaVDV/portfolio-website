@@ -4,7 +4,7 @@
 		'--separator-margin'?: string;
 		'--separator-color'?: string;
 		'--separator-thickness'?: string;
-		layout?: 'content' | 'full-width' | string & {};
+		layout?: 'content' | 'full-width' | (string & {});
 	}
 
 	let { orientation = 'horizontal', layout = 'content' }: Props = $props();
@@ -18,20 +18,18 @@
 
 <hr aria-orientation={orientation} data-orientation={orientation} class={layout} />
 
-<style lang="scss">
-	@use '../../styles/abstracts/' as *;
-
+<style>
 	hr {
 		margin-block: var(--separator-margin);
 		border: none;
 		border-block-start: var(--separator-thickness, 1px) solid
-			var(--separator-color, $clr-surface-600);
+			var(--separator-color, var(--clr-surface-600));
 	}
 
 	hr[data-orientation='vertical'] {
 		writing-mode: vertical-rl;
-		// This is a fix to make sure that the seperator stretches to the full height of its container.
-		//  This will eventually be replaced with height: stretch; once that is supported in all browsers.
+		/* This is a fix to make sure that the seperator stretches to the full height of its container. */
+		/*  This will eventually be replaced with height: stretch; once that is supported in all browsers. */
 		height: 100%;
 	}
 </style>

@@ -50,7 +50,7 @@
 	</ul>
 </section>
 
-<style lang="scss">
+<style>
 	.sidebar-section {
 		--_sidebar-section-padding-inline: var(--sidebar-section-padding-inline, 0.5rem);
 		display: grid;

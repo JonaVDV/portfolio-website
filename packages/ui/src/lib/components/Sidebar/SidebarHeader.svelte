@@ -13,9 +13,7 @@
 	{@render children()}
 </section>
 
-<style lang="scss">
-	@use '../../styles/abstracts/' as *;
-
+<style>
 	.sidebar-header {
 		--_sidebar-header-padding-inline: var(--sidebar-header-padding-inline, 0.5rem);
 		--_sidebar-header-padding-block: var(--sidebar-header-padding-block, 0.5rem);

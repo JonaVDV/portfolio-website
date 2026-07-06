@@ -1,0 +1,14 @@
+/* Layer order must be declared before the imports; components layer is
+   reserved for the component styles themselves. */
+@layer reset, base, layout, utilities, components;
+
+@import url("./tokens.css");
+@import url("./reset.css");
+@import url("./base.css");
+@import url("./fluid-type.css");
+@import url("./layout.css");
+@import url("./utilities.css");
+
+/* fonts.css (Lexend @font-face) is deliberately not imported: it points at
+   /fonts/... assets you would have to host. Import it yourself if you use
+   the default font stack, or just set --ff-body / --ff-headings. */

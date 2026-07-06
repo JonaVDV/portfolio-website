@@ -13,9 +13,7 @@
 	{@render children()}
 </footer>
 
-<style lang="scss">
-	@use '../../styles/abstracts/' as *;
-
+<style>
 	.sidebar-footer {
 		--_sidebar-footer-padding-inline: var(--sidebar-footer-padding-inline, 0.5rem);
 		--_sidebar-footer-padding-block: var(--sidebar-footer-padding-block, 0.5rem);

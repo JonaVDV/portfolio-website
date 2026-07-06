@@ -58,15 +58,13 @@ However, this should either be used sparingly or not at all since it can have
 	</div>
 </details>
 
-<style lang="scss">
-	@use '../../styles/abstracts/' as *;
-
+<style>
 	details {
-		// --- Private Scoped Props ---
+		/* --- Private Scoped Props --- */
 		--_accordion-padding: var(--accordion-padding, 1rem);
 		--_accordion-border-radius: var(--accordion-border-radius, 0.5rem);
-		--_accordion-background: var(--accordion-background, #{$clr-surface-000});
-		--_accordion-border-color: var(--accordion-border-color, #{$clr-surface-200});
+		--_accordion-background: var(--accordion-background, var(--clr-surface-000));
+		--_accordion-border-color: var(--accordion-border-color, var(--clr-surface-200));
 		--_accordion-title-color: var(--accordion-title-color, inherit);
 		--_accordion-transition-duration: var(--accordion-transition-duration, 300ms);
 		--_accordion-transition-easing: var(--accordion-transition-easing, ease-in-out);
@@ -75,7 +73,7 @@ However, this should either be used sparingly or not at all since it can have
 		border: 1px solid var(--_accordion-border-color);
 		background-color: var(--_accordion-background);
 		border-radius: var(--_accordion-border-radius);
-		overflow: hidden; // Ensures content doesn't bleed during animation
+		overflow: hidden;
 		isolation: isolate;
 
 		::marker {
@@ -107,7 +105,7 @@ However, this should either be used sparingly or not at all since it can have
 		cursor: pointer;
 		font-weight: 600;
 		color: var(--_accordion-title-color);
-		list-style: none; // Safari fix
+		list-style: none; /* Safari fix */
 		user-select: none;
 
 		&:hover {
@@ -124,6 +122,6 @@ However, this should either be used sparingly or not at all since it can have
 
 	.accordion-content {
 		padding: var(--_accordion-padding);
-		padding-block-start: 0; // Padding is owned by the summary/container
+		padding-block-start: 0; /* Padding is owned by the summary/container */
 	}
 </style>

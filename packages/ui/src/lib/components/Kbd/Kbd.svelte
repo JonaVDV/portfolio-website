@@ -17,7 +17,7 @@
 	{@render children?.()}
 </kbd>
 
-<style lang="scss">
+<style>
 	kbd {
 		--_kbd-padding: var(--kbd-padding, 0.25rem 0.5rem);
 		--_kbd-background: var(--kbd-background, oklch(0.269 0 0));

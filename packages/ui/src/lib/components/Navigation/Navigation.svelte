@@ -25,14 +25,12 @@
 	</nav>
 </header>
 
-<style lang="scss">
-	@use '../../styles/abstracts/' as *;
-
+<style>
 	.primary-navigation {
 	}
 
 	header {
-		background-color: $clr-brand-200;
+		background-color: var(--clr-brand-200);
 	}
 
 	.navigation-submenu {

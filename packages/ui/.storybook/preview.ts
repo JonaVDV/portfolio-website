@@ -1,5 +1,6 @@
 import type { Preview } from "@storybook/sveltekit";
-import "../src/lib/styles/main.scss";
+import "../src/lib/styles/main.css";
+import "../src/lib/styles/fonts.css";
 
 import polyfill from "@oddbird/css-anchor-positioning/fn";
 

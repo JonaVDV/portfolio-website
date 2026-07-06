@@ -54,7 +54,7 @@
 	{/if}
 </div>
 
-<style lang="scss">
+<style>
 	:global {
 		.primary-layout > *,
 		.primary-layout-sidebar > *:not(aside),

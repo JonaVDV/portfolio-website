@@ -1,7 +1,6 @@
 <script lang="ts">
 	import Tooltip from '../Tooltip/Tooltip.svelte';
 	import type { Snippet } from 'svelte';
-	import ChevronRight from '~icons/lucide/chevron-right';
 	import type { HTMLButtonAttributes, HTMLDetailsAttributes } from 'svelte/elements';
 	import { getSidebarState } from './context';
 
@@ -52,7 +51,21 @@
 		{#if collapsible && icon}
 			{@render icon()}
 		{:else if collapsible}
-			<ChevronRight />
+			<!-- inlined lucide/chevron-right — keeps the package free of icon build tooling -->
+			<svg
+				xmlns="http://www.w3.org/2000/svg"
+				width="1em"
+				height="1em"
+				viewBox="0 0 24 24"
+				fill="none"
+				stroke="currentColor"
+				stroke-width="2"
+				stroke-linecap="round"
+				stroke-linejoin="round"
+				aria-hidden="true"
+			>
+				<path d="m9 18 6-6-6-6" />
+			</svg>
 		{/if}
 	</svelte:element>
 {/snippet}
@@ -81,11 +94,9 @@
 	</div>
 </svelte:element>
 
-<style lang="scss">
-	@use '../../styles/abstracts/' as *;
-
+<style>
 	.sidebar-group {
-		// --- User settings ---
+		/* --- User settings --- */
 		--_sidebar-group-title-gap: var(--sidebar-group-title-gap, 0.25rem);
 		--_sidebar-group-inset: var(--sidebar-group-inset, -0.25rem);
 		--_sidebar-group-padding-block: var(--sidebar-group-padding-block, 0.5rem);
