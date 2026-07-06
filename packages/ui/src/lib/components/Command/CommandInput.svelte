@@ -1,10 +1,8 @@
 <script lang="ts">
-	import SearchIcon from '~icons/lucide/search';
 	import Button from '$components/Button/Button.svelte';
-	import XIcon from '~icons/lucide/x';
 	import type { HTMLInputAttributes } from 'svelte/elements';
 	import { CommandState } from './command.svelte';
-	import { InputGroup } from '$components/Form/InputGroup';
+	import * as InputGroup from '$components/Form/InputGroup';
 	import { Input } from '$components/Form/Input';
 	interface Props extends Omit<HTMLInputAttributes, 'type'> {
 		ref?: HTMLInputElement | null;
@@ -20,7 +18,22 @@
 <div class="command-input">
 	<InputGroup.Root>
 		<InputGroup.Addon align="inline-start">
-			<SearchIcon aria-hidden="true" />
+			<!-- inlined lucide/search — keeps the package free of icon build tooling -->
+			<svg
+				xmlns="http://www.w3.org/2000/svg"
+				width="1em"
+				height="1em"
+				viewBox="0 0 24 24"
+				fill="none"
+				stroke="currentColor"
+				stroke-width="2"
+				stroke-linecap="round"
+				stroke-linejoin="round"
+				aria-hidden="true"
+			>
+				<circle cx="11" cy="11" r="8" />
+				<path d="m21 21-4.3-4.3" />
+			</svg>
 		</InputGroup.Addon>
 		<Input
 			bind:ref
@@ -40,7 +53,22 @@
 		{#if commandState.search.trim() !== ''}
 			<InputGroup.Addon align="inline-end">
 				<Button type="button" variant="stripped" onclick={() => (commandState.search = '')}>
-					<XIcon />
+					<!-- inlined lucide/x -->
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						width="1em"
+						height="1em"
+						viewBox="0 0 24 24"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="2"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						aria-hidden="true"
+					>
+						<path d="M18 6 6 18" />
+						<path d="m6 6 12 12" />
+					</svg>
 					<span class="sr-only">Clear input</span>
 				</Button>
 			</InputGroup.Addon>

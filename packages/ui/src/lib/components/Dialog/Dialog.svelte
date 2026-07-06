@@ -2,7 +2,6 @@
 	import Button from '../Button/Button.svelte';
 	import type { Snippet } from 'svelte';
 	import type { HTMLAttributes } from 'svelte/elements';
-	import X from '~icons/lucide/x';
 
 	interface Props extends Omit<HTMLAttributes<HTMLElement>, 'children'> {
 		ref?: HTMLDialogElement | null;
@@ -153,7 +152,22 @@
 					aria-label="Close dialog"
 					onclick={handleClose}
 				>
-					<X />
+					<!-- inlined lucide/x — keeps the package free of icon build tooling -->
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						width="1em"
+						height="1em"
+						viewBox="0 0 24 24"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="2"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						aria-hidden="true"
+					>
+						<path d="M18 6 6 18" />
+						<path d="m6 6 12 12" />
+					</svg>
 				</Button>
 			{/if}
 			{#if header}
@@ -202,7 +216,7 @@
 
 		/** Content */
 		--_dialog-content-background: var(--dialog-content-background, inherit);
-        --_dialog-content-padding: var(--dialog-content-padding, var(--_dialog-padding));
+		--_dialog-content-padding: var(--dialog-content-padding, var(--_dialog-padding));
 
 		/** Footer */
 		--_dialog-footer-background: var(--dialog-footer-background, inherit);
@@ -324,7 +338,7 @@
 		--_dialog-close-margin: var(--dialog-close-margin, 0.5rem);
 
 		float: inline-end;
-        margin-inline-start: var(--_dialog-close-margin);
+		margin-inline-start: var(--_dialog-close-margin);
 		z-index: 2;
 	}
 </style>
