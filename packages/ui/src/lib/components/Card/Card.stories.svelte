@@ -2,7 +2,7 @@
 	import { defineMeta } from '@storybook/addon-svelte-csf';
 	import Card from './Card.svelte';
 	import Heading from '$components/Heading/Heading.svelte';
-	import Button from '$components/Button';
+	import { Button } from '$components/Button';
 	import { Input } from '$components/Form/Input';
 	const { Story } = defineMeta({
 		title: 'Components/Card',
@@ -18,7 +18,6 @@
 				<Heading level="h3">Card Title</Heading>
 				<p>This is a simple card component.</p>
 			{/snippet}
-
 
 			<p>
 				Cards are a flexible and extensible content container. They include options for headers and
@@ -43,7 +42,6 @@
 <Story name="Media / Login">
 	{#snippet template()}
 		<Card --card-max-width="40em" --card-border-radius="0.5rem">
-
 			{#snippet header()}
 				<div style="padding: 2rem 2rem 1rem;">
 					<strong style="font-size: 1.25rem;">Welcome back</strong>

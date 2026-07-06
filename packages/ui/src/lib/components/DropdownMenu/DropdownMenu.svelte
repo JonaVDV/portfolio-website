@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Popover from '$components/Popover/popover.svelte';
+	import Popover from '$components/Popover/Popover.svelte';
 	import { focusgroup } from '$lib/utils/focusgroup.svelte.js';
 	import type { ComponentProps, Snippet } from 'svelte';
 

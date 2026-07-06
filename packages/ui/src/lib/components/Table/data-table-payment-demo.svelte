@@ -40,13 +40,13 @@
 	import { DataTable } from './data-table.svelte.ts';
 	import DataTableComponent from './DataTable.svelte';
 	import Button from '$components/Button/Button.svelte';
-	import DropdownMenu from '$components/DropdownMenu/dropdown-menu.svelte';
-	import DropdownCheckbox from '$components/DropdownMenu/dropdown-checkbox.svelte';
-	import DropdownItem from '$components/DropdownMenu/dropdown-item.svelte';
+	import DropdownMenu from '$components/DropdownMenu/DropdownMenu.svelte';
+	import DropdownCheckbox from '$components/DropdownMenu/DropdownMenuCheckbox.svelte';
+	import DropdownItem from '$components/DropdownMenu/DropdownMenuItem.svelte';
 	import ArrowUpDown from '~icons/lucide/arrow-up-down';
 	import ChevronDown from '~icons/lucide/chevron-down';
 	import Ellipsis from '~icons/lucide/ellipsis';
-	import DropdownGroup from '$components/DropdownMenu/dropdown-group.svelte';
+	import DropdownGroup from '$components/DropdownMenu/DropdownMenuGroup.svelte';
 	import Separator from '$components/Separator/Separator.svelte';
 	import TableHead from './TableHead.svelte';
 	import TableCell from './TableCell.svelte';

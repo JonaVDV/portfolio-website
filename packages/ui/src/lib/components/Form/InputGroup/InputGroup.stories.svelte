@@ -1,7 +1,7 @@
 <script lang="ts" module>
 	import { defineMeta } from '@storybook/addon-svelte-csf';
 	import InputGroup from './InputGroup.svelte';
-	import Textarea from '../Textarea/';
+	import { Textarea } from '../Textarea';
 	import InputGroupAddon from './InputGroupAddon.svelte';
 	import { Input } from '../Input/';
 	import SearchIcon from '~icons/lucide/search';
@@ -11,7 +11,7 @@
 	import ArrowUpIcon from '~icons/lucide/arrow-up';
 	import Separator from '$components/Separator/Separator.svelte';
 	import PlusIcon from '~icons/lucide/plus';
-	import { Dropdown } from '$components/DropdownMenu';
+	import * as Dropdown from '$components/DropdownMenu';
 
 	const { Story } = defineMeta({
 		title: 'Components/Form/InputGroup',

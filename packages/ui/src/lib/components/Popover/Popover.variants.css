@@ -27,13 +27,13 @@
  *                                               (defaults to top → bottom → left → right)
  */
 :root {
-	--popover-background: #000;
-	--popover-color: #fff;
-	--popover-border: none;
-	--popover-border-radius: 1rem;
-	--popover-padding: 0.5rem;
-	--popover-width: auto;
+  --popover-background: #f8f3f3;
+  --popover-color: #000000;
+  --popover-border: none;
+  --popover-border-radius: 1rem;
+  --popover-padding: 0.5rem;
+  --popover-width: auto;
 
-	--popover-offset: 0px;
-	/* --popover-arrow-size: 8px;  (registered via @property; uncomment to override) */
+  --popover-offset: 0px;
+  /* --popover-arrow-size: 8px;  (registered via @property; uncomment to override) */
 }

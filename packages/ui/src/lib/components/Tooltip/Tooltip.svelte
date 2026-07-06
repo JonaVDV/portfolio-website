@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Popover from '$components/Popover/popover.svelte';
+	import Popover from '$components/Popover/Popover.svelte';
 	import type { ComponentProps, Snippet } from 'svelte';
 	import type { HTMLButtonAttributes } from 'svelte/elements';
 
@@ -82,12 +82,11 @@
 	{#snippet trigger({ props })}
 		{@render triggerProp({
 			props: {
+				...props,
 				onpointerenter: openOnHover ? scheduleOpen : undefined,
 				onpointerleave: openOnHover ? scheduleClose : undefined,
 				onfocus: scheduleOpen,
-				onblur: scheduleClose,
-				popovertarget: props.popovertarget,
-				style: props.style
+				onblur: scheduleClose
 			}
 		})}
 	{/snippet}

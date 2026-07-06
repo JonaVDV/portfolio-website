@@ -41,23 +41,23 @@
  */
 
 :root {
-	/* ── Menu surface ─────────────────────────────────────────── */
-	--dropdown-menu-background: #000;
-	--dropdown-menu-color: #ffffff;
-	--dropdown-menu-border: 1px solid color-mix(in oklcb, var(--dropdown-menu-color) 18%, transparent);
-	--dropdown-menu-border-radius: 1rem;
-	--dropdown-menu-padding: 0.25rem 0;
+  /* ── Menu surface ─────────────────────────────────────────── */
+  --dropdown-menu-background: #000;
+  --dropdown-menu-color: #ffffff;
+  --dropdown-menu-border: 1px solid color-mix(in oklab, var(--dropdown-menu-color) 18%, transparent);
+  --dropdown-menu-border-radius: 1rem;
+  --dropdown-menu-padding: 0.25rem 0;
 
-	/* ── Submenu surface ──────────────────────────────────────────
+  /* ── Submenu surface ──────────────────────────────────────────
 	   A brighter border than the menu so the nested surface reads as
 	   separate where they overlap. */
-	--dropdown-submenu-border: 1px solid
-		color-mix(in oklcb, var(--dropdown-menu-color) 35%, transparent);
+  --dropdown-submenu-border: 1px solid
+    color-mix(in oklab, var(--dropdown-menu-color) 35%, transparent);
 
-	/* ── Items ────────────────────────────────────────────────── */
-	--dropdown-item-padding: 0.25rem 0.5rem;
-	--dropdown-item-border-radius: 0.5rem;
-	--dropdown-item-gap: 0.5rem;
-	--dropdown-item-hover-background: oklch(0.269 0 0);
-	--dropdown-item-hover-color: oklch(0.985 0 0);
+  /* ── Items ────────────────────────────────────────────────── */
+  --dropdown-item-padding: 0.25rem 0.5rem;
+  --dropdown-item-border-radius: 0.5rem;
+  --dropdown-item-gap: 0.5rem;
+  --dropdown-item-hover-background: oklch(0.269 0 0);
+  --dropdown-item-hover-color: oklch(0.985 0 0);
 }

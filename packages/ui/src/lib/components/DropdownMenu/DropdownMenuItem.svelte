@@ -61,7 +61,7 @@
 	</li>
 {/if}
 
-<style lang="scss">
+<style>
 	li {
 		/* Public hooks fall back to private defaults (STYLE.md §1). Consumers
 		   override the unprefixed vars; the component only ever reads the `_` ones. */

@@ -1,13 +1,13 @@
 <script lang="ts" module>
 	import { defineMeta } from '@storybook/addon-svelte-csf';
 
-	import { Sidebar } from './index';
+	import * as Sidebar from './index';
 	import SidebarGroup from './SidebarGroup.svelte';
 	import SidebarItem from './SidebarItem.svelte';
-	import DropdownMenu from '$components/DropdownMenu/dropdown-menu.svelte';
+	import DropdownMenu from '$components/DropdownMenu/DropdownMenu.svelte';
 	import Separator from '$components/Separator/Separator.svelte';
 	import Button from '$components/Button/Button.svelte';
-	import { Root } from './exports';
+	import { Root } from './index';
 	const { Story } = defineMeta({
 		title: 'Components/Sidebar',
 		component: Root,

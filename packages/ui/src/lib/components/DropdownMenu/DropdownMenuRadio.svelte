@@ -1,5 +1,5 @@
 <script lang="ts">
-	import DropdownItem from './dropdown-item.svelte';
+	import DropdownItem from './DropdownMenuItem.svelte';
 	import type { Snippet } from 'svelte';
 	import type { HTMLInputAttributes } from 'svelte/elements';
 
@@ -38,7 +38,7 @@
 	</label>
 </DropdownItem>
 
-<style lang="scss">
+<style>
 	label {
 		--_flex-container-width: 100%;
 		cursor: pointer;

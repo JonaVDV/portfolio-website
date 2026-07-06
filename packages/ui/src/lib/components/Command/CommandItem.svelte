@@ -36,11 +36,10 @@
 	data-selected={isSelected || undefined}
 	data-value={value}
 	style:order
-	onmouseenter={(e) => commandState.onPointerMove(id, e)}
+	onpointerenter={(e) => commandState.onPointerMove(id, e)}
 	onclick={() => {
 		commandState.selectedIdState = id;
-		console.log('selected' + id);
-		
+
 		onselect?.();
 	}}
 >

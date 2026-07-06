@@ -1,22 +1,25 @@
-<script lang="ts" generics="TAs extends 'link' | 'button' = 'link'">
+<script lang="ts">
 	import type { Snippet } from 'svelte';
 	import { getSidebarState } from './context';
 	import type { HTMLAnchorAttributes, HTMLButtonAttributes } from 'svelte/elements';
 
-	type Props = (TAs extends 'button' ? HTMLButtonAttributes : HTMLAnchorAttributes) & {
-		children: Snippet;
-		action?: Snippet;
-		active?: boolean;
-		as?: TAs;
-		showActionOnHover?: boolean;
-	};
+	// anchor & button attrs intersected — simpler than a generic union, which
+	// TS cannot represent once spread together with class/aria props
+	type Props = HTMLAnchorAttributes &
+		HTMLButtonAttributes & {
+			children: Snippet;
+			action?: Snippet;
+			active?: boolean;
+			as?: 'link' | 'button';
+			showActionOnHover?: boolean;
+		};
 
 	let {
 		children,
 		action,
 		active,
 		showActionOnHover,
-		as = 'link' as TAs,
+		as = 'link',
 		class: className = '',
 		...rest
 	}: Props = $props();

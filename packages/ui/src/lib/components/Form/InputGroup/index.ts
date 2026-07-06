@@ -1,1 +1,2 @@
-export * as InputGroup from "./exports";
+export { default as Root } from "./InputGroup.svelte";
+export { default as Addon } from "./InputGroupAddon.svelte";

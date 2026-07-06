@@ -1,17 +1,16 @@
 <script lang="ts" module>
 	import { defineMeta } from '@storybook/addon-svelte-csf';
 	import Shell from './Shell.svelte';
-	import { Sidebar } from '$components/Sidebar';
-	import Header from '$components/Header/header.svelte';
-	import DropdownMenu from '$components/DropdownMenu/dropdown-menu.svelte';
+	import * as Sidebar from '$components/Sidebar';
+	import DropdownMenu from '$components/DropdownMenu/DropdownMenu.svelte';
 	import UpDown from '~icons/lucide/chevrons-up-down';
 	import Gallery from '~icons/lucide/gallery-vertical-end';
 	import Terminal from '~icons/lucide/square-terminal';
 	import Models from '~icons/lucide/bot';
 	import Settings from '~icons/lucide/settings-2';
 	import Documentation from '~icons/lucide/book-open';
-	import DropdownGroup from '$components/DropdownMenu/dropdown-group.svelte';
-	import DropdownItem from '$components/DropdownMenu/dropdown-item.svelte';
+	import DropdownGroup from '$components/DropdownMenu/DropdownMenuGroup.svelte';
+	import DropdownItem from '$components/DropdownMenu/DropdownMenuItem.svelte';
 	import Kbd, { cmd } from '$components/Kbd/Kbd.svelte';
 	import Separator from '$components/Separator/Separator.svelte';
 	import CMD from '~icons/lucide/command';
@@ -44,16 +43,16 @@
 			</Button>
 		{/snippet}
 		<DropdownItem>
-			<Folder/>
+			<Folder />
 			View project
 		</DropdownItem>
 		<DropdownItem>
-			<Share/>
+			<Share />
 			Share project
 		</DropdownItem>
 		<Separator />
 		<DropdownItem>
-			<Trash/>
+			<Trash />
 			Delete project
 		</DropdownItem>
 	</DropdownMenu>
@@ -126,12 +125,12 @@
 	{#snippet template()}
 		<Shell modules={['header', 'content', 'sidebar']}>
 			{#snippet header({ toggleSidebar })}
-				<Header sticky layout="full-width">
+				<header class="header | full-width">
 					<div class="flex-group space-between | full-content">
 						<Button variant="stripped" onclick={toggleSidebar}>sb</Button>
 						<strong>Portfolio</strong>
 					</div>
-				</Header>
+				</header>
 			{/snippet}
 			{#snippet sidebar()}
 				<Sidebar.Root --sidebar-item-font-size="0.875rem">
@@ -140,7 +139,7 @@
 							<DropdownMenu
 								content="This is the content of the dropdown menu. It can be a string or a Svelte component."
 								position="right top"
-								inheritTriggerWidth
+								--popover-width="anchor-size()"
 								--popover-padding="8px"
 								--icon-size="1em"
 							>
@@ -161,21 +160,27 @@
 										<Gallery />
 										Acme Inc
 										{#snippet keybind()}
-											<Kbd --kbd-background="transparent">{cmd} 1</Kbd>
+											<Kbd --kbd-background="transparent" style="margin-inline-start: auto;"
+												>{cmd} 1</Kbd
+											>
 										{/snippet}
 									</DropdownItem>
 									<DropdownItem>
 										<Acme />
 										Acme corp.
 										{#snippet keybind()}
-											<Kbd --kbd-background="transparent">{cmd} 2</Kbd>
+											<Kbd --kbd-background="transparent" style="margin-inline-start: auto;"
+												>{cmd} 2</Kbd
+											>
 										{/snippet}
 									</DropdownItem>
 									<DropdownItem>
 										<CMD />
 										Evil Corp.
 										{#snippet keybind()}
-											<Kbd --kbd-background="transparent">{cmd} 3</Kbd>
+											<Kbd --kbd-background="transparent" style="margin-inline-start: auto;"
+												>{cmd} 3</Kbd
+											>
 										{/snippet}
 									</DropdownItem>
 									<Separator></Separator>

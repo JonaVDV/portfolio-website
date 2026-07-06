@@ -17,7 +17,7 @@
 	{#snippet template()}
 		<div class="primary-layout">
 			<Item>
-				<Heading level="h3" sizeOf="h4">Item Title</Heading>
+				<Heading level="h3" variant="h4">Item Title</Heading>
 				<p>This is an example of an item component. It can contain any content and actions.</p>
 			</Item>
 		</div>
@@ -28,7 +28,7 @@
 	{#snippet template()}
 		<div class="primary-layout">
 			<Item>
-				<Heading level="h3" sizeOf="h4">Item Title</Heading>
+				<Heading level="h3" variant="h4">Item Title</Heading>
 				<p>This is an example of an item component with actions.</p>
 				{#snippet actions()}
 					<button>Edit</button>
@@ -47,7 +47,7 @@
 					<img style="border-radius: 50%;" src="https://picsum.photos/200" alt="placeholder" />
 				{/snippet}
 				<div>
-					<Heading level="h3" sizeOf="h4">Item Title</Heading>
+					<Heading level="h3" variant="h4">Item Title</Heading>
 					<p>This is an example of an item component with media.</p>
 				</div>
 			</Item>
@@ -60,7 +60,7 @@
 		<div class="primary-layout">
 			<Item>
 				{#snippet header()}
-					<Heading level="h3" sizeOf="h4">Item Header</Heading>
+					<Heading level="h3" variant="h4">Item Header</Heading>
 				{/snippet}
 				{#snippet media()}
 					<img style="border-radius: 50%;" src="https://picsum.photos/200" alt="placeholder" />
@@ -75,7 +75,7 @@
 	{#snippet template()}
 		<div class="primary-layout">
 			<Item as="a" href="https://example.com" target="_blank" rel="noopener noreferrer">
-				<Heading level="h3" sizeOf="h4">Item Title</Heading>
+				<Heading level="h3" variant="h4">Item Title</Heading>
 				<p>This item is rendered as an anchor tag. Styles apply normally.</p>
 			</Item>
 		</div>
@@ -90,7 +90,7 @@
 						{#snippet media()}
 							<CheckIcon />
 						{/snippet}
-						<Heading level="h3" sizeOf="h4">Item {index + 1}</Heading>
+						<Heading level="h3" variant="h4">Item {index + 1}</Heading>
 						<p>This is item {index + 1} in a group.</p>
 
 						{#snippet actions()}

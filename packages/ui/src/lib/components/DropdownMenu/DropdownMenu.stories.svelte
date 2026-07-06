@@ -1,12 +1,12 @@
 <script lang="ts" module>
 	import { defineMeta } from '@storybook/addon-svelte-csf';
 
-	import DropdownMenu from './dropdown-menu.svelte';
-	import DropdownItem from './dropdown-item.svelte';
-	import DropdownGroup from './dropdown-group.svelte';
-	import DropdownCheckbox from './dropdown-checkbox.svelte';
-	import DropdownRadio from './dropdown-radio.svelte';
-	import DropdownSubmenu from './dropdown-submenu.svelte';
+	import DropdownMenu from './DropdownMenu.svelte';
+	import DropdownItem from './DropdownMenuItem.svelte';
+	import DropdownGroup from './DropdownMenuGroup.svelte';
+	import DropdownCheckbox from './DropdownMenuCheckbox.svelte';
+	import DropdownRadio from './DropdownMenuRadio.svelte';
+	import DropdownSubmenu from './DropdownMenuSubmenu.svelte';
 	import Kbd, { cmd } from '$components/Kbd/Kbd.svelte';
 	import Separator from '$components/Separator/Separator.svelte';
 	import Gallery from '~icons/lucide/gallery-vertical-end';
@@ -24,13 +24,13 @@
 		title: 'Components/Dropdown Menu',
 		component: DropdownMenu,
 		parameters: {
-			layout: 'centered',
+			layout: 'centered'
 		},
 		argTypes: {
 			position: {
 				/**
 				 * The position of the popover relative to the trigger. See (position-area)[https://developer.mozilla.org/en-US/docs/Web/CSS/position-area] for details.
-				*/
+				 */
 				control: { type: 'text' }
 			}
 		},

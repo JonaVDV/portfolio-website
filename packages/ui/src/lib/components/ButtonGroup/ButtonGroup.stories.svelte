@@ -1,6 +1,6 @@
 <script lang="ts" module>
-	import Button from '$components/Button';
-	import { Dropdown } from '$components/DropdownMenu';
+	import { Button } from '$components/Button';
+	import * as Dropdown from '$components/DropdownMenu';
 	import ButtonGroup from './ButtonGroup.svelte';
 	import { defineMeta } from '@storybook/addon-svelte-csf';
 

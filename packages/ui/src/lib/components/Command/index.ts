@@ -1,1 +1,8 @@
-export * as Command from "./exports";
+export { default as Root } from "./Command.svelte";
+export { default as Item } from "./CommandItem.svelte";
+export { default as Group } from "./CommandGroup.svelte";
+export { default as Input } from "./CommandInput.svelte";
+export { default as Dialog } from "./CommandDialog.svelte";
+export { default as List } from "./CommandList.svelte";
+
+export { CommandState } from "./command.svelte";

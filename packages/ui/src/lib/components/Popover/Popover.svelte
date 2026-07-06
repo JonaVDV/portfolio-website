@@ -11,6 +11,11 @@
 						style: string;
 						['data-popover-trigger']: true;
 						type: 'button';
+						// present so wrappers (e.g. Tooltip) can augment the trigger
+						onpointerenter?: HTMLAttributes<HTMLElement>['onpointerenter'];
+						onpointerleave?: HTMLAttributes<HTMLElement>['onpointerleave'];
+						onfocus?: HTMLAttributes<HTMLElement>['onfocus'];
+						onblur?: HTMLAttributes<HTMLElement>['onblur'];
 					};
 				}
 			]

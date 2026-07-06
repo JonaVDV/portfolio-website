@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Popover from '$components/Popover/popover.svelte';
+	import Popover from '$components/Popover/Popover.svelte';
 	import { focusgroup } from '$lib/utils/focusgroup.svelte.js';
 	import type { Snippet } from 'svelte';
 
@@ -122,7 +122,7 @@
 	</Popover>
 </li>
 
-<style lang="scss">
+<style>
 	li {
 		/* Shares the same public API as dropdown-item, so a single consumer
 		   override (e.g. --dropdown-item-hover-background) themes both. */
