@@ -1,0 +1,61 @@
+/*
+ * Text variant definitions — consumer-owned.
+ * Copy this file into your project and edit freely.
+ *
+ * Display-only variant system (STYLE.md §10): no hover/active derivation, just
+ * layer 1 (set the values) and layer 3 (override anything). The component reads
+ * every --text-* property with a sensible fallback, so a variant only sets what
+ * it changes.
+ *
+ * The `variant` prop defaults to `as`, so <Text as="strong"> picks up
+ * [data-variant='strong'] automatically. Add your own variants below (e.g.
+ * `lead`, `caption`) and pass them explicitly: <Text as="p" variant="lead">.
+ * Pass variant="none" to skip variant styling entirely.
+ *
+ * ════════════════════════════════════════════════════════════════════════════
+ * FULL PUBLIC API — all available custom properties
+ * ════════════════════════════════════════════════════════════════════════════
+ *
+ * [data-variant='your-variant'] {
+ *   --text-font-family: var(--ff-body);
+ *   --text-font-size: var(--fs-400);       (--fs-300 … --fs-900 scale)
+ *   --text-font-weight: var(--fw-normal);  (normal | medium | bold | extra-bold | black)
+ *   --text-font-style: normal;             (normal | italic)
+ *   --text-line-height: 1.5;
+ *   --text-letter-spacing: normal;
+ *   --text-color: inherit;
+ *   --text-wrap: pretty;                   (pretty | balance | nowrap)
+ * }
+ */
+
+/* ════════════════════════════════════════════════════════════════════════════
+ * VARIANTS
+ * ════════════════════════════════════════════════════════════════════════════ */
+
+/* p — the default. Base typography is already the body paragraph, so nothing to add. */
+
+[data-variant="strong"] {
+  --text-font-weight: var(--fw-bold);
+}
+
+[data-variant="em"] {
+  --text-font-style: italic;
+}
+
+[data-variant="small"] {
+  --text-font-size: var(--fs-300);
+  --text-color: var(--clr-text-400, var(--clr-surface-600));
+}
+
+/* lead — an intro paragraph; larger and lighter than body. Not a native element,
+   so pass it explicitly: <Text as="p" variant="lead"> */
+[data-variant="lead"] {
+  --text-font-size: var(--fs-500);
+  --text-line-height: 1.4;
+  --text-color: var(--clr-text-400, var(--clr-surface-600));
+}
+
+/* muted — de-emphasised body text. */
+[data-variant="muted"] {
+  --text-color: var(--clr-text-400, var(--clr-surface-500));
+}

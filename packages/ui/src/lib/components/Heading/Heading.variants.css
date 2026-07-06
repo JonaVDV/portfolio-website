@@ -1,0 +1,59 @@
+/*
+ * Heading variant definitions — consumer-owned.
+ * Copy this file into your project and edit freely.
+ *
+ * Display-only variant system (STYLE.md §10): no hover/active, just set the
+ * values. The component reads every --heading-* property with a fallback, so a
+ * variant only sets what it changes.
+ *
+ * The `variant` prop defaults to `level`, so <Heading level="h1"> picks up
+ * [data-variant='h1'] automatically. Decouple look from semantics with
+ * <Heading level="h1" variant="h3">, add your own variants below (e.g.
+ * `display`), or pass variant="none" to skip variant styling entirely.
+ *
+ * ════════════════════════════════════════════════════════════════════════════
+ * FULL PUBLIC API — all available custom properties
+ * ════════════════════════════════════════════════════════════════════════════
+ *
+ * [data-variant='your-variant'] {
+ *   --heading-font-family: var(--ff-headings);
+ *   --heading-font-size: var(--fs-700);       (--fs-300 … --fs-900 scale)
+ *   --heading-font-weight: var(--fw-bold);    (normal | medium | bold | extra-bold | black)
+ *   --heading-line-height: 1.1;
+ *   --heading-letter-spacing: normal;
+ *   --heading-text-transform: none;           (none | uppercase | lowercase | capitalize)
+ *   --heading-color: inherit;
+ *   --heading-text-wrap: balance;             (balance | pretty | nowrap)
+ * }
+ */
+
+/* ════════════════════════════════════════════════════════════════════════════
+ * VARIANTS
+ * ════════════════════════════════════════════════════════════════════════════ */
+
+[data-variant="h1"] {
+  --heading-font-size: var(--fs-800);
+  --heading-font-weight: var(--fw-extra-bold);
+}
+
+[data-variant="h2"] {
+  --heading-font-size: var(--fs-700);
+}
+
+[data-variant="h3"] {
+  --heading-font-size: var(--fs-600);
+}
+
+[data-variant="h4"] {
+  --heading-font-size: var(--fs-500);
+}
+
+[data-variant="h5"] {
+  --heading-font-size: var(--fs-400);
+}
+
+[data-variant="h6"] {
+  --heading-font-size: var(--fs-300);
+  --heading-letter-spacing: 0.05em;
+  --heading-text-transform: uppercase;
+}

@@ -1,0 +1,39 @@
+/*
+ * Radio theming — consumer-owned.
+ * Copy this file into your project and edit freely.
+ *
+ * Set these on any ancestor element (e.g. :root, a form, a fieldset).
+ * Properties set here apply to all Radio components within that scope,
+ * including those inside a RadioGroup.
+ *
+ * ════════════════════════════════════════════════════════════════════════════
+ * FULL PUBLIC API
+ * ════════════════════════════════════════════════════════════════════════════
+ *
+ * -- Indicator
+ * --radio-indicator-color: var(--clr-brand-500);   (fill of the inner dot + checked border)
+ * --radio-indicator-size-ratio: 0.45;               (inner dot size relative to --radio-size)
+ *
+ * -- Border
+ * --radio-border-color: oklch(0.73 0.001 271);      (unchecked ring; checked uses indicator color)
+ * --radio-border-width: 2px;
+ *
+ * -- Focus ring
+ * --radio-focus-color: var(--clr-brand-400);
+ * --radio-focus-outline-width: 2px;
+ * --radio-focus-outline-offset: 2px;
+ *
+ * -- Size & spacing
+ * --radio-size: 1.125rem;
+ * --radio-gap: 0.5rem;                              (gap between the input and label text)
+ */
+
+/* ════════════════════════════════════════════════════════════════════════════
+ * EXAMPLE THEME
+ * ════════════════════════════════════════════════════════════════════════════ */
+
+:root {
+  --radio-indicator-color: var(--clr-brand-500);
+  --radio-border-color: var(--clr-surface-400);
+  --radio-focus-color: var(--clr-brand-400);
+}

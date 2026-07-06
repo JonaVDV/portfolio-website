@@ -84,6 +84,7 @@ Also accepts spread attributes from a remote form field: `{...form.fields.myFiel
 		border-radius: 50%;
 		flex-shrink: 0;
 		cursor: pointer;
+		position: relative;
 
 		&::before {
 			content: '';
@@ -93,6 +94,9 @@ Also accepts spread attributes from a remote form field: `{...form.fields.myFiel
 			border-radius: 50%;
 			background-color: var(--_radio-indicator-color);
 			scale: 0;
+			position: absolute;
+			inset: 0;
+			margin: auto;
 			transition: scale 0.15s ease-in-out;
 		}
 
