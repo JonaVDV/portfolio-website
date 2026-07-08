@@ -2,152 +2,150 @@
 	import type { Snippet } from 'svelte';
 	import type { HTMLAttributes } from 'svelte/elements';
 
-	interface Props extends Omit<HTMLAttributes<HTMLElement>, 'children'> {
-		ref?: HTMLElement | null;
-		header?: Snippet;
-		action?: Snippet;
-		children?: Snippet;
-		footer?: Snippet;
-		media?: Snippet;
-		subgrid?: boolean;
-	}
+	type CssProps =
+		| '--card-max-width'
+		| '--card-header-background'
+		| '--card-footer-background'
+		| '--card-background'
+		| '--card-gap'
+		| '--card-border'
+		| '--card-padding'
+		| '--card-padding-inline'
+		| '--card-padding-block'
+		| '--card-border-radius'
+		| '--card-header-padding'
+		| '--card-footer-padding';
 
-	let { header, ref, action, children, footer, media, subgrid, ...rest }: Props = $props();
+	type Props = HTMLAttributes<HTMLElement> & {
+		action?: Snippet;
+		header?: Snippet;
+		footer?: Snippet;
+	} & {
+		[K in CssProps]?: string;
+	};
+
+	let { children, class: className, header, action, footer, ...rest }: Props = $props();
 </script>
 
-<article class="card" data-subgrid={subgrid || undefined} bind:this={ref} {...rest}>
+<article class={['card', className]} {...rest}>
 	{#if header || action}
-		<div class="card-header">
-			<div class="card-action">
-				{@render action?.()}
-			</div>
-			{@render header?.()}
-		</div>
+		<header class="card-header">
+			{#if action}
+				<div class="card-header-inner">
+					<div class="card-action">{@render action()}</div>
+					{@render header?.()}
+				</div>
+			{/if}
+			{#if !action}
+				{@render header?.()}
+			{/if}
+		</header>
 	{/if}
-
 	<div class="card-content">
 		{@render children?.()}
 	</div>
-
 	{#if footer}
-		<div class="card-footer">
-			{@render footer?.()}
-		</div>
+		<footer class="card-footer">
+			{@render footer()}
+		</footer>
 	{/if}
 </article>
 
 <style>
 	.card {
-		--_card-background: var(--card-background, var(--clr-surface-100));
-		--_card-border: var(--card-border-width, 1px) solid
-			var(--card-border-color, var(--clr-surface-300));
-		--_card-radius: var(--card-border-radius, var(--radius-medium));
-		--_card-padding: var(--card-padding, 1rem);
-		--_card-max-width: var(--card-max-width, none);
-		--_card-gap: var(--card-gap, 0.5rem);
+		--_card-background: var(--card-background, white);
+		--_card-gap: var(--card-gap, 1rem);
+		--_card-border: var(
+			--card-border,
+			var(--card-border-width, 1px) solid var(--card-border-color, var(--clr-surface-300, #e0e0e0))
+		);
+		/* --card-padding is a single length that seeds both axes; override an axis
+		   with --card-padding-inline / --card-padding-block. */
+		--_card-pad-inline: var(--card-padding-inline, var(--card-padding, 1rem));
+		--_card-pad-block: var(--card-padding-block, var(--card-padding, 1rem));
+		--_card-max-width: var(--card-max-width, 100%);
+		--_card-border-radius: var(--card-border-radius, 0.5rem);
 
-		background-color: var(--_card-background);
-		border: var(--_card-border);
-		border-radius: var(--_card-radius);
-		/* padding lives on sections so header/footer backgrounds extend edge-to-edge.
-		   spacing is owned entirely by section padding (no gap), so the model needs
-		   no style queries or :has() to look right whether or not sections are styled. */
-		padding: 0;
+		display: grid;
+		/* prettier-ignore */
+		grid-template-columns:
+			[full-width-start] var(--_card-pad-inline)
+			[content-start] 1fr
+			[content-end] var(--_card-pad-inline)
+			[full-width-end];
+		row-gap: var(--_card-gap);
 		max-width: var(--_card-max-width);
-		container-type: inline-size;
-		display: flex;
-		flex-direction: column;
-		gap: var(--_card-gap);
-		/* clip section backgrounds to the card's border-radius */
+		background: var(--_card-background);
+		border: var(--_card-border);
+		border-radius: var(--_card-border-radius);
+		padding-block: var(--_card-pad-block);
+		/* clips bled media corners to the card radius (no per-image rounding needed) */
 		overflow: clip;
 	}
 
-	/* ── Sections ────────────────────────────────────────────────────────────── */
-
-	/* Header & footer always carry full padding, so any background/border they
-	   get fills edge-to-edge and reads as a distinct section. */
-	.card-header {
-		--_card-header-background: var(--card-header-background, transparent);
-		--_card-header-color: var(--card-header-color, inherit);
-
-		padding-inline: var(--card-header-padding-inline, var(--_card-padding));
-		padding-block-start: var(--card-header-padding-block-start, var(--_card-padding));
-		padding-block-end: var(--card-header-padding-block-end, var(--_card-padding));
-		background: var(--_card-header-background);
-		color: var(--_card-header-color);
-		border-bottom: var(--card-header-border-bottom, none);
-		position: relative;
+	.card-header,
+	.card-footer,
+	.card-content {
+		grid-column: full-width;
+		display: grid;
+		grid-template-columns: subgrid;
+		row-gap: var(--card-content-gap, 0);
 	}
 
-	/* Content's vertical space comes from its neighbours' inner padding; it only
-	   pads its own block edge when it's the first/last section (no neighbour there). */
-	.card-content {
-		padding-inline: var(--card-content-padding-inline, var(--_card-padding));
-		padding-block: var(--card-content-padding-block, 0);
+	/* Header/footer: background bleeds edge-to-edge, text stays inset by the tracks. */
+	.card-header {
+		position: relative; /* anchor for the absolutely-placed action */
+		background: var(--card-header-background, var(--_card-background));
+		padding-block: var(--card-header-padding, var(--_card-pad-block));
+	}
 
-		&:first-child {
-			padding-block-start: var(--card-content-padding-block-start, var(--_card-padding));
-		}
-		&:last-child {
-			padding-block-end: var(--card-content-padding-block-end, var(--_card-padding));
-		}
+	.card-action {
+		float: inline-end;
+		margin-inline-start: var(--_card-gap);
 	}
 
 	.card-footer {
-		--_card-footer-background: var(--card-footer-background, transparent);
-		--_card-footer-color: var(--card-footer-color, inherit);
-
-		padding-inline: var(--card-footer-padding-inline, var(--_card-padding));
-		padding-block-start: var(--card-footer-padding-block-start, var(--_card-padding));
-		padding-block-end: var(--card-footer-padding-block-end, var(--_card-padding));
-		background: var(--_card-footer-background);
-		color: var(--_card-footer-color);
-		border-top: var(--card-footer-border-top, none);
+		background: var(--card-footer-background, var(--_card-background));
+		padding-block: var(--card-footer-padding, var(--_card-pad-block));
 	}
 
-	/* ── Media side-by-side layout ───────────────────────────────────────── */
-	/* When .card-media is present, switch to a two-column grid */
-	.card:has(.card-media) {
-		display: grid;
-		grid-template-columns: var(--card-media-width, auto) 1fr;
-		grid-template-rows: auto 1fr auto;
-		grid-template-areas:
-			'media header'
-			'media content'
-			'media footer';
-
-		& .card-media {
-			grid-area: media;
-		}
-		& .card-header {
-			grid-area: header;
-		}
-		& .card-content {
-			grid-area: content;
-		}
-		& .card-footer {
-			grid-area: footer;
-		}
+	/* A section owns its own block padding, so the card drops its own on that edge. */
+	.card:has(.card-header) {
+		padding-block-start: 0;
 	}
 
-	.card-media {
-		overflow: hidden;
+	.card:has(.card-footer) {
+		padding-block-end: 0;
 	}
 
-	/* ── Subgrid ──────────────────────────────────────────────────────────── */
-	/* Opt in with the subgrid prop. Parent must be a named-row grid.         */
-	/* --card-subgrid-span: override if the card has more or fewer sections.  */
-	.card[data-subgrid] {
-		display: grid;
-		grid-template-rows: subgrid;
-		grid-row: var(--card-subgrid-span, span 3);
-		/* container-type would prevent the parent from reading through to size rows */
-		container-type: normal;
+	/* Children come from the consumer (unscoped), so section-child rules are :global. */
+	:is(.card-header, .card-footer, .card-content) > :global(*) {
+		grid-column: content;
 	}
 
-	/* ── Action (float-based, same pattern as Dialog close button) ─────────── */
-	.card-action {
-		display: flex;
-		float: inline-end;
+	/* Edge media (img / [data-card-media]) and opt-in breakout (.full / [data-card-full]). */
+	:is(.card-header, .card-footer, .card-content)
+		:global(:is(img, [data-card-media], .full, [data-card-full])) {
+		grid-column: full-width;
+	}
+
+	:is(.card-header, .card-footer, .card-content) > :global(img) {
+		display: block;
+		width: 100%;
+		object-fit: cover;
+	}
+
+	.card-header:has(:global(:is(img, [data-card-media]):first-child)),
+	.card:not(:has(.card-header)):has(
+			.card-content:first-child > :global(:is(img, [data-card-media]):first-child)
+		) {
+		padding-block-start: 0;
+	}
+
+	.card-footer:has(> :global(:is(img, [data-card-media]):last-child)),
+	.card:not(:has(.card-footer)):has(
+			.card-content:last-child > :global(:is(img, [data-card-media]):last-child)
+		) {
+		padding-block-end: 0;
 	}
 </style>
