@@ -1,0 +1,81 @@
+/*
+ * Sidebar customization reference — consumer-owned.
+ * Copy this file into your project, uncomment what you need, and edit freely.
+ *
+ * The Sidebar family (Sidebar, SidebarHeader, SidebarSection, SidebarGroup,
+ * SidebarItem, SidebarFooter) has no variants — it's a layout system. This
+ * sheet is a full overview of every custom property the family exposes, with
+ * defaults where one exists, since CSS intellisense can't surface them.
+ * Properties marked (no default) inherit from the surrounding theme.
+ *
+ * ════════════════════════════════════════════════════════════════════════════
+ * FULL PUBLIC API (defaults shown)
+ * ════════════════════════════════════════════════════════════════════════════
+ */
+
+:root {
+	/* -- Sizing & layout (Sidebar / Shell) */
+	/* --sidebar-max-width: ...;            (expanded width cap; no default) */
+	/* --sidebar-icons-only-width: 3rem;    (collapsed icon-rail width) */
+	/* --sidebar-icon-width: 3rem; */
+	/* --sidebar-border: ...;               (no default) */
+	/* --sidebar-z-index: 2; */
+	/* --sidebar-overlay-z-index: 1; */
+
+	/* -- Transition */
+	/* --sidebar-transition-duration: 0.3s; */
+	/* --sidebar-transition-easing: ease-in-out; */
+
+	/* -- Mobile overlay */
+	/* --overlay-background: ...;           (no default) */
+	/* --overlay-opacity: ...;              (no default) */
+
+	/* -- Header */
+	/* --sidebar-header-padding-block: 0.5rem; */
+	/* --sidebar-header-padding-inline: 0.5rem; */
+	/* --sidebar-header-border-width: 1px; */
+	/* --sidebar-header-border-color: ...;  (no default) */
+
+	/* -- Section */
+	/* --sidebar-section-gap: 0.25rem; */
+	/* --sidebar-section-padding-block: 0.75rem; */
+	/* --sidebar-section-padding-inline: 0.5rem; */
+	/* --sidebar-section-label-color: oklch(0.55 0 0); */
+	/* --sidebar-section-label-size: 0.6875rem; */
+	/* --sidebar-section-label-weight: 600; */
+	/* --sidebar-section-label-tracking: 0.05em; */
+	/* --sidebar-section-label-inset: 0.25rem; */
+
+	/* -- Group */
+	/* --sidebar-group-background: transparent; */
+	/* --sidebar-group-border-width: 1px; */
+	/* --sidebar-group-border: solid; */
+	/* --sidebar-group-border-radius: 0.75rem; */
+	/* --sidebar-group-padding-block: 0.5rem; */
+	/* --sidebar-group-padding-inline: 0.5rem; */
+	/* --sidebar-group-gap: 0em; */
+	/* --sidebar-group-title-gap: 0.25rem; */
+	/* --sidebar-group-font-size: 0.875rem; */
+	/* --sidebar-group-icon-size: 1rem; */
+	/* --sidebar-group-inset: -0.25rem; */
+
+	/* -- Item */
+	/* --sidebar-item-background: transparent; */
+	/* --sidebar-item-color: inherit; */
+	/* --sidebar-item-hover-background: ...;   (no default) */
+	/* --sidebar-item-hover-color: inherit; */
+	/* --sidebar-item-active-background: ...;  (no default) */
+	/* --sidebar-item-active-color: ...;       (no default) */
+	/* --sidebar-item-border-radius: 0.75rem; */
+	/* --sidebar-item-padding-block: 0.5rem; */
+	/* --sidebar-item-padding-inline: 0.5rem; */
+	/* --sidebar-item-gap: 0.75rem; */
+	/* --sidebar-item-font-size: 0.875rem; */
+	/* --sidebar-item-icon-size: 1rem; */
+
+	/* -- Footer */
+	/* --sidebar-footer-padding-block: 0.5rem; */
+	/* --sidebar-footer-padding-inline: 0.5rem; */
+	/* --sidebar-footer-border-width: 0px; */
+	/* --sidebar-footer-border-color: transparent; */
+}

@@ -1,0 +1,61 @@
+/*
+ * Alert variant definitions — consumer-owned.
+ * Copy this file into your project and edit freely.
+ *
+ * The component derives text color and border color automatically from
+ * --alert-background using oklch relative color syntax. Set just the
+ * background; everything else is handled for you.
+ *
+ * ════════════════════════════════════════════════════════════════════════════
+ * FULL PUBLIC API — all available custom properties
+ * ════════════════════════════════════════════════════════════════════════════
+ *
+ * [data-variant='your-variant'] {
+ *
+ *   -- Colors
+ *   --alert-background: <color>;             (layer 1: base; text/border derived automatically)
+ *   --alert-color-l: 5%;                     (layer 2: oklch lightness for derived text color)
+ *   --alert-color-c: 0;                      (layer 2: chroma delta for derived text color)
+ *   --alert-color-h: 0;                      (layer 2: hue delta in degrees for derived text color)
+ *   --alert-border-l: 80%;                   (layer 2: oklch lightness for derived border color)
+ *   --alert-border-c: 0;                     (layer 2: chroma delta for derived border color)
+ *   --alert-border-h: 0;                     (layer 2: hue delta in degrees for derived border color)
+ *   --alert-color: <color>;                  (layer 3: full text color override)
+ *   --alert-border-color: <color>;           (layer 3: full border color override)
+ *
+ *   -- Border
+ *   --alert-border-width: 1px;
+ *   --alert-border-style: solid;
+ *
+ *   -- Spacing & shape
+ *   --alert-padding: 16px;
+ *   --alert-gap: 12px;
+ *   --alert-border-radius: 4px;
+ *   --alert-max-width: none;
+ *   --alert-actions-gap: 0.5rem;
+ * }
+ */
+
+/* ════════════════════════════════════════════════════════════════════════════
+ * VARIANTS
+ * ════════════════════════════════════════════════════════════════════════════ */
+
+[data-variant='default'] {
+  --alert-background: var(--clr-surface-100, oklch(95.994% 0.01077 16.788));
+}
+
+[data-variant='success'] {
+  --alert-background: oklch(95.046% 0.05071 163.166);
+}
+
+[data-variant='warning'] {
+  --alert-background: oklch(96.19% 0.05793 95.632);
+}
+
+[data-variant='error'] {
+  --alert-background: oklch(93.564% 0.03087 17.529);
+}
+
+[data-variant='info'] {
+  --alert-background: oklch(93.192% 0.0317 255.644);
+}

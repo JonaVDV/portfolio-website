@@ -1,0 +1,54 @@
+/*
+ * Range theming — consumer-owned.
+ * Copy this file into your project and edit freely.
+ *
+ * Set these on any ancestor element (e.g. :root, a form, a fieldset).
+ * All properties cascade normally.
+ *
+ * ════════════════════════════════════════════════════════════════════════════
+ * FULL PUBLIC API
+ * ════════════════════════════════════════════════════════════════════════════
+ *
+ * -- Track
+ * --range-track-color: var(--clr-surface-300, oklch(0.75 0.01 264));
+ * --range-track-hover-color: oklch(from <track-color> calc(l - 0.05) c h);  (derived)
+ * --range-track-height: 0.375rem;
+ * --range-track-radius: 100vw;
+ *
+ * -- Progress fill  (the filled portion from start to thumb)
+ * --range-progress-color: var(--clr-brand-500, oklch(0.5 0.22 290));
+ * --range-progress-hover-color: oklch(from <progress-color> calc(l - 0.05) c h);  (derived)
+ *
+ * -- Thumb
+ * --range-thumb-color: var(--clr-brand-400, oklch(0.511 0.246 290));
+ * --range-thumb-hover-color: oklch(from <thumb-color> calc(l - 0.06) c h);  (derived)
+ * --range-thumb-size: 1.125rem;
+ * --range-thumb-radius: 50%;
+ *
+ * -- Focus ring  (outline wraps the entire slider input, not just the thumb,
+ *                 because overflow:hidden clips box-shadow on the thumb)
+ * --range-focus-color: var(--clr-brand-400, oklch(0.511 0.246 290));
+ * --range-focus-width: 3px;
+ *
+ * -- Out-of-range state  (value set programmatically outside min/max bounds)
+ * --range-out-of-range-color: oklch(0.55 0.22 25);           (red, track)
+ * --range-out-of-range-thumb-color: oklch(0.55 0.22 25);     (red, thumb)
+ * --range-out-of-range-progress-color: oklch(0.55 0.22 25);  (red, fill)
+ *
+ * -- Disabled
+ * --range-disabled-opacity: 0.45;
+ *
+ * -- Layout
+ * --range-width: 15rem;
+ */
+
+/* ════════════════════════════════════════════════════════════════════════════
+ * EXAMPLE THEME
+ * ════════════════════════════════════════════════════════════════════════════ */
+
+:root {
+  --range-track-color: var(--clr-surface-300);
+  --range-progress-color: var(--clr-brand-500);
+  --range-thumb-color: var(--clr-brand-400);
+  --range-focus-color: var(--clr-brand-400);
+}

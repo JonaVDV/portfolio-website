@@ -15,9 +15,7 @@
 			{#snippet title()}
 				test
 			{/snippet}
-			{#snippet children()}
-				<p>This is the content of section 1.</p>
-			{/snippet}
+			<p>This is the content of section 1.</p>
 		</Accordion>
 	{/snippet}
 </Story>
@@ -29,27 +27,21 @@
 				{#snippet title()}
 					Section 1
 				{/snippet}
-				{#snippet children()}
-					<p>This is the content of section 1.</p>
-				{/snippet}
+				<p>This is the content of section 1.</p>
 			</Accordion>
 
 			<Accordion name="accordion1">
 				{#snippet title()}
 					Section 2
 				{/snippet}
-				{#snippet children()}
-					<p>This is the content of section 2.</p>
-				{/snippet}
+				<p>This is the content of section 2.</p>
 			</Accordion>
 
 			<Accordion name="accordion1">
 				{#snippet title()}
 					Section 3
 				{/snippet}
-				{#snippet children()}
-					<p>This is the content of section 3.</p>
-				{/snippet}
+				<p>This is the content of section 3.</p>
 			</Accordion>
 		</div>
 	{/snippet}

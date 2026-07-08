@@ -1,0 +1,66 @@
+/*
+ * Badge variant definitions — consumer-owned.
+ * Copy this file into your project and edit freely.
+ *
+ * The component derives the background automatically as a 15% alpha tint of
+ * --badge-color. Set just the color; background is handled for you.
+ * Override --badge-background to bypass the derivation entirely (layer 3).
+ *
+ * ════════════════════════════════════════════════════════════════════════════
+ * FULL PUBLIC API — all available custom properties
+ * ════════════════════════════════════════════════════════════════════════════
+ *
+ * [data-variant='your-variant'] {
+ *
+ *   -- Colors
+ *   --badge-color: <color>;                  (layer 1: accent; background and border derived automatically)
+ *   --badge-background-alpha: 15%;           (layer 2: opacity of the auto-derived background tint)
+ *   --badge-border-alpha: 50%;               (layer 2: opacity of the auto-derived border color)
+ *   --badge-background: <color>;             (layer 3: full background override, bypasses tint derivation)
+ *   --badge-border-color: <color>;           (layer 3: full border color override, bypasses derivation)
+ *
+ *   -- Border
+ *   --badge-border-width: 0;
+ *   --badge-border-style: solid;
+ *
+ *   -- Typography
+ *   --badge-font-size: 0.75rem;
+ *   --badge-font-weight: 500;
+ *   --badge-letter-spacing: 0.05em;
+ *   --badge-text-transform: uppercase;
+ *
+ *   -- Spacing & shape
+ *   --badge-padding: 0.25em 0.75em;
+ *   --badge-gap: 0.25rem;
+ *   --badge-border-radius: 100vw;      (100vw = pill; 4px = square)
+ * }
+ */
+
+/* ════════════════════════════════════════════════════════════════════════════
+ * VARIANTS
+ * ════════════════════════════════════════════════════════════════════════════ */
+
+:root {
+	--badge-gap: 0.5em;
+}
+
+[data-variant='default'] {
+	--badge-color: var(--clr-surface-900);
+	--badge-background: var(--clr-surface-300);
+}
+
+[data-variant='success'] {
+	--badge-color: oklch(74.423% 0.16996 156.894);
+}
+
+[data-variant='warning'] {
+	--badge-color: oklch(76.606% 0.15167 92.462);
+}
+
+[data-variant='error'] {
+	--badge-color: oklch(55.877% 0.19836 25.19);
+}
+
+[data-variant='info'] {
+	--badge-color: oklch(51.952% 0.17374 258.215);
+}

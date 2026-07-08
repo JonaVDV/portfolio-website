@@ -1,0 +1,49 @@
+/*
+ * Checkbox theming — consumer-owned.
+ * Copy this file into your project and edit freely.
+ *
+ * Set these on any ancestor element (e.g. :root, a form, a fieldset).
+ *
+ * ════════════════════════════════════════════════════════════════════════════
+ * FULL PUBLIC API
+ * ════════════════════════════════════════════════════════════════════════════
+ *
+ * -- Border (all states share the same width; only color changes)
+ * --checkbox-border-color: #ccc;           (default / unchecked)
+ * --checkbox-border-hover-color: #ccc;
+ * --checkbox-border-focus-color: #ccc;
+ * --checkbox-border-checked-color: #ccc;
+ *
+ * -- Box
+ * --checkbox-size: 1.25rem;
+ * --checkbox-border-radius: 0.25rem;
+ * --checkbox-checked-background: transparent;
+ *
+ * -- Checkmark / indeterminate icon
+ * --checkbox-checkmark-color: currentColor;
+ * --checkbox-checkmark-image: url(...);      swap the default check (used as a mask)
+ * --checkbox-indeterminate-image: url(...);  swap the default dash (used as a mask)
+ *   Icons are applied via mask, so the SVG's own colour is ignored — colour comes
+ *   from --checkbox-checkmark-color. For a fully custom / animated icon, pass a
+ *   `checkmark` snippet instead.
+ *
+ * -- Animation
+ * --checkbox-transition: 0s        Set e.g. 0.25s to animate. Interpolates the
+ *   registered --checkbox-checked number 0 -> 1.
+ * --checkbox-checked: 0 -> 1       (read-only) Read it in a custom checkmark
+ *   snippet to drive the animation, e.g.
+ *   stroke-dashoffset: calc((1 - var(--checkbox-checked)) * 26);
+ */
+
+/* ════════════════════════════════════════════════════════════════════════════
+ * EXAMPLE THEME
+ * ════════════════════════════════════════════════════════════════════════════ */
+
+:root {
+	--checkbox-border-color: var(--clr-surface-300);
+	--checkbox-border-hover-color: var(--clr-surface-400);
+	--checkbox-border-focus-color: var(--clr-brand-400);
+	--checkbox-checked-background: var(--clr-brand-400);
+	--checkbox-border-checked-color: var(--clr-brand-400);
+	--checkbox-checkmark-color: var(--clr-surface-000);
+}

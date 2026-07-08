@@ -1,0 +1,25 @@
+/*
+ * InputGroup customization reference — consumer-owned.
+ * Copy this file into your project, uncomment what you need, and edit freely.
+ *
+ * InputGroup has no variants. It groups an <input> with addons (icons, buttons,
+ * text) and inherits the shared --input-* properties for border/padding so the
+ * group matches the input inside it. This sheet lists the group-specific props
+ * plus the inherited input props it reads, with defaults.
+ *
+ * ════════════════════════════════════════════════════════════════════════════
+ * FULL PUBLIC API (defaults shown)
+ * ════════════════════════════════════════════════════════════════════════════
+ */
+
+:root {
+	/* -- Group-specific */
+	/* --input-group-addon-background: transparent; */
+	/* --input-group-border-color: var(--input-border-color, #ccc); */
+	/* --input-group-border-width: var(--input-border-width, 1px); */
+	/* --input-group-padding: var(--input-padding, 0.25rem 0.75rem); */
+
+	/* -- Inherited from Input (see Input.variants.css for the full set) */
+	/* --input-border-radius: 0.8rem; */
+	/* --input-focus-outline-width: 1px; */
+}

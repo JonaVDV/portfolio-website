@@ -52,9 +52,7 @@
 	{@render children(form.fields[name] as FieldType<TForm, TName>, id)}
 </div>
 
-<style lang="scss">
-	@use '../../styles/abstracts/' as *;
-
+<style>
 	.form-group {
 		display: grid;
 		gap: var(--form-group-gap, 0.5rem);

@@ -1,0 +1,41 @@
+/*
+ * Command customization reference — consumer-owned.
+ * Copy this file into your project, uncomment what you need, and edit freely.
+ *
+ * The Command family (Command, CommandInput, CommandList, CommandGroup,
+ * CommandItem) has no variants — it's a layout primitive. This sheet is a full
+ * overview of every custom property it exposes, with defaults, since CSS
+ * intellisense can't surface them.
+ *
+ * ════════════════════════════════════════════════════════════════════════════
+ * FULL PUBLIC API (defaults shown)
+ * ════════════════════════════════════════════════════════════════════════════
+ */
+
+:root {
+	/* -- Container */
+	/* --command-background: transparent; */
+	/* --command-color: currentColor; */
+	/* --command-border-width: 1px; */
+	/* --command-border-color: oklch(93.042% 0.00757 16.525); */
+	/* --command-border-radius: 0.5rem; */
+	/* --command-padding: 0.5rem; */
+	/* --command-max-width: 30em; */
+
+	/* -- List */
+	/* --command-list-max-height: 22rem; */
+	/* --command-list-padding: 0.25rem; */
+
+	/* -- Group */
+	/* --command-group-gap: 0.5rem; */
+	/* --command-group-padding: 0.25rem; */
+	/* --command-group-label-color: currentColor; */
+	/* --command-group-label-font-size: 0.75rem; */
+	/* --command-group-label-font-weight: 500; */
+
+	/* -- Item */
+	/* --command-item-gap: 0.5rem; */
+	/* --command-item-padding: 0.5rem 0.75rem; */
+	/* --command-item-border-radius: 0.375rem; */
+	/* --command-item-selected-background: oklch(93% 0.01 250); */
+}

@@ -1,0 +1,60 @@
+/*
+ * Dialog customization reference — consumer-owned.
+ * Copy this file into your project, uncomment what you need, and edit freely.
+ *
+ * Dialog has no variants — it's a layout primitive. This sheet is a full
+ * overview of every custom property it exposes, with its default value, since
+ * CSS intellisense can't surface them. Set them on :root, a wrapper, or the
+ * <dialog> element itself.
+ *
+ * ════════════════════════════════════════════════════════════════════════════
+ * FULL PUBLIC API (defaults shown)
+ * ════════════════════════════════════════════════════════════════════════════
+ */
+
+:root {
+	/* -- Surface */
+	/* --dialog-background: oklch(100% 0 0); */
+	/* --dialog-color: inherit; */
+	/* --dialog-padding: 1.5rem;            (base padding all sections inherit) */
+	/* --dialog-spacing: 0;                 (gap between sections; padding owns spacing) */
+	/* --dialog-border-radius: 8px; */
+	/* --dialog-border-width: 1px; */
+	/* --dialog-border-color: var(--clr-surface-300); */
+	/* --dialog-box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1); */
+	/* --dialog-max-width: 30rem; */
+	/* --dialog-max-height: 90vh; */
+
+	/* -- Header */
+	/* --dialog-header-background: inherit; */
+	/* --dialog-header-color: inherit; */
+	/* --dialog-header-padding: var(--dialog-padding); */
+	/* --dialog-header-border-bottom: none; */
+	/* --dialog-header-gap: 0.5rem; */
+	/* --dialog-header-align: center; */
+
+	/* -- Content */
+	/* --dialog-content-background: inherit; */
+	/* --dialog-content-padding: var(--dialog-padding); */
+	/* --dialog-content-padding-block: 0; */
+
+	/* -- Footer */
+	/* --dialog-footer-background: inherit; */
+	/* --dialog-footer-color: inherit; */
+	/* --dialog-footer-padding: var(--dialog-padding); */
+	/* --dialog-footer-border-top: none; */
+	/* --dialog-footer-gap: 0.75rem; */
+	/* --dialog-footer-justify: flex-end; */
+
+	/* -- Close button */
+	/* --dialog-close-margin: 0.5rem; */
+
+	/* -- Backdrop */
+	/* --dialog-backdrop-background: hsl(0 0% 0% / 0.5); */
+	/* --dialog-backdrop-blur: 4px; */
+}
+
+/*
+ * AlertDialog (Dialog/AlertDialog.svelte) inherits all of the above and adds:
+ * --alert-icon-color: oklch(0.6 0.2 25);
+ */

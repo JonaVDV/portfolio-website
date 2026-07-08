@@ -1,96 +1,115 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
 	import type { HTMLButtonAttributes, HTMLAnchorAttributes } from 'svelte/elements';
+	import { type ConditionalProps } from '../../types';
+	import './Button.variants.css';
 
 	/**
 	 * Edit this type to add more variants
 	 */
-	type ButtonVariant = 'stripped' | 'primary' | (string & {});
+	type ButtonVariant = 'stripped' | (string & {});
+	type ButtonSize = 'icon' | 'small' | 'large' | (string & {});
 
 	interface BaseProps {
 		children: Snippet;
 		variant?: ButtonVariant;
+		size?: ButtonSize;
+		as?: 'button' | 'link';
+		disabled?: boolean;
 	}
 
-	type ButtonProps = BaseProps &
-		HTMLButtonAttributes & {
-			as?: 'button';
-		};
+	type Props = ConditionalProps<
+		BaseProps,
+		'as',
+		'link',
+		HTMLAnchorAttributes,
+		HTMLButtonAttributes
+	>;
 
-	type LinkProps = BaseProps &
-		HTMLAnchorAttributes & {
-			as: 'link';
-		};
-
-	type Props = ButtonProps | LinkProps;
-
-	let props: Props = $props();
+	let { children, variant, size, as = 'button', disabled, ...rest }: Props = $props();
 </script>
 
-{#if props.as === 'link'}
-	{@const { children, variant, as, ...rest } = props as LinkProps}
-	<a {...rest} class={[rest.class, 'button']} data-variant={variant}>
-		<div aria-hidden="true" class="outline-supporter"></div>
-		{@render children()}
-	</a>
-{:else}
-	{@const { children, variant, as, ...rest } = props as ButtonProps}
-	<button {...rest} class={[rest.class, 'button']} data-variant={variant}>
-		<div aria-hidden="true" class="outline-supporter"></div>
-		{@render children()}
-	</button>
-{/if}
+<svelte:element
+	this={as === 'link' ? 'a' : 'button'}
+	{...rest}
+	disabled={as === 'button' ? disabled : undefined}
+	aria-disabled={disabled ? true : undefined}
+	tabindex={disabled && as === 'link' ? -1 : undefined}
+	class={[rest.class, 'button']}
+	data-variant={variant}
+	data-size={size}
+>
+	{@render children()}
+</svelte:element>
 
-<style lang="scss">
-	@use '../../styles/abstracts/' as *;
-
+<style>
+	/* ── Variant base ─────────────────────────────────────────────────── */
 	.button[data-variant] {
-		/* Base settings */
-		--button-border-radius: 0;
-		--button-font-size: 1.125rem;
-		--button-font-weight: 600;
-		border: var(--button-border, 0);
-		padding: var(--button-padding, 0.75rem 1.5rem);
-		border-radius: var(--button-border-radius);
-		font-size: var(--button-font-size);
-		font-weight: var(--button-font-weight);
-		background-color: var(--button-background);
-		position: relative;
-		text-transform: uppercase;
-		letter-spacing: 0.2ch;
-		outline: 0;
-		z-index: 1;
-		isolation: isolate;
-		color: var(--button-color);
+		--_button-font-size: var(--button-font-size, 1rem);
+		--_button-font-weight: var(--button-font-weight, 600);
+		--_button-padding: var(--button-padding, 0.75rem 1.5rem);
+		--_button-border-radius: var(--button-border-radius);
+		--_button-letter-spacing: var(--button-letter-spacing, 0.1ch);
 
-		&:is(:hover, :focus) {
-			background-color: var(--button-hover-background, var(--button-background));
+		/* oklch delta defaults — tunable per variant via --button-hover-l/-c/-h etc. */
+		--_button-hover-l: var(--button-hover-l, -0.08);
+		--_button-hover-c: var(--button-hover-c, 0);
+		--_button-hover-h: var(--button-hover-h, 0);
+		--_button-active-l: var(--button-active-l, -0.16);
+		--_button-active-c: var(--button-active-c, 0);
+		--_button-active-h: var(--button-active-h, 0);
+
+		padding: var(--_button-padding);
+		border: var(--button-border, 0);
+		border-color: var(--button-border-color, currentColor);
+		border-radius: var(--_button-border-radius);
+		font-size: var(--_button-font-size);
+		font-weight: var(--_button-font-weight);
+		letter-spacing: var(--_button-letter-spacing);
+		background-color: var(--button-background);
+		color: var(--button-color);
+		line-height: var(--button-line-height, 1);
+		width: var(--button-width, auto);
+		position: relative;
+
+		&:is(:hover, :focus-visible) {
+			background-color: var(
+				--button-hover-background,
+				oklch(
+					from var(--button-background) calc(l + var(--_button-hover-l))
+						calc(c + var(--_button-hover-c)) calc(h + var(--_button-hover-h))
+				)
+			);
 			color: var(--button-hover-color, var(--button-color));
-			/* add more properties here */
+			border-color: var(--button-hover-border-color, var(--button-border-color, currentColor));
 		}
 
 		&:active {
-			background-color: var(--button-active-background, var(--button-background));
+			background-color: var(
+				--button-active-background,
+				oklch(
+					from var(--button-background) calc(l + var(--_button-active-l))
+						calc(c + var(--_button-active-c)) calc(h + var(--_button-active-h))
+				)
+			);
 			color: var(--button-active-color, var(--button-color));
-			/* add more properties here */
+			border-color: var(--button-active-border-color, var(--button-border-color, currentColor));
 		}
 	}
 
-	.button[data-variant='primary'] {
-		--button-background: #{$clr-brand-400};
-		--button-color: #{$clr-brand-000};
-		--button-hover-background: #{$clr-brand-600};
-		--button-active-background: #{$clr-brand-700};
+	/* ── Disabled state ───────────────────────────────────────────────── */
+	.button:disabled,
+	.button[aria-disabled='true'] {
+		--_button-disabled-opacity: var(--button-disabled-opacity, 0.45);
 
-		--focus-outline-width: 3px;
-		--focus-outline-color: #{$clr-brand-400};
-		--focus-outline-edge-size: 0.5rem;
-		--focus-outline-offset: 10px;
+		opacity: var(--_button-disabled-opacity);
+		cursor: not-allowed;
+		pointer-events: none;
 	}
 
+	/* ── Reset / stripped ─────────────────────────────────────────────── */
 	.button,
 	.button[data-variant='stripped'] {
-		/* Reset button styles */
 		appearance: none;
 		padding: var(--button-padding, 0);
 		border: 0;
@@ -99,6 +118,7 @@
 		display: inline-flex;
 		min-width: fit-content;
 		align-items: center;
+		vertical-align: middle;
 		justify-content: center;
 	}
 </style>

@@ -1,113 +1,255 @@
 <script lang="ts">
-	import Button from '$components/Button/Button.svelte';
+	import Button from '../Button/Button.svelte';
 	import type { Snippet } from 'svelte';
 	import type { HTMLAttributes } from 'svelte/elements';
 
 	interface Props extends Omit<HTMLAttributes<HTMLElement>, 'children'> {
-		ref: HTMLDialogElement | null;
+		ref?: HTMLDialogElement | null;
+		/**
+		 * Whether the dialog is open.
+		 * Reactive - bind to track dialog state externally.
+		 */
+		open?: boolean;
 		/**
 		 * The trigger that opens the dialog.
+		 * Receives an object with `dialogId` and `triggerProps` that can be spread onto buttons.
+		 *
+		 * Example:
+		 * ```svelte
+		 * {#snippet trigger({ dialogId, triggerProps })}
+		 *   <button {...triggerProps}>Open Dialog</button>
+		 * {/snippet}
+		 * ```
+		 *
+		 * The `triggerProps` object includes:
+		 * - `commandfor`: The dialog ID for Invoker Commands API (modern browsers)
+		 * - `command`: "show-modal" for native command support
+		 * - `onclick`: Fallback handler for browsers without command API support
 		 */
 		trigger?: Snippet<
 			[
 				{
 					/**
-					 * Whether the dialog is open.
-					 */
-					open: boolean;
-					/**
 					 * The ID of the dialog.
 					 */
 					dialogId: string;
 					/**
-					 * Function to open the dialog.
-					 * this is useful when you want to open the dialog with javaScript.
-					 * @returns void
+					 * Props to spread onto the trigger button.
+					 * Includes commandfor, command, and onclick for progressive enhancement.
 					 */
-					openFn: () => void;
+					triggerProps: {
+						commandfor: string;
+						command: 'show-modal';
+						onclick: () => void;
+					};
 				}
 			]
 		>;
+		/**
+		 * Enable light dismiss (click outside to close).
+		 * Uses the native `closedby="any"` attribute (Chrome 134+, Firefox 141+).
+		 * Gracefully degrades to `closedby="closerequest"` (ESC key only) in unsupporting browsers.
+		 */
 		lightDismiss?: boolean;
+		/**
+		 * Show a built-in close button.
+		 * Uses the native Invoker Commands API (`commandfor` + `command="close"`).
+		 * Falls back to JavaScript event listeners in older browsers.
+		 */
+		closeButton?: boolean;
 		/**
 		 * The content of the dialog.
 		 */
-		children?: Snippet<
-			[
-				{
-					/*Whether the dialog is open. */ open: boolean;
-				}
-			]
-		>;
-		footer?: Snippet<
-			[
-				{
-					/*Whether the dialog is open. */ open: boolean;
-				}
-			]
-		>;
+		children?: Snippet;
+		/**
+		 * Optional header snippet (useful for titles/descriptions).
+		 */
+		header?: Snippet;
+		/**
+		 * Optional footer snippet.
+		 */
+		footer?: Snippet;
 	}
 
-	let { trigger, children, footer, ref = $bindable(null), lightDismiss, ...rest }: Props = $props();
+	let {
+		trigger,
+		children,
+		closeButton = true,
+		header,
+		footer,
+		ref = $bindable(null),
+		open = $bindable(false),
+		lightDismiss = true,
+		...rest
+	}: Props = $props();
 
 	let dialogId = $props.id();
 
-	function close() {
-		if (!open || !ref?.open) return;
+	/**
+	 * Fallback close handler for browsers without Invoker Commands API support.
+	 * Native `command="close"` will work without this in supported browsers.
+	 */
+	function handleClose() {
 		ref?.close();
 		open = false;
 	}
 
-	function openDialog() {
-		if (open || ref?.open) return;
+	/**
+	 * Fallback open handler for browsers without Invoker Commands API support.
+	 * Native `command="show-modal"` will work without this in supported browsers.
+	 */
+	function handleOpen() {
 		ref?.showModal();
 		open = true;
 	}
 
-	let open = $state(false);
+	/**
+	 * Sync open state when dialog closes (via ESC, light dismiss, or close() call)
+	 */
+	function handleDialogClose() {
+		open = false;
+	}
+
+	/**
+	 * Track dialog's actual open state and sync with bindable open prop
+	 */
+	$effect.pre(() => {
+		if (ref) {
+			const isOpen = ref.open;
+			if (open !== isOpen) {
+				open = isOpen;
+			}
+		}
+	});
 </script>
 
-{@render trigger?.({ open, dialogId, openFn: openDialog })}
+{@render trigger?.({
+	dialogId,
+	triggerProps: {
+		commandfor: dialogId,
+		command: 'show-modal',
+		onclick: handleOpen
+	}
+})}
 
 <dialog
-	onclose={() => (open = false)}
+	{...rest}
+	onclose={handleDialogClose}
 	closedby={lightDismiss ? 'any' : 'closerequest'}
 	id={dialogId}
 	bind:this={ref}
-	{...rest}
+	aria-labelledby={header ? `${dialogId}-header` : undefined}
 >
-	<Button
-		class="close-dialog"
-		variant="stripped"
-		commandfor={dialogId}
-		command="request-close"
-		data-testid="close-dialog-button"
-		aria-label="Close dialog"
-		onclick={close}
-		--button-padding=".25rem"
-	>
-		<!-- Replace with icon later -->
-		X
-	</Button>
+	{#if closeButton || header}
+		<div id="{dialogId}-header" class="dialog-header">
+			{#if closeButton}
+				<Button
+					class="close-dialog"
+					variant="stripped"
+					data-dialog-close
+					commandfor={dialogId}
+					command="close"
+					aria-label="Close dialog"
+					onclick={handleClose}
+				>
+					<!-- inlined lucide/x — keeps the package free of icon build tooling -->
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						width="1em"
+						height="1em"
+						viewBox="0 0 24 24"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="2"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						aria-hidden="true"
+					>
+						<path d="M18 6 6 18" />
+						<path d="m6 6 12 12" />
+					</svg>
+				</Button>
+			{/if}
+			{#if header}
+				{@render header?.()}
+			{/if}
+		</div>
+	{/if}
+
 	<div class="dialog-content">
-		{@render children?.({ open })}
+		{@render children?.()}
 	</div>
 
-	<div class="dialog-footer">
-		{@render footer?.({ open })}
-	</div>
+	{#if footer}
+		<div class="dialog-footer">
+			{@render footer?.()}
+		</div>
+	{/if}
 </dialog>
 
-<style lang="scss">
-	@use '../../styles/abstracts/' as *;
-
+<style>
 	dialog:modal {
+		/** --- Public Styling API --- */
+		/** These variables can be overridden by consumers */
+		--_dialog-background: var(--dialog-background, oklch(100% 0 0));
+		--_dialog-color: var(--dialog-color, inherit);
+		--_dialog-padding: var(--dialog-padding, 1.5rem);
+		--_dialog-border-radius: var(--dialog-border-radius, 8px);
+		--_dialog-border-width: var(--dialog-border-width, 1px);
+		--_dialog-border-color: var(
+			--dialog-border-color,
+			var(--clr-surface-300, oklch(83.57% 0.00308 264.751))
+		);
+		--_dialog-max-width: var(--dialog-max-width, 30rem);
+		/* spacing is owned by section padding (same model as Card), so default to 0 */
+		--_dialog-spacing: var(--dialog-spacing, 0);
+		--_dialog-max-height: var(--dialog-max-height, 90vh);
+		--_dialog-box-shadow: var(--dialog-box-shadow, 0 10px 15px -3px rgb(0 0 0 / 0.1));
+
+		/** Header */
+		--_dialog-header-background: var(--dialog-header-background, inherit);
+		--_dialog-header-color: var(--dialog-header-color, inherit);
+		--_dialog-header-padding: var(--dialog-header-padding, var(--_dialog-padding));
+		--_dialog-header-border-bottom: var(--dialog-header-border-bottom, none);
+		--_dialog-header-gap: var(--dialog-header-gap, 0.5rem);
+		--_dialog-header-align: var(--dialog-header-align, center);
+
+		/** Content */
+		--_dialog-content-background: var(--dialog-content-background, inherit);
+		--_dialog-content-padding: var(--dialog-content-padding, var(--_dialog-padding));
+
+		/** Footer */
+		--_dialog-footer-background: var(--dialog-footer-background, inherit);
+		--_dialog-footer-color: var(--dialog-footer-color, inherit);
+		--_dialog-footer-padding: var(--dialog-footer-padding, var(--_dialog-padding));
+		--_dialog-footer-border-top: var(--dialog-footer-border-top, none);
+		--_dialog-footer-gap: var(--dialog-footer-gap, 0.75rem);
+		--_dialog-footer-justify: var(--dialog-footer-justify, flex-end);
+
+		/** --- Layout ---*/
 		margin: auto;
-		opacity: 0;
-		width: min(100%, var(--dialog-max-width, 30em));
+		width: min(calc(100% - 2rem), var(--_dialog-max-width));
+		max-height: min(calc(100% - 2rem), var(--_dialog-max-height));
+		padding: 0; /** Padding moved to sub-elements for edge-to-edge borders */
+
+		/** --- Appearance ---*/
+		background: var(--_dialog-background);
+		color: var(--_dialog-color);
+		border: var(--_dialog-border-width) solid var(--_dialog-border-color);
+		border-radius: var(--_dialog-border-radius);
+		box-shadow: var(--_dialog-box-shadow);
+
+		/** --- Behavior ---*/
+		overflow: hidden;
+		isolation: isolate;
+		display: flex;
+		flex-direction: column;
+		gap: var(--_dialog-spacing);
+
+		/** --- Transitions ---*/
+		/** Modern CSS: allow transitions on display property (all browsers except firefox) */
 		transition-behavior: allow-discrete;
-		border: 1px solid $clr-surface-200;
-		border-radius: 4px;
+		opacity: 0;
 		transition:
 			opacity 0.2s ease-in-out,
 			display 0.2s,
@@ -118,14 +260,65 @@
 		}
 	}
 
+	/* Header & footer carry full padding so any background/border fills edge-to-edge. */
+	.dialog-header {
+		background: var(--_dialog-header-background);
+		color: var(--_dialog-header-color);
+		padding: var(--_dialog-header-padding);
+		border-bottom: var(--_dialog-header-border-bottom);
+		gap: var(--_dialog-header-gap);
+		position: relative;
+	}
+
+	/* Content takes its vertical space from neighbours; pads its own edge only
+	   when it's the first/last section. */
+	.dialog-content {
+		background: var(--_dialog-content-background);
+		padding-inline: var(--_dialog-content-padding);
+		padding-block: var(--dialog-content-padding-block, 0);
+		overflow-y: auto;
+		overscroll-behavior: contain;
+
+		&:first-child {
+			padding-block-start: var(--_dialog-content-padding);
+		}
+		&:last-child {
+			padding-block-end: var(--_dialog-content-padding);
+		}
+	}
+
+	.dialog-footer {
+		background: var(--_dialog-footer-background);
+		color: var(--_dialog-footer-color);
+		padding: var(--_dialog-footer-padding);
+		border-top: var(--_dialog-footer-border-top);
+		display: flex;
+		justify-content: var(--_dialog-footer-justify);
+		gap: var(--_dialog-footer-gap);
+	}
+
+	/**
+	 * Backdrop - semi-transparent overlay behind the dialog
+	 * Smooth transition with the dialog itself for cohesive UX
+	 */
 	dialog::backdrop {
-		background-color: var(--modal-backdrop-color, hsl(0 0% 0% / 0.5));
+		--_dialog-backdrop-background: var(--dialog-backdrop-background, hsl(0 0% 0% / 0.5));
+		--_dialog-backdrop-blur: var(--dialog-backdrop-blur, 4px);
+
+		background-color: var(--_dialog-backdrop-background);
+		backdrop-filter: blur(var(--_dialog-backdrop-blur));
+
 		transition-behavior: allow-discrete;
 		transition:
 			opacity 0.2s ease-in-out,
 			overlay 0.2s;
 	}
 
+	/**
+	 * Entry animation
+	 * Defines the starting state before the dialog opens
+	 * Used by @starting-style in modern browsers
+	 */
 	@starting-style {
 		dialog[open] {
 			opacity: 0;
@@ -136,8 +329,16 @@
 		}
 	}
 
-	dialog :global(.close-dialog) {
+	/**
+	 * Close Button
+	 * Positioned in the top-right corner of the dialog
+	 * Explicitly positioned to avoid header content collision
+	 */
+	dialog:modal :global([data-dialog-close]) {
+		--_dialog-close-margin: var(--dialog-close-margin, 0.5rem);
+
 		float: inline-end;
-		margin-inline-start: var(--close-button-safe-area, 0.25rem);
+		margin-inline-start: var(--_dialog-close-margin);
+		z-index: 2;
 	}
 </style>
