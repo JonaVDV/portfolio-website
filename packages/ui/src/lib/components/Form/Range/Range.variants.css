@@ -47,8 +47,8 @@
  * ════════════════════════════════════════════════════════════════════════════ */
 
 :root {
-  --range-track-color: var(--clr-surface-300);
-  --range-progress-color: var(--clr-brand-500);
-  --range-thumb-color: var(--clr-brand-400);
-  --range-focus-color: var(--clr-brand-400);
+	--range-track-color: var(--clr-surface-300);
+	--range-progress-color: var(--clr-brand-500);
+	--range-thumb-color: var(--clr-brand-400);
+	--range-focus-color: var(--clr-brand-400);
 }

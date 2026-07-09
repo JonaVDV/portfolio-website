@@ -41,21 +41,21 @@
  * ════════════════════════════════════════════════════════════════════════════ */
 
 [data-variant='default'] {
-  --alert-background: var(--clr-surface-100, oklch(95.994% 0.01077 16.788));
+	--alert-background: var(--clr-surface-100, oklch(95.994% 0.01077 16.788));
 }
 
 [data-variant='success'] {
-  --alert-background: oklch(95.046% 0.05071 163.166);
+	--alert-background: oklch(95.046% 0.05071 163.166);
 }
 
 [data-variant='warning'] {
-  --alert-background: oklch(96.19% 0.05793 95.632);
+	--alert-background: oklch(96.19% 0.05793 95.632);
 }
 
 [data-variant='error'] {
-  --alert-background: oklch(93.564% 0.03087 17.529);
+	--alert-background: oklch(93.564% 0.03087 17.529);
 }
 
 [data-variant='info'] {
-  --alert-background: oklch(93.192% 0.0317 255.644);
+	--alert-background: oklch(93.192% 0.0317 255.644);
 }

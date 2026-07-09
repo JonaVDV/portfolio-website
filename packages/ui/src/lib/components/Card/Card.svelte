@@ -129,7 +129,7 @@
 		grid-column: full-width;
 	}
 
-	:is(.card-header, .card-footer, .card-content) > :global(img) {
+	:is(.card-header, .card-footer, .card-content) :global(img) {
 		display: block;
 		width: 100%;
 		object-fit: cover;

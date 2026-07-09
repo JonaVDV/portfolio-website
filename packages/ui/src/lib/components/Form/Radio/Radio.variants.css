@@ -33,7 +33,7 @@
  * ════════════════════════════════════════════════════════════════════════════ */
 
 :root {
-  --radio-indicator-color: var(--clr-brand-500);
-  --radio-border-color: var(--clr-surface-400);
-  --radio-focus-color: var(--clr-brand-400);
+	--radio-indicator-color: var(--clr-brand-500);
+	--radio-border-color: var(--clr-surface-400);
+	--radio-focus-color: var(--clr-brand-400);
 }

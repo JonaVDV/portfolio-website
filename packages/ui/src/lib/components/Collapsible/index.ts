@@ -1,1 +1,1 @@
-export { default as Collapsible } from "./Collapsible.svelte";
+export { default as Collapsible } from './Collapsible.svelte';

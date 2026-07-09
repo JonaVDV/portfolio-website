@@ -56,12 +56,12 @@
  * ════════════════════════════════════════════════════════════════════════════ */
 
 :root {
-  --input-border-color: var(--clr-surface-300);
-  --input-border-hover-color: var(--clr-surface-400);
-  --input-border-radius: 6px;
-  --input-focus-outline-color: var(--clr-brand-400);
-  --input-text-color: var(--clr-surface-900);
-  --input-placeholder-color: var(--clr-surface-500);
-  --input-border-disabled-color: var(--clr-surface-200);
-  --input-text-disabled-color: var(--clr-surface-400);
+	--input-border-color: var(--clr-surface-300);
+	--input-border-hover-color: var(--clr-surface-400);
+	--input-border-radius: 6px;
+	--input-focus-outline-color: var(--clr-brand-400);
+	--input-text-color: var(--clr-surface-900);
+	--input-placeholder-color: var(--clr-surface-500);
+	--input-border-disabled-color: var(--clr-surface-200);
+	--input-text-disabled-color: var(--clr-surface-400);
 }

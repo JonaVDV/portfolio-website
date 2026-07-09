@@ -72,8 +72,8 @@ Core equations:
 ```css
 /* 0 below breakpoint, very large above breakpoint */
 --sidebar-breakpoint-gate: min(
-  max(0px, (100cqi - var(--sidebar-mobile-breakpoint)) * 9999),
-  100cqi
+	max(0px, (100cqi - var(--sidebar-mobile-breakpoint)) * 9999),
+	100cqi
 );
 
 /* Breakpoint-aware sidebar widths */
@@ -85,7 +85,7 @@ Core equations:
 
 /* Available content width after sidebar and both paddings */
 --content-available-inline-size: calc(
-  100cqi - var(--sidebar-active-width) - var(--minimum-content-padding) * 2
+	100cqi - var(--sidebar-active-width) - var(--minimum-content-padding) * 2
 );
 
 /* Clamp to readable max and never go negative */
@@ -109,7 +109,7 @@ to set a gap, simply change the `--flex-gap` variable on the element, for exampl
 
 ```html
 <div class="flex-group" style="--flex-gap: 2rem;">
-  <!-- flex items here -->
+	<!-- flex items here -->
 </div>
 ```
 
@@ -117,7 +117,7 @@ if you want the items to have space between them, you can use the `space-between
 
 ```html
 <div class="flex-group space-between">
-  <!-- flex items here -->
+	<!-- flex items here -->
 </div>
 ```
 
@@ -125,7 +125,7 @@ in order to center the items, you can use the `center` class on the flex contain
 
 ```html
 <div class="flex-group center">
-  <!-- flex items here -->
+	<!-- flex items here -->
 </div>
 ```
 
@@ -133,7 +133,7 @@ by default the flex container will wrap the items, but if you want to prevent th
 
 ```html
 <div class="flex-group nowrap">
-  <!-- flex items here -->
+	<!-- flex items here -->
 </div>
 ```
 
@@ -145,7 +145,7 @@ for grid there is also no component, but there are utility classes that you can 
 
 ```html
 <div class="grid-auto-fit" style="--min-column-size: 200px; --max-columns: 4;">
-  <!-- grid items here -->
+	<!-- grid items here -->
 </div>
 ```
 
@@ -157,7 +157,7 @@ If you want to adjust the gap between the columns, you can set the `--gap` varia
 
 ```html
 <div class="grid-auto-fit" style="--min-column-size: 200px; --max-columns: 4; --gap: 2rem;">
-  <!-- grid items here -->
+	<!-- grid items here -->
 </div>
 ```
 

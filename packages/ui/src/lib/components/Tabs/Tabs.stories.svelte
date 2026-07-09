@@ -22,8 +22,12 @@
 						<TabTrigger tab="profile">Tab 3</TabTrigger>
 						<TabTrigger tab="disabled" disabled>Disabled Tab</TabTrigger>
 						<TabTrigger tab="long">This is a very long tab that should be truncated</TabTrigger>
-						<TabTrigger tab="overflow">This is a very long tab that should cause overflow and be scrollable</TabTrigger>
-						<TabTrigger tab="overflow2">This is a very long tab that should cause overflow and be scrollable</TabTrigger>
+						<TabTrigger tab="overflow"
+							>This is a very long tab that should cause overflow and be scrollable</TabTrigger
+						>
+						<TabTrigger tab="overflow2"
+							>This is a very long tab that should cause overflow and be scrollable</TabTrigger
+						>
 					</TabList>
 					<TabPanel tab="account">
 						<p>This is the content of Tab 1.</p>

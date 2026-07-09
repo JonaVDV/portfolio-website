@@ -27,7 +27,8 @@
 		font-weight: var(--badge-font-weight, var(--fw-medium));
 		letter-spacing: var(--badge-letter-spacing, 0.05em);
 		text-transform: var(--badge-text-transform, uppercase);
-		border: var(--badge-border-width, 0) var(--badge-border-style, solid) var(--_badge-border-color, currentColor);
+		border: var(--badge-border-width, 0) var(--badge-border-style, solid)
+			var(--_badge-border-color, currentColor);
 		color: var(--badge-color, var(--clr-surface-900));
 		background-color: var(--badge-background, var(--clr-surface-300));
 		border-radius: var(--badge-border-radius, 100vw);
@@ -39,7 +40,13 @@
 	.badge[data-variant] {
 		--_badge-background-alpha: var(--badge-background-alpha, 15%);
 		--_badge-border-alpha: var(--badge-border-alpha, 50%);
-		--_badge-border-color: var(--badge-border-color, oklch(from var(--badge-color) l c h / var(--_badge-border-alpha)));
-		background-color: var(--badge-background, oklch(from var(--badge-color) l c h / var(--_badge-background-alpha)));
+		--_badge-border-color: var(
+			--badge-border-color,
+			oklch(from var(--badge-color) l c h / var(--_badge-border-alpha))
+		);
+		background-color: var(
+			--badge-background,
+			oklch(from var(--badge-color) l c h / var(--_badge-background-alpha))
+		);
 	}
 </style>

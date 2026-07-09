@@ -2,14 +2,7 @@
 	// Known variants ship with the library; consumers can add their own in
 	// Text.variants.css and pass the name through — hence the open string union.
 	export type TextVariant =
-		| 'p'
-		| 'strong'
-		| 'em'
-		| 'small'
-		| 'lead'
-		| 'muted'
-		| 'none'
-		| (string & {});
+		'p' | 'strong' | 'em' | 'small' | 'lead' | 'muted' | 'none' | (string & {});
 </script>
 
 <script lang="ts">

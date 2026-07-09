@@ -5,7 +5,7 @@
 	import { Button } from '$components/Button';
 
 	const { Story } = defineMeta({
-		title: '2. UI Components/Card',
+		title: 'Components/Card',
 		parameters: {
 			layout: 'centered',
 			controls: { expanded: true }
@@ -58,7 +58,6 @@
 			--card-max-width={args['--card-max-width']}
 			--card-header-background={args['--card-header-background']}
 			--card-footer-background={args['--card-footer-background']}
-			
 		>
 			{#snippet header()}
 				<Heading level="h2">Card Header</Heading>
@@ -204,14 +203,13 @@ pad the title text itself. Header/footer aren't subgrid — this is the hook. --
 		>
 			{#snippet header()}
 				<div class="grid-stack" data-card-full>
-					<img src={IMG} alt="Placeholder" />
+					<img src={IMG} alt="Placeholder" data-card-full />
 					<!-- place button top right with grid area -->
 					<Button style="place-self: start end;" data-card-full variant="ghost">Edit</Button>
 
 					<div
 						data-card-full
-						style="place-self: end start;"
-						class="bg-black/20 p-4 backdrop-blur-sm"
+						style="place-self: end start; background: rgba(0, 0, 0, 0.5); padding: 1rem; color: white;"
 					>
 						<Heading --heading-color="white" level="h2">Card Header</Heading>
 						<p style="--subtitle-color:white" class="subtitle">Card subtitle</p>

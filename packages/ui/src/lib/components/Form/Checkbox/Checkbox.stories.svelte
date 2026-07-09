@@ -6,9 +6,22 @@
 	const { Story } = defineMeta({
 		component: Checkbox,
 		parameters: {
-			layout: 'centered',
+			layout: 'centered'
 		},
 		tags: ['autodocs'],
+		args: {
+			indeterminate: false
+		},
+		argTypes: {
+			indeterminate: {
+				control: { type: 'boolean' },
+				description: 'Whether the checkbox is in an indeterminate state.',
+				table: {
+					type: { summary: 'boolean' },
+					defaultValue: { summary: '' }
+				}
+			}
+		},
 		title: 'Components/Form/Checkbox'
 	});
 </script>
@@ -20,25 +33,27 @@
 
 <!-- Any snippet works as the checked icon. -->
 <Story name="Custom icon">
-	<Checkbox>
-		{#snippet checkmark()}
-			<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-				<path d="M12 2l2.9 6.3 6.9.6-5.2 4.5 1.6 6.7L12 17l-6.2 3.6 1.6-6.7L2.2 8.9l6.9-.6z" />
-			</svg>
-		{/snippet}
-	</Checkbox>
+	{#snippet template(args)}
+		<Checkbox {...args}>
+			{#snippet checkmark()}
+				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+					<path d="M12 2l2.9 6.3 6.9.6-5.2 4.5 1.6 6.7L12 17l-6.2 3.6 1.6-6.7L2.2 8.9l6.9-.6z" />
+				</svg>
+			{/snippet}
+		</Checkbox>
+	{/snippet}
 </Story>
 
 <!-- Indeterminate (e.g. a table's "select all" header). Needs JS to set the flag. -->
-<Story name="Indeterminate">
-	<Checkbox indeterminate />
-</Story>
+<Story name="Indeterminate"></Story>
 
 <!-- Swap either default icon with a url() — no snippet needed. -->
 <Story name="Custom url() icons">
-	<div class="custom-url">
-		<Checkbox indeterminate />
-	</div>
+	{#snippet template(args)}
+		<div class="custom-url">
+			<Checkbox {...args} />
+		</div>
+	{/snippet}
 </Story>
 
 <!--
@@ -47,30 +62,32 @@
 	that value into stroke-dashoffset. No JS, no Svelte transition — pure CSS.
 -->
 <Story name="Animated (draw)">
-	<div class="animated">
-		<Checkbox>
-			{#snippet checkmark()}
-				<svg
-					class="draw"
-					xmlns="http://www.w3.org/2000/svg"
-					viewBox="0 0 24 24"
-					fill="none"
-					stroke-width="3"
-					stroke-linecap="round"
-					stroke-linejoin="round"
-				>
-					<path d="M20 6 9 17l-5-5" />
-				</svg>
-			{/snippet}
-		</Checkbox>
-	</div>
+	{#snippet template(args)}
+		<div class="animated">
+			<Checkbox {...args}>
+				{#snippet checkmark()}
+					<svg
+						class="draw"
+						xmlns="http://www.w3.org/2000/svg"
+						viewBox="0 0 24 24"
+						fill="none"
+						stroke-width="3"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+					>
+						<path d="M20 6 9 17l-5-5" />
+					</svg>
+				{/snippet}
+			</Checkbox>
+		</div>
+	{/snippet}
 </Story>
 
 <style>
 	.animated {
 		--checkbox-transition: 0.25s;
 		--checkbox-transition: 1s;
-		--checkbox-checkmark-color: var(--clr-brand-400);
+		--checkbox-checkmark-color: var(--clr-surface-100, #fff);
 	}
 	.draw path {
 		/* offset hides the stroke when unchecked, reveals it as --checkbox-checked -> 1 */

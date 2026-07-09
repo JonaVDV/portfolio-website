@@ -37,11 +37,11 @@
  * ════════════════════════════════════════════════════════════════════════════ */
 
 :root {
-  --switch-background-color: var(--clr-surface-300);
-  --switch-border-color: var(--clr-surface-400);
-  --switch-checked-background-color: var(--clr-brand-400);
-  --switch-checked-border-color: var(--clr-brand-500);
-  --switch-focus-color: var(--clr-brand-400);
-  --switch-thumb-color: var(--clr-surface-000);
-  --switch-thumb-border-color: var(--clr-surface-200);
+	--switch-background-color: var(--clr-surface-300);
+	--switch-border-color: var(--clr-surface-400);
+	--switch-checked-background-color: var(--clr-brand-400);
+	--switch-checked-border-color: var(--clr-brand-500);
+	--switch-focus-color: var(--clr-brand-400);
+	--switch-thumb-color: var(--clr-surface-000);
+	--switch-thumb-border-color: var(--clr-surface-200);
 }

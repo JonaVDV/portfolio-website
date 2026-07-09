@@ -34,28 +34,28 @@
 
 /* p — the default. Base typography is already the body paragraph, so nothing to add. */
 
-[data-variant="strong"] {
-  --text-font-weight: var(--fw-bold);
+[data-variant='strong'] {
+	--text-font-weight: var(--fw-bold);
 }
 
-[data-variant="em"] {
-  --text-font-style: italic;
+[data-variant='em'] {
+	--text-font-style: italic;
 }
 
-[data-variant="small"] {
-  --text-font-size: var(--fs-300);
-  --text-color: var(--clr-text-400, var(--clr-surface-600));
+[data-variant='small'] {
+	--text-font-size: var(--fs-300);
+	--text-color: var(--clr-text-400, var(--clr-surface-600));
 }
 
 /* lead — an intro paragraph; larger and lighter than body. Not a native element,
    so pass it explicitly: <Text as="p" variant="lead"> */
-[data-variant="lead"] {
-  --text-font-size: var(--fs-500);
-  --text-line-height: 1.4;
-  --text-color: var(--clr-text-400, var(--clr-surface-600));
+[data-variant='lead'] {
+	--text-font-size: var(--fs-500);
+	--text-line-height: 1.4;
+	--text-color: var(--clr-text-400, var(--clr-surface-600));
 }
 
 /* muted — de-emphasised body text. */
-[data-variant="muted"] {
-  --text-color: var(--clr-text-400, var(--clr-surface-500));
+[data-variant='muted'] {
+	--text-color: var(--clr-text-400, var(--clr-surface-500));
 }

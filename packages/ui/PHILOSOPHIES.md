@@ -72,8 +72,8 @@ For example:
 
 ```html
 <details>
-  <summary>Accordion Title</summary>
-  <p>Accordion Content</p>
+	<summary>Accordion Title</summary>
+	<p>Accordion Content</p>
 </details>
 ```
 
@@ -111,8 +111,8 @@ A concrete example: the `Shell` component needs to collapse a sidebar without us
 
 ```css
 --sidebar-breakpoint-gate: min(
-  max(0px, (100cqi - var(--sidebar-mobile-breakpoint)) * 9999),
-  100cqi
+	max(0px, (100cqi - var(--sidebar-mobile-breakpoint)) * 9999),
+	100cqi
 );
 --sidebar-expanded-width: min(var(--sidebar-max-width), var(--sidebar-breakpoint-gate));
 ```

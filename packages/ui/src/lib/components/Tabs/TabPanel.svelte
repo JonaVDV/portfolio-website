@@ -11,9 +11,9 @@
 	const id = $props.id();
 	const tab = 'tab-' + rest.tab;
 
-    const tabs = getTabsState();
+	const tabs = getTabsState();
 
-    $inspect(tabs.activeTab, tab);
+	$inspect(tabs.activeTab, tab);
 </script>
 
 <div {...rest} hidden={tabs.activeTab !== tab}>

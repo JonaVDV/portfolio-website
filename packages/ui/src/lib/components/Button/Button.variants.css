@@ -57,53 +57,53 @@
  * VARIANTS
  * ════════════════════════════════════════════════════════════════════════════ */
 
-[data-variant="primary"] {
-  --button-background: var(--clr-brand-400);
-  --button-color: var(--clr-brand-000);
-  --button-border-color: transparent;
+[data-variant='primary'] {
+	--button-background: var(--clr-brand-400);
+	--button-color: var(--clr-brand-000);
+	--button-border-color: transparent;
 
-  --focus-outline-color: var(--clr-brand-400);
-  --focus-outline-width: 3px;
-  --focus-outline-edge-size: 0.5rem;
-  --focus-outline-offset: 10px;
+	--focus-outline-color: var(--clr-brand-400);
+	--focus-outline-width: 3px;
+	--focus-outline-edge-size: 0.5rem;
+	--focus-outline-offset: 10px;
 }
 
-[data-variant="secondary"] {
-  --button-background: var(--clr-surface-200);
-  --button-color: currentColor;
-  --button-border-color: transparent;
+[data-variant='secondary'] {
+	--button-background: var(--clr-surface-200);
+	--button-color: currentColor;
+	--button-border-color: transparent;
 }
 
 /* Ghost: transparent base; explicit hover because oklch can't derive from transparent */
-[data-variant="ghost"] {
-  --button-background: transparent;
-  --button-color: var(--clr-brand-400);
-  --button-border-color: transparent;
+[data-variant='ghost'] {
+	--button-background: transparent;
+	--button-color: var(--clr-brand-400);
+	--button-border-color: transparent;
 
-  --button-hover-background: color-mix(in oklch, var(--clr-brand-400) 10%, transparent);
-  --button-active-background: color-mix(in oklch, var(--clr-brand-400) 18%, transparent);
+	--button-hover-background: color-mix(in oklch, var(--clr-brand-400) 10%, transparent);
+	--button-active-background: color-mix(in oklch, var(--clr-brand-400) 18%, transparent);
 }
 
 /* Outline: like ghost but with a visible border */
-[data-variant="outline"] {
-  --button-background: transparent;
-  --button-color: var(--clr-brand-400);
-  --button-border: 1.5px solid;
-  --button-border-color: var(--clr-brand-400);
+[data-variant='outline'] {
+	--button-background: transparent;
+	--button-color: var(--clr-brand-400);
+	--button-border: 1.5px solid;
+	--button-border-color: var(--clr-brand-400);
 
-  --button-hover-background: color-mix(in oklch, var(--clr-brand-400) 10%, transparent);
-  --button-active-background: color-mix(in oklch, var(--clr-brand-400) 18%, transparent);
+	--button-hover-background: color-mix(in oklch, var(--clr-brand-400) 10%, transparent);
+	--button-active-background: color-mix(in oklch, var(--clr-brand-400) 18%, transparent);
 }
 
-[data-variant="destructive"] {
-  --button-background: oklch(0.55 0.22 25);
-  --button-color: oklch(0.98 0 0);
-  --button-border-color: transparent;
+[data-variant='destructive'] {
+	--button-background: oklch(0.55 0.22 25);
+	--button-color: oklch(0.98 0 0);
+	--button-border-color: transparent;
 
-  --focus-outline-color: oklch(0.55 0.22 25);
-  --focus-outline-width: 3px;
-  --focus-outline-edge-size: 0.5rem;
-  --focus-outline-offset: 10px;
+	--focus-outline-color: oklch(0.55 0.22 25);
+	--focus-outline-width: 3px;
+	--focus-outline-edge-size: 0.5rem;
+	--focus-outline-offset: 10px;
 }
 
 /* ════════════════════════════════════════════════════════════════════════════
@@ -113,19 +113,19 @@
  *      use `rem` for fixed padding regardless of font-size.
  * ════════════════════════════════════════════════════════════════════════════ */
 
-[data-size="small"] {
-  --button-font-size: 0.8125rem;
-  --button-padding: 0.5em 1em;
+[data-size='small'] {
+	--button-font-size: 0.8125rem;
+	--button-padding: 0.5em 1em;
 }
 
-[data-size="large"] {
-  --button-font-size: 1.125rem;
-  --button-padding: 0.875em 1.75em;
+[data-size='large'] {
+	--button-font-size: 1.125rem;
+	--button-padding: 0.875em 1.75em;
 }
 
 /* Icon: square button sized to its padding; place a single icon inside */
-[data-size="icon"] {
-  --button-padding: 0.75em;
+[data-size='icon'] {
+	--button-padding: 0.75em;
 
-  aspect-ratio: 1;
+	aspect-ratio: 1;
 }

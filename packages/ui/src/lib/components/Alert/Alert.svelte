@@ -12,7 +12,14 @@
 	let { children, actions, variant = 'default', ref = $bindable(null), ...rest }: Props = $props();
 </script>
 
-<div role="alert" aria-live="assertive" aria-atomic="true" data-variant={variant} bind:this={ref} {...rest}>
+<div
+	role="alert"
+	aria-live="assertive"
+	aria-atomic="true"
+	data-variant={variant}
+	bind:this={ref}
+	{...rest}
+>
 	{@render children?.()}
 
 	<div class="alert-actions">
@@ -48,8 +55,20 @@
 		--_alert-border-l: var(--alert-border-l, 80%);
 		--_alert-border-c: var(--alert-border-c, 0);
 		--_alert-border-h: var(--alert-border-h, 0);
-		--_alert-color: var(--alert-color, oklch(from var(--_alert-background) var(--_alert-color-l) calc(c + var(--_alert-color-c)) calc(h + var(--_alert-color-h)) / 1));
-		--_alert-border-color: var(--alert-border-color, oklch(from var(--_alert-background) var(--_alert-border-l) calc(c + var(--_alert-border-c)) calc(h + var(--_alert-border-h)) / 1));
+		--_alert-color: var(
+			--alert-color,
+			oklch(
+				from var(--_alert-background) var(--_alert-color-l) calc(c + var(--_alert-color-c))
+					calc(h + var(--_alert-color-h)) / 1
+			)
+		);
+		--_alert-border-color: var(
+			--alert-border-color,
+			oklch(
+				from var(--_alert-background) var(--_alert-border-l) calc(c + var(--_alert-border-c))
+					calc(h + var(--_alert-border-h)) / 1
+			)
+		);
 	}
 
 	.alert-actions {

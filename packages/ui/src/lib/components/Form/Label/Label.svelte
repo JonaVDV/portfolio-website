@@ -18,10 +18,10 @@
 {/if}
 
 <style>
-    label {
-        --_label-color: var(--label-color, currentColor);
-        --_label-font-size: var(--label-font-size, inherit);
-        color: var(--_label-color);
-        font-size: var(--_label-font-size);
-    }
+	label {
+		--_label-color: var(--label-color, currentColor);
+		--_label-font-size: var(--label-font-size, inherit);
+		color: var(--_label-color);
+		font-size: var(--_label-font-size);
+	}
 </style>

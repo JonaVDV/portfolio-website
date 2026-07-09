@@ -13,8 +13,7 @@
 		const target = e.target as HTMLElement;
 		const currentTarget = e.currentTarget as HTMLElement;
 		if (target.closest('button')) return; // prevent focusing the input when clicking on a button inside the addon
-		const input =
-			currentTarget.parentElement?.querySelector<HTMLElement>('input, select');
+		const input = currentTarget.parentElement?.querySelector<HTMLElement>('input, select');
 		input?.focus();
 	}
 </script>
@@ -29,7 +28,7 @@
 		background: var(--input-group-addon-background, transparent);
 		user-select: none;
 		-webkit-user-drag: none;
-        text-wrap-mode: nowrap;
+		text-wrap-mode: nowrap;
 	}
 
 	[data-alignment='inline-start'] {

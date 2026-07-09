@@ -48,12 +48,7 @@
 <Story name="Customization / Custom progress color">
 	{#snippet template()}
 		<div style="padding: 2rem;">
-			<Range
-				min={0}
-				max={100}
-				value={50}
-				style="--range-progress-color: oklch(0.6 0.2 30);"
-			/>
+			<Range min={0} max={100} value={50} style="--range-progress-color: oklch(0.6 0.2 30);" />
 		</div>
 	{/snippet}
 </Story>

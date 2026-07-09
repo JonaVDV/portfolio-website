@@ -82,11 +82,21 @@
 <Story name="Outlined">
 	{#snippet template()}
 		<div class="flex-group">
-			<Badge variant="default" style="--badge-border-width: 1.5px; --badge-background: transparent;">Default</Badge>
-			<Badge variant="success" style="--badge-border-width: 1.5px; --badge-background: transparent;">Success</Badge>
-			<Badge variant="warning" style="--badge-border-width: 1.5px; --badge-background: transparent;">Warning</Badge>
-			<Badge variant="error" style="--badge-border-width: 1.5px; --badge-background: transparent;">Error</Badge>
-			<Badge variant="info" style="--badge-border-width: 1.5px; --badge-background: transparent;">Info</Badge>
+			<Badge variant="default" style="--badge-border-width: 1.5px; --badge-background: transparent;"
+				>Default</Badge
+			>
+			<Badge variant="success" style="--badge-border-width: 1.5px; --badge-background: transparent;"
+				>Success</Badge
+			>
+			<Badge variant="warning" style="--badge-border-width: 1.5px; --badge-background: transparent;"
+				>Warning</Badge
+			>
+			<Badge variant="error" style="--badge-border-width: 1.5px; --badge-background: transparent;"
+				>Error</Badge
+			>
+			<Badge variant="info" style="--badge-border-width: 1.5px; --badge-background: transparent;"
+				>Info</Badge
+			>
 		</div>
 	{/snippet}
 </Story>
@@ -119,13 +129,22 @@
 <Story name="Customization / Layer 2: border alpha">
 	{#snippet template()}
 		<div class="flex-group">
-			<Badge variant="success" style="--badge-border-width: 1.5px; --badge-background: transparent;">
+			<Badge
+				variant="success"
+				style="--badge-border-width: 1.5px; --badge-background: transparent;"
+			>
 				Default border (50%)
 			</Badge>
-			<Badge variant="success" style="--badge-border-width: 1.5px; --badge-background: transparent; --badge-border-alpha: 20%;">
+			<Badge
+				variant="success"
+				style="--badge-border-width: 1.5px; --badge-background: transparent; --badge-border-alpha: 20%;"
+			>
 				Subtle border (20%)
 			</Badge>
-			<Badge variant="success" style="--badge-border-width: 1.5px; --badge-background: transparent; --badge-border-alpha: 100%;">
+			<Badge
+				variant="success"
+				style="--badge-border-width: 1.5px; --badge-background: transparent; --badge-border-alpha: 100%;"
+			>
 				Solid border (100%)
 			</Badge>
 		</div>
@@ -137,7 +156,10 @@
 	{#snippet template()}
 		<div class="flex-group">
 			<Badge variant="success">Derived tint</Badge>
-			<Badge variant="success" style="--badge-background: oklch(0.3 0.15 163); --badge-color: white;">
+			<Badge
+				variant="success"
+				style="--badge-background: oklch(0.3 0.15 163); --badge-color: white;"
+			>
 				Dark filled
 			</Badge>
 		</div>
@@ -148,10 +170,16 @@
 <Story name="Customization / Layer 3: explicit border color">
 	{#snippet template()}
 		<div class="flex-group">
-			<Badge variant="success" style="--badge-border-width: 1.5px; --badge-background: transparent;">
+			<Badge
+				variant="success"
+				style="--badge-border-width: 1.5px; --badge-background: transparent;"
+			>
 				Derived border
 			</Badge>
-			<Badge variant="success" style="--badge-border-width: 1.5px; --badge-background: transparent; --badge-border-color: oklch(0.55 0.18 290);">
+			<Badge
+				variant="success"
+				style="--badge-border-width: 1.5px; --badge-background: transparent; --badge-border-color: oklch(0.55 0.18 290);"
+			>
 				Purple border
 			</Badge>
 		</div>
