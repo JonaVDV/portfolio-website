@@ -52,6 +52,13 @@
 		 */
 		lightDismiss?: boolean;
 		/**
+		 * Turn the dialog into an alert dialog: sets `role="alertdialog"`, points
+		 * `aria-describedby` at the content (so the message is announced), and
+		 * disables light dismiss so a deliberate choice is required. Purely
+		 * semantic/behavioral — orthogonal to visual `variant` styling.
+		 */
+		alert?: boolean;
+		/**
 		 * Show a built-in close button.
 		 * Uses the native Invoker Commands API (`commandfor` + `command="close"`).
 		 * Falls back to JavaScript event listeners in older browsers.
@@ -80,10 +87,13 @@
 		ref = $bindable(null),
 		open = $bindable(false),
 		lightDismiss = true,
+		alert = false,
 		...rest
 	}: Props = $props();
 
 	let dialogId = $props.id();
+	// An alert dialog demands an explicit choice, so light dismiss is always off.
+	let canLightDismiss = $derived(alert ? false : lightDismiss);
 
 	/**
 	 * Fallback close handler for browsers without Invoker Commands API support.
@@ -135,10 +145,12 @@
 <dialog
 	{...rest}
 	onclose={handleDialogClose}
-	closedby={lightDismiss ? 'any' : 'closerequest'}
+	closedby={canLightDismiss ? 'any' : 'closerequest'}
+	role={alert ? 'alertdialog' : undefined}
 	id={dialogId}
 	bind:this={ref}
 	aria-labelledby={header ? `${dialogId}-header` : undefined}
+	aria-describedby={alert ? `${dialogId}-content` : undefined}
 >
 	{#if closeButton || header}
 		<div id="{dialogId}-header" class="dialog-header">
@@ -176,7 +188,7 @@
 		</div>
 	{/if}
 
-	<div class="dialog-content">
+	<div id="{dialogId}-content" class="dialog-content">
 		{@render children?.()}
 	</div>
 
@@ -206,6 +218,28 @@
 		--_dialog-max-height: var(--dialog-max-height, 90vh);
 		--_dialog-box-shadow: var(--dialog-box-shadow, 0 10px 15px -3px rgb(0 0 0 / 0.1));
 
+		/* Responsive container: the min() keeps this much breathing room from the
+		   viewport edges so the panel never touches them. A Sheet sets it to 0 to
+		   go full-bleed on its stretched axis. */
+		--_dialog-viewport-margin: var(--dialog-viewport-margin, 2rem);
+
+		/* Placement/sizing hooks — a Sheet overrides these to pin to an edge.
+		   Defaults reproduce the centered dialog exactly. */
+		--_dialog-margin: var(--dialog-margin, auto);
+		--_dialog-width: var(--dialog-width, min(100% - var(--_dialog-viewport-margin), var(--_dialog-max-width)));
+		--_dialog-height: var(--dialog-height, auto);
+
+		/* Enter/exit animation. --dialog-enter-translate is the closed-state offset
+		   (0 0 = pure fade); a Sheet sets e.g. `100% 0` to slide in from the right. */
+		--_dialog-enter-translate: var(--dialog-enter-translate, 0 0);
+		--_dialog-transition: var(
+			--dialog-transition,
+			opacity 0.2s ease-in-out,
+			translate 0.2s ease-in-out,
+			display 0.2s,
+			overlay 0.2s
+		);
+
 		/** Header */
 		--_dialog-header-background: var(--dialog-header-background, inherit);
 		--_dialog-header-color: var(--dialog-header-color, inherit);
@@ -227,9 +261,14 @@
 		--_dialog-footer-justify: var(--dialog-footer-justify, flex-end);
 
 		/** --- Layout ---*/
-		margin: auto;
-		width: min(calc(100% - 2rem), var(--_dialog-max-width));
-		max-height: min(calc(100% - 2rem), var(--_dialog-max-height));
+		margin: var(--_dialog-margin);
+		width: var(--_dialog-width);
+		height: var(--_dialog-height);
+		/* Same responsive container applied as max-* — also overrides the UA
+		   `dialog:modal` max-width/height (calc(100% - 2em - 6px)) that would
+		   otherwise clamp a full-bleed Sheet away from the edges. */
+		max-width: min(100% - var(--_dialog-viewport-margin), var(--_dialog-max-width));
+		max-height: min(100% - var(--_dialog-viewport-margin), var(--_dialog-max-height));
 		padding: 0; /** Padding moved to sub-elements for edge-to-edge borders */
 
 		/** --- Appearance ---*/
@@ -247,16 +286,15 @@
 		gap: var(--_dialog-spacing);
 
 		/** --- Transitions ---*/
-		/** Modern CSS: allow transitions on display property (all browsers except firefox) */
+		/** allow-discrete lets display animate (Chrome 117+, Firefox 129+, Safari 17.4+) */
 		transition-behavior: allow-discrete;
 		opacity: 0;
-		transition:
-			opacity 0.2s ease-in-out,
-			display 0.2s,
-			overlay 0.2s;
+		translate: var(--_dialog-enter-translate);
+		transition: var(--_dialog-transition);
 
 		&[open] {
 			opacity: 1;
+			translate: 0 0;
 		}
 	}
 
@@ -293,6 +331,8 @@
 		padding: var(--_dialog-footer-padding);
 		border-top: var(--_dialog-footer-border-top);
 		display: flex;
+		flex-wrap: wrap;
+		margin-block-start: auto;
 		justify-content: var(--_dialog-footer-justify);
 		gap: var(--_dialog-footer-gap);
 	}
@@ -322,6 +362,7 @@
 	@starting-style {
 		dialog[open] {
 			opacity: 0;
+			translate: var(--_dialog-enter-translate);
 		}
 
 		dialog::backdrop {

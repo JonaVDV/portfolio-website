@@ -24,6 +24,15 @@
 	/* --dialog-box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1); */
 	/* --dialog-max-width: 30rem; */
 	/* --dialog-max-height: 90vh; */
+	/* --dialog-viewport-margin: 2rem;     (breathing room kept from the viewport edges) */
+
+	/* -- Placement & entry animation (the Sheet component drives these to
+	      pin the panel to an edge and slide it in; defaults = centered fade) */
+	/* --dialog-margin: auto;              (e.g. `0 0 0 auto` pins to the right) */
+	/* --dialog-width: min(calc(100% - 2rem), var(--dialog-max-width)); */
+	/* --dialog-height: auto; */
+	/* --dialog-enter-translate: 0 0;      (closed-state offset; `100% 0` = slide from right) */
+	/* --dialog-transition: opacity 0.2s ease-in-out, translate 0.2s ease-in-out, display 0.2s, overlay 0.2s; */
 
 	/* -- Header */
 	/* --dialog-header-background: inherit; */
@@ -55,6 +64,8 @@
 }
 
 /*
- * AlertDialog (Dialog/AlertDialog.svelte) inherits all of the above and adds:
- * --alert-icon-color: oklch(0.6 0.2 25);
+ * Alert dialogs: pass the `alert` prop to <Dialog> (no separate component, no
+ * extra custom properties). It sets role="alertdialog", wires aria-describedby
+ * to the content, and disables light dismiss. Styling is unchanged — use the
+ * properties above, or `variant` for color, exactly as with a normal dialog.
  */
