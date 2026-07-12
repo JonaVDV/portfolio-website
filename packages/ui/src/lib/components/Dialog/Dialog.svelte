@@ -226,7 +226,10 @@
 		/* Placement/sizing hooks — a Sheet overrides these to pin to an edge.
 		   Defaults reproduce the centered dialog exactly. */
 		--_dialog-margin: var(--dialog-margin, auto);
-		--_dialog-width: var(--dialog-width, min(100% - var(--_dialog-viewport-margin), var(--_dialog-max-width)));
+		--_dialog-width: var(
+			--dialog-width,
+			min(100% - var(--_dialog-viewport-margin), var(--_dialog-max-width))
+		);
 		--_dialog-height: var(--dialog-height, auto);
 
 		/* Enter/exit animation. --dialog-enter-translate is the closed-state offset
