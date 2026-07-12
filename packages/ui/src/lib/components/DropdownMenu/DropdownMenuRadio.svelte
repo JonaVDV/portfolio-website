@@ -55,25 +55,27 @@
 	}
 
 	.dropdown-radio-indicator {
-		--dropdown-radio-size: 1em;
-		--dropdown-radio-color: currentColor;
-		--dropdown-radio-border: 1.5px solid currentColor;
+		--_dropdown-radio-size: var(--dropdown-radio-size, 1em);
+		--_dropdown-radio-color: var(--dropdown-radio-color, currentColor);
+		--_dropdown-radio-border: var(--dropdown-radio-border, 1.5px solid currentColor);
+		--_dropdown-radio-radius: var(--dropdown-radio-radius, 50%);
+		--_dropdown-radio-dot-size: var(--dropdown-radio-dot-size, 0.45em);
 
 		display: inline-flex;
 		align-items: center;
 		justify-content: center;
 		flex-shrink: 0;
-		width: var(--dropdown-radio-size);
-		height: var(--dropdown-radio-size);
-		border: var(--dropdown-radio-border);
-		border-radius: 50%;
+		width: var(--_dropdown-radio-size);
+		height: var(--_dropdown-radio-size);
+		border: var(--_dropdown-radio-border);
+		border-radius: var(--_dropdown-radio-radius);
 
 		/* Filled dot for selected state */
 		&::after {
 			content: '';
 			display: block;
-			width: 0.45em;
-			height: 0.45em;
+			width: var(--_dropdown-radio-dot-size);
+			height: var(--_dropdown-radio-dot-size);
 			border-radius: 50%;
 			background-color: transparent;
 			transition: background-color 0.1s;
@@ -87,10 +89,10 @@
 	 */
 	:global(li:has(input[type='radio']:checked)) {
 		.dropdown-radio-indicator {
-			border-color: var(--dropdown-radio-color);
+			border-color: var(--_dropdown-radio-color);
 
 			&::after {
-				background-color: var(--dropdown-radio-color);
+				background-color: var(--_dropdown-radio-color);
 			}
 		}
 	}

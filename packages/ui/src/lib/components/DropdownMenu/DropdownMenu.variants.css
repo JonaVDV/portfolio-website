@@ -35,9 +35,22 @@
  *  --dropdown-item-hover-background  <color>
  *  --dropdown-item-hover-color       <color>
  *
- *  Indicators
- *  --dropdown-checkbox-size / -color / -check-color / -border / -radius
- *  --dropdown-radio-size  / -color  / -border
+ *  Checkbox indicator
+ *  --dropdown-checkbox-size            <length>   box width/height (1:1)
+ *  --dropdown-checkbox-color           <color>    fill when checked
+ *  --dropdown-checkbox-check-color     <color>    checkmark stroke
+ *  --dropdown-checkbox-border          <border>
+ *  --dropdown-checkbox-radius          <length>
+ *  --dropdown-checkbox-check-width     <length>   checkmark leg lengths
+ *  --dropdown-checkbox-check-height    <length>
+ *  --dropdown-checkbox-check-thickness <length>   checkmark stroke width
+ *
+ *  Radio indicator
+ *  --dropdown-radio-size               <length>   box width/height (1:1)
+ *  --dropdown-radio-color              <color>    border + dot when selected
+ *  --dropdown-radio-border             <border>
+ *  --dropdown-radio-radius             <length>   outer ring (default 50%)
+ *  --dropdown-radio-dot-size           <length>   selected dot diameter
  */
 
 :root {
@@ -58,6 +71,24 @@
 	--dropdown-item-padding: 0.25rem 0.5rem;
 	--dropdown-item-border-radius: 0.5rem;
 	--dropdown-item-gap: 0.5rem;
-	--dropdown-item-hover-background: oklch(0.269 0 0);
+	--dropdown-item-hover-background: oklch(from var(--dropdown-menu-color) l c h / 0.1);
 	--dropdown-item-hover-color: oklch(0.985 0 0);
+
+	/* ── Indicators (checkbox / radio) ─────────────────────────────
+	   Commented out: the component defaults already match. Uncomment
+	   to theme the check/dot independently of item text. */
+	/* --dropdown-checkbox-size: 1em; */
+	/* --dropdown-checkbox-color: currentColor; */
+	/* --dropdown-checkbox-check-color: var(--dropdown-menu-background); */
+	--dropdown-checkbox-border: 1.5px solid transparent;
+	/* --dropdown-checkbox-radius: 0.25em; */
+	/* --dropdown-checkbox-check-width: 0.55em; */
+	/* --dropdown-checkbox-check-height: 0.3em; */
+	/* --dropdown-checkbox-check-thickness: 2px; */
+
+	/* --dropdown-radio-size: 1em; */
+	/* --dropdown-radio-color: currentColor; */
+	/* --dropdown-radio-border: 1.5px solid currentColor; */
+	/* --dropdown-radio-radius: 50%; */
+	/* --dropdown-radio-dot-size: 0.45em; */
 }

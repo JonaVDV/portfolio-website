@@ -55,30 +55,33 @@
 	}
 
 	.dropdown-checkbox-indicator {
-		--dropdown-checkbox-size: 1em;
-		--dropdown-checkbox-color: currentColor;
-		--dropdown-checkbox-check-color: oklch(0.145 0 0);
-		--dropdown-checkbox-border: 1.5px solid currentColor;
-		--dropdown-checkbox-radius: 0.25em;
+		--_dropdown-checkbox-size: var(--dropdown-checkbox-size, 1em);
+		--_dropdown-checkbox-color: var(--dropdown-checkbox-color, inherit);
+		--_dropdown-checkbox-check-color: var(--dropdown-checkbox-check-color, currentColor);
+		--_dropdown-checkbox-border: var(--dropdown-checkbox-border, 1.5px solid currentColor);
+		--_dropdown-checkbox-radius: var(--dropdown-checkbox-radius, 0.25em);
+		--_dropdown-checkbox-check-width: var(--dropdown-checkbox-check-width, 0.55em);
+		--_dropdown-checkbox-check-height: var(--dropdown-checkbox-check-height, 0.3em);
+		--_dropdown-checkbox-check-thickness: var(--dropdown-checkbox-check-thickness, 2px);
 
 		display: inline-flex;
 		align-items: center;
 		justify-content: center;
 		flex-shrink: 0;
-		width: var(--dropdown-checkbox-size);
-		height: var(--dropdown-checkbox-size);
-		border: var(--dropdown-checkbox-border);
-		border-radius: var(--dropdown-checkbox-radius);
+		width: var(--_dropdown-checkbox-size);
+		aspect-ratio: 1/1;
+		border: var(--_dropdown-checkbox-border);
+		border-radius: var(--_dropdown-checkbox-radius);
 
 		/* Checkmark drawn as a CSS pseudo-element — no icon dependency */
 		&::after {
 			content: '';
 			display: block;
-			width: 0.55em;
-			height: 0.3em;
-			border-left: 2px solid transparent;
-			border-bottom: 2px solid transparent;
-			transform: rotate(-45deg) translateY(-0.05em);
+			width: var(--_dropdown-checkbox-check-width);
+			height: var(--_dropdown-checkbox-check-height);
+			border-left: var(--_dropdown-checkbox-check-thickness) solid transparent;
+			border-bottom: var(--_dropdown-checkbox-check-thickness) solid transparent;
+			transform: rotate(-45deg) translateY(-0.1em);
 			opacity: 0;
 			transition: opacity 0.1s;
 		}
@@ -91,10 +94,10 @@
 	 */
 	:global(li:has(input[type='checkbox']:checked)) {
 		.dropdown-checkbox-indicator {
-			background-color: var(--dropdown-checkbox-color);
+			background-color: var(--_dropdown-checkbox-color);
 
 			&::after {
-				border-color: var(--dropdown-checkbox-check-color);
+				border-color: var(--_dropdown-checkbox-check-color);
 				opacity: 1;
 			}
 		}

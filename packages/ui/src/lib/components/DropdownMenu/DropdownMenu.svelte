@@ -55,7 +55,7 @@
 			1px solid color-mix(in oklab, var(--dropdown-menu-color, #fff) 18%, transparent)
 		);
 		--popover-border-radius: var(--dropdown-menu-border-radius, 1rem);
-		--popover-padding: var(--dropdown-menu-padding, 0.5rem);
+		--popover-padding: var(--dropdown-menu-padding, 0px);
 		width: var(--icon-size);
 		flex-shrink: 0;
 		aspect-ratio: 1/1;

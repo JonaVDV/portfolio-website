@@ -137,6 +137,8 @@
 
 		--_flex-container-width: 100%;
 
+		--popover-custom-fallbacks: right span-bottom, left span-bottom;
+
 		border-radius: var(--_dropdown-item-border-radius);
 		background-color: var(--_dropdown-item-background);
 		color: var(--_dropdown-item-color);

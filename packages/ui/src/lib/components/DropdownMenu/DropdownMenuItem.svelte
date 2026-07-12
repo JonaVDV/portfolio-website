@@ -110,6 +110,7 @@
 		font: inherit;
 		color: inherit;
 		cursor: pointer;
+		min-width: max-content;
 		border: none;
 		outline: 0;
 		background: none;
