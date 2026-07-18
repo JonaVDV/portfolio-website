@@ -54,11 +54,7 @@
 
 <Story name="Full (header + body + footer)">
 	{#snippet template(args)}
-		<Card
-			--card-max-width={args['--card-max-width']}
-			--card-header-background={args['--card-header-background']}
-			--card-footer-background={args['--card-footer-background']}
-		>
+		<Card {...args}>
 			{#snippet header()}
 				<Heading level="h2">Card Header</Heading>
 				<p class="subtitle">Card subtitle</p>
@@ -73,9 +69,58 @@
 	{/snippet}
 </Story>
 
+<Story name="Tall card">
+	{#snippet template(args)}
+		<Card {...args} style="height: 40rem;">
+			{#snippet header()}
+				<Heading level="h2">Card Header</Heading>
+				<p class="subtitle">Card subtitle</p>
+			{/snippet}
+
+			<div>
+				<p>This is the body of the card. It can contain any content you want.</p>
+
+				<p>More content...</p>
+				<p>Even more content...</p>
+				<p>Keep going...</p>
+				<p>Almost there...</p>
+				<p>Done!</p>
+			</div>
+
+			{#snippet footer()}
+				<Button variant="primary">Save</Button>
+			{/snippet}
+		</Card>
+	{/snippet}
+</Story>
+
+<!-- Product-card row: outer grid owns the row tracks, each card spans them with
+subgrid so headers/bodies/footers line up regardless of content length. -->
+<Story name="Aligned product cards (subgrid)">
+	{#snippet template()}
+		<div
+			style="display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: auto 1fr auto; gap: 1rem; width: 60rem;"
+		>
+			{#each [{ t: 'Basic', d: 'Short description.' }, { t: 'Pro', d: 'A noticeably longer description that wraps onto multiple lines to prove the rows still align.' }, { t: 'Team', d: 'Medium length copy here.' }] as p}
+				<Card style="grid-row: span 3;" --card-rows="subgrid">
+					{#snippet header()}
+						<Heading level="h2">{p.t}</Heading>
+					{/snippet}
+
+					<p>{p.d}</p>
+
+					{#snippet footer()}
+						<Button variant="primary">Buy</Button>
+					{/snippet}
+				</Card>
+			{/each}
+		</div>
+	{/snippet}
+</Story>
+
 <Story name="Without header">
 	{#snippet template(args)}
-		<Card --card-max-width={args['--card-max-width']}>
+		<Card {...args}>
 			<p>This is the body of the card. It can contain any content you want.</p>
 
 			{#snippet footer()}
@@ -87,7 +132,7 @@
 
 <Story name="Without footer">
 	{#snippet template(args)}
-		<Card --card-max-width={args['--card-max-width']}>
+		<Card {...args}>
 			{#snippet header()}
 				<Heading level="h2">Card Header</Heading>
 				<p class="subtitle">Card subtitle</p>
@@ -100,7 +145,7 @@
 
 <Story name="Body only">
 	{#snippet template(args)}
-		<Card --card-max-width={args['--card-max-width']}>
+		<Card {...args}>
 			<p>This is the body of the card. It can contain any content you want.</p>
 		</Card>
 	{/snippet}
@@ -111,7 +156,7 @@
 <!-- Action pins to the header's top-inline-end, aligned with the title. -->
 <Story name="Action (short title)">
 	{#snippet template(args)}
-		<Card --card-max-width={args['--card-max-width']}>
+		<Card {...args}>
 			{#snippet header()}
 				<Heading level="h2">Settings</Heading>
 				<p class="subtitle">Manage your preferences</p>
@@ -129,7 +174,7 @@
 <!-- The action floats, so a long title reserves space and wraps around it. -->
 <Story name="Action (long title — wrap check)">
 	{#snippet template(args)}
-		<Card --card-max-width={args['--card-max-width']}>
+		<Card {...args}>
 			{#snippet header()}
 				<Heading level="h2">A deliberately long card title that keeps going</Heading>
 				<p class="subtitle">Watch how the title flows relative to the action</p>
@@ -149,7 +194,7 @@
 <!-- Image dropped straight into the body: bleeds to the edges via subgrid. -->
 <Story name="Body media">
 	{#snippet template(args)}
-		<Card --card-max-width={args['--card-max-width']}>
+		<Card {...args}>
 			{#snippet header()}
 				<Heading level="h2">Card Header</Heading>
 			{/snippet}
@@ -164,7 +209,7 @@
 <!-- Image as the first child of a headerless card: flush to the very top. -->
 <Story name="Top media (flush)">
 	{#snippet template(args)}
-		<Card --card-max-width={args['--card-max-width']}>
+		<Card {...args}>
 			<img src={IMG} alt="Placeholder" />
 
 			<p>No header, so the first-child image sits flush against the card's top edge.</p>
@@ -180,10 +225,7 @@
 pad the title text itself. Header/footer aren't subgrid — this is the hook. -->
 <Story name="Header media (above title)">
 	{#snippet template(args)}
-		<Card
-			--card-max-width={args['--card-max-width']}
-			--card-header-padding={args['--card-header-padding']}
-		>
+		<Card {...args} --card-header-padding={args['--card-header-padding']}>
 			{#snippet header()}
 				<img src={IMG} alt="Placeholder" />
 				<Heading level="h2">Card Header</Heading>
@@ -197,10 +239,7 @@ pad the title text itself. Header/footer aren't subgrid — this is the hook. --
 
 <Story name="Header media with action">
 	{#snippet template(args)}
-		<Card
-			--card-max-width={args['--card-max-width']}
-			--card-header-padding={args['--card-header-padding']}
-		>
+		<Card {...args} --card-header-padding={args['--card-header-padding']}>
 			{#snippet header()}
 				<div class="grid-stack" data-card-full>
 					<img src={IMG} alt="Placeholder" data-card-full />
@@ -230,9 +269,9 @@ pad the title text itself. Header/footer aren't subgrid — this is the hook. --
 	{#snippet template()}
 		<Card --card-max-width="30rem" --card-header-padding="0">
 			{#snippet header()}
-				<div class="grid-stack">
-					<img src={IMG} alt="Placeholder" />
-					<div style="place-self: end start; padding: 1rem; color: white;">
+				<div class="grid-stack" data-card-full>
+					<img src={IMG} alt="Placeholder" data-card-full />
+					<div style="place-self: end start; padding: 1rem; color: white;" data-card-full>
 						<Heading level="h2">Overlaid title</Heading>
 						<p class="subtitle" style="color: inherit;">Text stacked on the image</p>
 					</div>
@@ -249,7 +288,7 @@ pad the title text itself. Header/footer aren't subgrid — this is the hook. --
 <!-- .full spans full width but keeps normal spacing (unlike edge media). -->
 <Story name="Full-width divider">
 	{#snippet template(args)}
-		<Card --card-max-width={args['--card-max-width']}>
+		<Card {...args}>
 			{#snippet header()}
 				<Heading level="h2">Card Header</Heading>
 			{/snippet}

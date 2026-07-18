@@ -8,6 +8,7 @@
 		| '--card-footer-background'
 		| '--card-background'
 		| '--card-gap'
+		| '--card-rows'
 		| '--card-border'
 		| '--card-padding'
 		| '--card-padding-inline'
@@ -24,10 +25,23 @@
 		[K in CssProps]?: string;
 	};
 
-	let { children, class: className, header, action, footer, ...rest }: Props = $props();
+	let { children, class: className, header, action, footer, style, ...rest }: Props = $props();
+
+	// Svelte forwards spread `--foo` keys as dead HTML attributes, not CSS custom
+	// properties. Pull them out of rest and fold into the style so consumers can
+	// spread them (e.g. `<Card {...args}>`) instead of listing each one.
+	const cssVars = $derived(
+		Object.entries(rest)
+			.filter(([k]) => k.startsWith('--'))
+			.map(([k, v]) => `${k}:${v}`)
+			.join(';')
+	);
+	const attrs = $derived(
+		Object.fromEntries(Object.entries(rest).filter(([k]) => !k.startsWith('--')))
+	);
 </script>
 
-<article class={['card', className]} {...rest}>
+<article class={['card', className]} style={[cssVars, style].filter(Boolean).join(';')} {...attrs}>
 	{#if header || action}
 		<header class="card-header">
 			{#if action}
@@ -81,6 +95,27 @@
 		padding-block: var(--_card-pad-block);
 		/* clips bled media corners to the card radius (no per-image rounding needed) */
 		overflow: clip;
+	}
+
+	/* When the card is taller than its content (fixed/stretched height), the content
+	   row absorbs the slack — header/footer stay their natural size, footer sits at
+	   the bottom, and margins on the footer work. Which rows exist depends on the
+	   optional header/footer, so pick the template with :has().
+
+	   Override with --card-rows to opt into subgrid: place the card in an outer grid
+	   spanning its rows (e.g. grid-row: span 3) and set --card-rows: subgrid so
+	   header/content/footer line up across a row of product cards. */
+	.card:has(.card-header):has(.card-footer) {
+		grid-template-rows: var(--card-rows, auto 1fr auto);
+	}
+	.card:has(.card-header):not(:has(.card-footer)) {
+		grid-template-rows: var(--card-rows, auto 1fr);
+	}
+	.card:not(:has(.card-header)):has(.card-footer) {
+		grid-template-rows: var(--card-rows, 1fr auto);
+	}
+	.card:not(:has(.card-header)):not(:has(.card-footer)) {
+		grid-template-rows: var(--card-rows, 1fr);
 	}
 
 	.card-header,
