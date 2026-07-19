@@ -60,13 +60,13 @@
 		email: string;
 	};
 
-	const payments: Payment[] = [
+	const payments: Payment[] = $state([
 		{ id: 'm5gr84i9', amount: 316, status: 'Success', email: 'ken99@yahoo.com' },
 		{ id: '3u1reuv4', amount: 242, status: 'Success', email: 'Abe45@gmail.com' },
 		{ id: 'derv1ws0', amount: 837, status: 'Processing', email: 'Monserrat44@gmail.com' },
 		{ id: '5kma53ae', amount: 874, status: 'Success', email: 'Silas22@gmail.com' },
 		{ id: 'bhqecj4p', amount: 721, status: 'Failed', email: 'carmella@hotmail.com' }
-	];
+	]);
 
 	// ── Column definitions — pure metadata, no Svelte in sight ───────────────
 
@@ -105,7 +105,9 @@
 	// immediately visible here — no events, no $bindable.
 
 	const table = new DataTable<Payment>({
-		data: payments,
+		get data() {
+			return payments;
+		},
 		columns,
 		// selectable: true adds a built-in checkbox column at position 0.
 		// Table handles rendering the checkboxes; the parent just reads
@@ -212,6 +214,21 @@
 <!-- ── Pagination + selection footer ─────────────────────────────────────── -->
 
 <div class="footer">
+	<Button
+		variant="primary"
+		onclick={() => {
+			payments.push({
+				id: crypto.randomUUID().slice(0, 8),
+				amount: Math.floor(Math.random() * 1000),
+				status: 'Pending',
+				email: `user${payments.length + 1}@example.com`
+			});
+
+			$inspect(payments);
+		}}
+	>
+		Add more rows
+	</Button>
 	<span class="selection-count">
 		{selectedCount} of {payments.length} row(s) selected
 	</span>

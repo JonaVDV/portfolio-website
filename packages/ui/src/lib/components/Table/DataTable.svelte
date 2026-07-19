@@ -1,7 +1,7 @@
 <script lang="ts" generics="TData extends Record<string, unknown>">
 	import type { Snippet } from 'svelte';
 	import type { CellContext, ColumnDefinition, HeaderContext } from './data-table.svelte.ts';
-	import type { DataTable } from './data-table.svelte.ts';
+	import { columnId, type DataTable } from './data-table.svelte.ts';
 	import Table from './Table.svelte';
 	import TableHeader from './TableHeader.svelte';
 	import TableRow from './TableRow.svelte';
@@ -15,7 +15,7 @@
 		 * (`accessor` or `id`) to override rendering for that column only.
 		 * Must render a complete `<td>` element.
 		 *
-		 * @example
+		 * example
 		 * ```svelte
 		 * <DataTable {table}>
 		 *   {#snippet amount({ formatted })} <td class="text-end">{formatted}</td> {/snippet}
@@ -56,7 +56,7 @@
 
 <Table>
 	<TableHeader>
-		{#each table.visibleColumns as column (column.id ?? String(column.accessor ?? ''))}
+		{#each table.visibleColumns as column (columnId(column))}
 			{#if column.id === '__select__'}
 				<TableHead>
 					<input
@@ -70,8 +70,8 @@
 			{:else if header}
 				{@render header({
 					column,
-					sorted: table.getSortDirection(column.id ?? String(column.accessor ?? '')),
-					toggleSort: () => table.toggleSort(column.id ?? String(column.accessor ?? ''))
+					sorted: table.getSortDirection(columnId(column)),
+					toggleSort: () => table.toggleSort(columnId(column))
 				})}
 			{:else}
 				<TableHead class={column.headerClass}>{column.header}</TableHead>
@@ -80,13 +80,23 @@
 	</TableHeader>
 
 	<tbody>
-		{#each table.rows as row, pageIndex (pageIndex)}
-			{@const rowKey = table.getRowKey(row)}
-			{@const dataIndex = table.data.indexOf(row)}
+		{#each table.rows as row (table.getRowKey(row))}
+			{const rowKey = table.getRowKey(row)}
+			{const dataIndex = table.getRowIndex(row)}
 			<TableRow>
-				{#each table.visibleColumns as column (column.id ?? String(column.accessor ?? ''))}
-					{@const value = column.accessor != null ? row[column.accessor] : undefined}
-					{@const formatted = getFormatted(column, row)}
+				{#each table.visibleColumns as column (columnId(column))}
+					{const value = column.accessor != null ? row[column.accessor] : undefined}
+					{const formatted = getFormatted(column, row)}
+					{const key = columnId(column)}
+					{const columnSnippet = columnSnippets[key] as Snippet<[CellContext<TData>]>}
+					{const columnData = {
+						column,
+						row,
+						value,
+						formatted,
+						table,
+						index: dataIndex
+					} as CellContext<TData>}
 					{#if column.id === '__select__'}
 						<!-- Built-in per-row checkbox — rendered by DataTable, not by user snippets -->
 						<TableCell>
@@ -98,12 +108,10 @@
 							/>
 						</TableCell>
 					{:else}
-						{@const key = column.id ?? String(column.accessor ?? '')}
-						{@const columnSnippet = columnSnippets[key] as Snippet<[CellContext<TData>]>}
 						{#if columnSnippet}
-							{@render columnSnippet({ column, row, value, formatted, table, index: dataIndex })}
+							{@render columnSnippet(columnData)}
 						{:else if cell}
-							{@render cell({ column, row, value, formatted, table, index: dataIndex })}
+							{@render cell(columnData)}
 						{:else}
 							<TableCell class={column.cellClass}>{formatted}</TableCell>
 						{/if}

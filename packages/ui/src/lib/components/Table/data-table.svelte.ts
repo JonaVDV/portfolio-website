@@ -1,5 +1,10 @@
 export type SortDirection = 'asc' | 'desc';
 
+/** Stable id for a column: explicit `id`, else stringified `accessor`, else `''`. */
+export function columnId<T extends Record<string, unknown>>(col: ColumnDefinition<T>): string {
+	return col.id ?? String(col.accessor ?? '');
+}
+
 export interface ColumnDefinition<T extends Record<string, unknown>> {
 	/** Key of `T` to read the cell value from. Omit for derived/action columns. */
 	accessor?: keyof T;
@@ -61,17 +66,46 @@ export interface DataTableOptions<TData extends Record<string, unknown>> {
 	columns: ColumnDefinition<TData>[];
 	/** Adds a built-in checkbox column for row selection. @default false */
 	selectable?: boolean;
-	/**
-	 * Disables internal filtering, sorting, and pagination.
-	 * In manual mode `rows` returns `data` as-is; the parent is responsible for
-	 * providing already-processed data (e.g. from a server/API response).
-	 * Set `manualRowCount` from the server to keep `pageCount`/`filteredRowCount` accurate.
-	 * @default false
-	 */
-	manual?: boolean;
 	pagination?: {
+		/**
+		 * Page size. Provide a plain number for a static/default size, or a
+		 * getter to make it *controlled* (server/URL-driven). When provided,
+		 * `setPageSize` emits via `onPageSizeChange` instead of mutating internal
+		 * state — same semantics as a controlled `<input value>`.
+		 */
 		pageSize?: number;
+		/**
+		 * Controlled current page (1-based). Provide as a getter to drive the page
+		 * from the server response or the URL. When set, `goToPage`/`nextPage`/
+		 * `prevPage` emit via `onPageChange` instead of mutating internal state.
+		 */
+		page?: number;
+		/**
+		 * Total row count. **Providing this switches the table to server mode**:
+		 * it renders `data` as-is (no internal filter/sort/paginate) and trusts you
+		 * to have processed it upstream — page count is derived from this number.
+		 * Provide as a getter reading the server response. Omit for client mode,
+		 * where the table paginates the full `data` array itself.
+		 */
+		total?: number;
+		/** Called with the requested page when the user navigates. Wire to `goto` in controlled mode. */
+		onPageChange?: (page: number) => void;
+		/** Called with the requested size when the page size changes. Wire to `goto` in controlled mode. */
+		onPageSizeChange?: (size: number) => void;
 	};
+	/**
+	 * Controlled sort state. Provide a getter (reading the URL/server) to make
+	 * sorting server-driven; `toggleSort`/`resetSorting` then emit via
+	 * `onSortingChange` instead of mutating internal state. Provide `null` for
+	 * "controlled, currently unsorted". Omit entirely for internal state.
+	 */
+	sorting?: { id: string; direction: SortDirection } | null;
+	/** Called with the next sort state when the user sorts. Wire to `goto` in controlled mode. */
+	onSortingChange?: (sorting: { id: string; direction: SortDirection } | null) => void;
+	/** Controlled global filter. Provide a getter to drive from the URL; `globalFilter =` emits via `onGlobalFilterChange`. */
+	globalFilter?: string;
+	/** Called with the next filter value. Wire to `goto` in controlled mode. */
+	onGlobalFilterChange?: (value: string) => void;
 	/**
 	 * Returns a stable unique key for a row. Strongly recommended in manual mode
 	 * so that row selection survives data replacements (pagination, re-fetches).
@@ -81,12 +115,17 @@ export interface DataTableOptions<TData extends Record<string, unknown>> {
 }
 
 export class DataTable<TData extends Record<string, unknown>> {
-	// ── Public data ───────────────────────────────────────────────────────────
-	// $state.raw — these large arrays are replaced wholesale (never mutated in
-	// place), so there's no benefit to deep-proxying every row object. Avoiding
-	// the proxy removes all the trap overhead from the filter/sort pipelines.
-	data = $state.raw<TData[]>([]);
-	columns = $state.raw<ColumnDefinition<TData>[]>([]);
+	#options: DataTableOptions<TData>;
+
+	data = $derived.by(() => this.#options.data);
+	columns = $derived.by((): ColumnDefinition<TData>[] => {
+		const cols = this.#options.columns;
+		// selectable prepends the built-in checkbox column. Consumers never
+		// handle '__select__' in snippets — the component renders it internally.
+		return this.#options.selectable
+			? [{ id: '__select__', enableHiding: false } as ColumnDefinition<TData>, ...cols]
+			: cols;
+	});
 
 	// ── Public reactive state ─────────────────────────────────────────────────
 
@@ -94,31 +133,48 @@ export class DataTable<TData extends Record<string, unknown>> {
 	columnVisibility = $state<Record<string, boolean>>({});
 	/** Map of rowKey → selected. Keys are stable row IDs (from `getRowId`) or data indices. */
 	rowSelection = $state<Record<string, boolean>>({});
-	/** Bound to the filter input. Filters across all string-serialisable cell values. */
-	globalFilter = $state('');
+	/**
+	 * Filter across all string-serialisable cell values. Controlled by the
+	 * `globalFilter` option when provided (emits via `onGlobalFilterChange`),
+	 * otherwise internal state. `bind:value={table.globalFilter}` works either way.
+	 */
+	get globalFilter() {
+		return this.#options.globalFilter ?? this.#globalFilter;
+	}
+	set globalFilter(value: string) {
+		this.#options.onGlobalFilterChange?.(value);
+		if (this.#options.globalFilter === undefined) this.#globalFilter = value;
+	}
 	/**
 	 * Per-column filter values. Set `table.columnFilters[columnId] = value` to filter a column.
 	 * Clear individual keys or call `resetFilters()` to remove all column filters.
 	 */
 	columnFilters = $state<Record<string, unknown>>({});
-	/**
-	 * Total row count as reported by the server. Only meaningful in manual mode.
-	 * Update from the server response to keep `pageCount` and `filteredRowCount` accurate.
-	 */
-	manualRowCount = $state<number | null>(null);
 
 	// ── Private state ─────────────────────────────────────────────────────────
 
+	// Uncontrolled fallbacks — used only when the matching `pagination` option
+	// getter is absent. When the option is provided, that value wins (controlled).
 	#currentPage = $state(1);
 	// Default of 10 ensures the $derived below never sees an uninitialised value.
 	#pageSize = $state(10);
 	#sorting = $state<{ id: string; direction: SortDirection } | null>(null);
-	#manual: boolean = false;
-	#getRowId?: (row: TData) => string | number;
-	// Holds the debounced copy of globalFilter actually used by the pipeline.
-	// The input binds to globalFilter for immediate feedback; the expensive
-	// filter derived only recomputes 150 ms after the last keystroke.
-	#debouncedFilter = $state('');
+	#globalFilter = $state('');
+
+	// row → index map, rebuilt once whenever `data` changes. Makes getRowKey /
+	// getRowIndex O(1) instead of an O(n) indexOf per row (which was O(n²) per page).
+	#rowIndex = $derived.by(() => {
+		const m = new Map<TData, number>();
+		this.data.forEach((row, i) => m.set(row, i));
+		return m;
+	});
+
+	get #serverMode() {
+		return this.#options.pagination !== undefined && 'total' in this.#options.pagination;
+	}
+	get #getRowId() {
+		return this.#options.getRowId;
+	}
 
 	// ── Derived ───────────────────────────────────────────────────────────────
 
@@ -128,7 +184,7 @@ export class DataTable<TData extends Record<string, unknown>> {
 		// Apply per-column filters.
 		for (const [colId, filterValue] of Object.entries(this.columnFilters)) {
 			if (filterValue === undefined || filterValue === null || filterValue === '') continue;
-			const col = this.columns.find((c) => (c.id ?? String(c.accessor ?? '')) === colId);
+			const col = this.columns.find((c) => columnId(c) === colId);
 			if (!col?.filterFn) continue;
 			const { accessor, filterFn } = col;
 			rows = rows.filter((row) => {
@@ -137,8 +193,11 @@ export class DataTable<TData extends Record<string, unknown>> {
 			});
 		}
 
-		// Use the debounced value so the pipeline only runs 150 ms after typing stops.
-		const q = this.#debouncedFilter.trim().toLowerCase();
+		// Filter directly off globalFilter — $derived is lazy, so this only runs
+		// when something actually reads the rows. Debounce belongs at the I/O
+		// boundary (the query trigger), not baked into state; a consumer who
+		// wants it debounces the input in one line.
+		const q = this.globalFilter.trim().toLowerCase();
 		if (q) {
 			rows = rows.filter((row) =>
 				Object.values(row).some((v) => String(v).toLowerCase().includes(q))
@@ -151,9 +210,9 @@ export class DataTable<TData extends Record<string, unknown>> {
 	#sortedRows = $derived.by(() => {
 		if (!this.#sorting) return this.#filteredRows;
 		const { id, direction } = this.#sorting;
-		const col = this.columns.find((c) => (c.id ?? String(c.accessor ?? '')) === id);
+		const col = this.columns.find((c) => columnId(c) === id);
 		if (!col) return this.#filteredRows;
-		return [...this.#filteredRows].sort((a, b) => {
+		return this.#filteredRows.toSorted((a, b) => {
 			const cmp = col.sortFn
 				? col.sortFn(a, b)
 				: (() => {
@@ -169,26 +228,22 @@ export class DataTable<TData extends Record<string, unknown>> {
 	});
 
 	#totalPages = $derived.by(() => {
-		const count =
-			this.#manual && this.manualRowCount !== null
-				? this.manualRowCount
-				: this.#filteredRows.length;
-		return Math.ceil(count / this.#pageSize) || 1;
+		const count = this.#serverMode
+			? (this.#options.pagination?.total ?? 0)
+			: this.#filteredRows.length;
+		return Math.ceil(count / this.pageSize) || 1;
 	});
 
-	/** The rows for the current page. In manual mode returns `data` as-is (already processed by the server). */
+	/** The rows for the current page. In server mode returns `data` as-is (already processed upstream). */
 	rows = $derived.by(() => {
-		if (this.#manual) return this.data;
-		const start = (this.#currentPage - 1) * this.#pageSize;
-		return this.#sortedRows.slice(start, start + this.#pageSize);
+		if (this.#serverMode) return this.data;
+		const start = (this.currentPage - 1) * this.pageSize;
+		return this.#sortedRows.slice(start, start + this.pageSize);
 	});
 
 	/** Columns that pass the current `columnVisibility` filter. */
 	visibleColumns = $derived(
-		this.columns.filter((col) => {
-			const key = col.id ?? String(col.accessor ?? '');
-			return this.columnVisibility[key] !== false;
-		})
+		this.columns.filter((col) => this.columnVisibility[columnId(col)] !== false)
 	);
 
 	/** Columns where `enableHiding` is not explicitly `false`. */
@@ -196,33 +251,43 @@ export class DataTable<TData extends Record<string, unknown>> {
 		return this.columns.filter((col) => col.enableHiding !== false);
 	}
 
-	getColumn(accessorOrId: string | number): ColumnDefinition<TData> | undefined {
-		return this.columns.find((col) => col.id === accessorOrId || col.accessor === accessorOrId);
-	}
-
 	/**
 	 * Whether there is a previous page. In manual mode, also check that the current page is greater than 1 so the parent can react (e.g. by fetching new data from the server).
 	 */
 	get hasPrevPage() {
-		return this.#currentPage > 1;
+		return this.currentPage > 1;
 	}
 
 	get pageCount() {
 		return this.#totalPages;
 	}
 
+	/**
+	 * The requested page (1-based), unclamped. Controlled by `pagination.page`
+	 * when provided, otherwise internal state. Read by `queryState` — kept free
+	 * of any query-result dependency so a server-driven `data` getter can't form
+	 * a computation cycle (queryState → page → total → result → queryState).
+	 */
+	get #requestedPage() {
+		return this.#options.pagination?.page ?? this.#currentPage;
+	}
+	/**
+	 * Current page (1-based). Like `#requestedPage` but clamped to the valid
+	 * range, so a stale high page (e.g. after filtering narrows the set) never
+	 * yields an empty slice — this replaces the old reset-to-page-1 $effect.
+	 */
 	get currentPage() {
-		return this.#currentPage;
+		return Math.min(Math.max(1, this.#requestedPage), this.#totalPages);
 	}
 	/** Whether there is a next page. In manual mode, also check that the current page is less than the total pages so the parent can react (e.g. by fetching new data from the server). */
 	get hasNextPage() {
-		return this.#currentPage < this.#totalPages;
+		return this.currentPage < this.#totalPages;
 	}
 	/**
 	 * The current page size. In manual mode, also update this value so the parent can react (e.g. by fetching new data from the server with the new page size).
 	 */
 	get pageSize() {
-		return this.#pageSize;
+		return this.#options.pagination?.pageSize ?? this.#pageSize;
 	}
 	/**
 	 * returns the total number of rows derived from `data`
@@ -231,15 +296,13 @@ export class DataTable<TData extends Record<string, unknown>> {
 		return this.data.length;
 	}
 	/**
-	 * returns the number of rows after filtering (before pagination). In manual mode, returns `manualRowCount` if set, otherwise falls back to `data.length` since the server is responsible for filtering.
+	 * Number of rows after filtering, before pagination. In server mode returns
+	 * the provided `total`; in client mode the internally-filtered row count.
 	 */
 	get filteredRowCount() {
-		if (this.#manual && this.manualRowCount !== null) return this.manualRowCount;
+		if (this.#serverMode) return this.#options.pagination?.total ?? this.data.length;
 		return this.#filteredRows.length;
 	}
-	/**
-	 * the number of rows after filtering and sorting, but before pagination. In manual mode, returns `manualRowCount` if set, otherwise falls back to `data.length` since the server is responsible for filtering/sorting.
-	 */
 	get selectedRows(): TData[] {
 		return this.data.filter((r) => this.rowSelection[this.getRowKey(r)] === true);
 	}
@@ -258,59 +321,51 @@ export class DataTable<TData extends Record<string, unknown>> {
 		return this.data.some((r) => this.rowSelection[this.getRowKey(r)] === true);
 	}
 
-	/** Current sort state, or `null` when unsorted. In manual mode, read this to tell the server what to sort by. */
+	/** Current sort state, or `null` when unsorted. Controlled by the `sorting` option when provided. */
 	get sorting() {
-		return this.#sorting;
+		return this.#options.sorting !== undefined ? this.#options.sorting : this.#sorting;
+	}
+	#setSorting(next: { id: string; direction: SortDirection } | null) {
+		this.#options.onSortingChange?.(next);
+		if (this.#options.sorting === undefined) this.#sorting = next;
+	}
+
+	/**
+	 * A single serialisable snapshot of everything the server needs to reproduce
+	 * the current view: page, size, sort, and filters. Reactive — read it inside
+	 * a `$derived`/`goto` or hand it straight to a remote `query()`. Replaces the
+	 * old URL-abstraction helpers: the consumer decides how to transport it.
+	 */
+	get queryState() {
+		return {
+			page: this.#requestedPage,
+			pageSize: this.pageSize,
+			sort: this.sorting,
+			globalFilter: this.globalFilter || undefined,
+			columnFilters: { ...this.columnFilters }
+		};
 	}
 
 	constructor(options: DataTableOptions<TData>) {
-		this.data = options.data;
-		this.#getRowId = options.getRowId;
-		// If selectable, prepend the built-in checkbox column. The component
-		// renders it internally — consumers never handle '__select__' in snippets.
-		const selectCol: ColumnDefinition<TData> = { id: '__select__', enableHiding: false };
-		this.columns = options.selectable ? [selectCol, ...options.columns] : options.columns;
+		this.#options = options;
 		this.#pageSize = options.pagination?.pageSize ?? 10;
-		this.#manual = options.manual ?? false;
 		// Pre-populate columnVisibility so bind:checked always gets a boolean
 		// (undefined causes a Svelte runtime error when binding to a prop with a fallback).
+		// Runs once; columns arriving later default to visible via `visibleColumns`.
 		for (const col of this.hidableColumns) {
-			const key = col.id ?? String(col.accessor ?? '');
-			this.columnVisibility[key] = true;
+			this.columnVisibility[columnId(col)] = true;
 		}
-		// Debounce globalFilter → #debouncedFilter (150 ms).
-		$effect(() => {
-			const value = this.globalFilter;
-			const timer = setTimeout(() => {
-				this.#debouncedFilter = value;
-			}, 150);
-			return () => clearTimeout(timer);
-		});
-
-		// Reset to page 1 whenever filters change so users don't end up on a
-		// non-existent page after narrowing the result set.
-		let filtersInitialized = false;
-		$effect(() => {
-			void this.#debouncedFilter;
-			// Iterate values to track deep mutations without a JSON.stringify allocation.
-			for (const v of Object.values(this.columnFilters)) void v;
-			if (!filtersInitialized) {
-				filtersInitialized = true;
-				return;
-			}
-			this.#currentPage = 1;
-		});
 	}
 
 	/**
 	 * Go to the previous page if it exists. In manual mode, also update the current page so the parent can react (e.g. by fetching new data from the server).
 	 */
 	prevPage() {
-		if (this.hasPrevPage) this.#currentPage -= 1;
+		if (this.hasPrevPage) this.goToPage(this.currentPage - 1);
 	}
 	/** Go to the next page if it exists. In manual mode, also update the current page so the parent can react (e.g. by fetching new data from the server). */
 	nextPage() {
-		if (this.hasNextPage) this.#currentPage += 1;
+		if (this.hasNextPage) this.goToPage(this.currentPage + 1);
 	}
 
 	/**
@@ -319,17 +374,18 @@ export class DataTable<TData extends Record<string, unknown>> {
 	 * @param columnId The ID of the column to toggle sorting for.
 	 */
 	toggleSort(columnId: string) {
-		if (this.#sorting?.id === columnId) {
-			this.#sorting =
-				this.#sorting.direction === 'asc' ? { id: columnId, direction: 'desc' } : null;
+		const cur = this.sorting;
+		if (cur?.id === columnId) {
+			this.#setSorting(cur.direction === 'asc' ? { id: columnId, direction: 'desc' } : null);
 		} else {
-			this.#sorting = { id: columnId, direction: 'asc' };
+			this.#setSorting({ id: columnId, direction: 'asc' });
 		}
 	}
 
 	/** Returns the current sort direction for `columnId`, or `false` if unsorted. */
 	getSortDirection(columnId: string): SortDirection | false {
-		return this.#sorting?.id === columnId ? this.#sorting.direction : false;
+		const cur = this.sorting;
+		return cur?.id === columnId ? cur.direction : false;
 	}
 	/**
 	 * Toggle selection of a row by its stable key (from `getRowId`). In manual mode, relies on stable row keys to track selection across data replacements; ensure `getRowId` is set and returns consistent keys for this to work.
@@ -352,25 +408,27 @@ export class DataTable<TData extends Record<string, unknown>> {
 	 * Clear sorting (set to unsorted). In manual mode, also update the sort state so the parent can react (e.g. by fetching new data from the server).
 	 */
 	resetSorting() {
-		this.#sorting = null;
+		this.#setSorting(null);
 	}
 
 	/** Clear both the global filter and all column filters, and reset to page 1. */
 	resetFilters() {
 		this.globalFilter = '';
 		this.columnFilters = {};
-		this.#currentPage = 1;
+		this.goToPage(1);
 	}
 
-	/** Jump to a specific page number (clamped to the valid range). */
+	/**
+	 * Jump to a specific page number (clamped to the valid range). When
+	 * `pagination.page` is controlled, emits via `onPageChange` and leaves
+	 * internal state untouched; otherwise updates internal state.
+	 */
 	goToPage(page: number) {
-		this.#currentPage = Math.max(1, Math.min(Math.round(page), this.#totalPages));
+		const next = Math.max(1, Math.min(Math.round(page), this.#totalPages));
+		this.#options.pagination?.onPageChange?.(next);
+		if (this.#options.pagination?.page === undefined) this.#currentPage = next;
 	}
 
-	/** Programmatically set the active sort column and direction. */
-	setSort(columnId: string, direction: SortDirection) {
-		this.#sorting = { id: columnId, direction };
-	}
 	/**
 	 * Toggle selection of all rows. Selects all when not all are selected, otherwise clears selection. In manual mode, relies on stable row keys (from `getRowId`) to track selection across data replacements; ensure `getRowId` is set and returns consistent keys for this to work.
 	 */
@@ -388,7 +446,9 @@ export class DataTable<TData extends Record<string, unknown>> {
 	 * @param size the new page size.
 	 */
 	setPageSize(size: number) {
-		this.#pageSize = Math.max(1, Math.round(size));
+		const next = Math.max(1, Math.round(size));
+		this.#options.pagination?.onPageSizeChange?.(next);
+		if (this.#options.pagination?.pageSize === undefined) this.#pageSize = next;
 	}
 
 	/**
@@ -398,7 +458,11 @@ export class DataTable<TData extends Record<string, unknown>> {
 	 */
 	getRowKey(row: TData): string {
 		if (this.#getRowId) return String(this.#getRowId(row));
-		const idx = this.data.indexOf(row);
-		return String(idx);
+		return String(this.#rowIndex.get(row) ?? -1);
+	}
+
+	/** The row's index in `data` (O(1) via the internal row→index map). */
+	getRowIndex(row: TData): number {
+		return this.#rowIndex.get(row) ?? -1;
 	}
 }
