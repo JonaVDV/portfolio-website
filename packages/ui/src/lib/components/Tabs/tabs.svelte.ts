@@ -38,7 +38,6 @@ export class TabsState {
 	setTabActive(tab: string) {
 		this.tabs.set(tab, true);
 
-		
 		if (this.options.onchange) {
 			this.options.onchange(tab);
 		}
