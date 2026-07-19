@@ -9,11 +9,21 @@
 		 * The value of the active tab. This should be the same as the `tab` prop of the corresponding `TabTrigger`.
 		 */
 		value?: string;
+		onchange?: (value: string) => void;
 	}
 
-	let { children, orientation = 'horizontal', value }: TabsProps = $props();
+	let { children, orientation = 'horizontal', value, onchange }: TabsProps = $props();
 
-	setTabsState(new TabsState(orientation, value));
+	const tabs = new TabsState({
+		get orientation() {
+			return orientation;
+		},
+		get initialTab() {
+			return value;
+		}
+	});
+
+	setTabsState(tabs);
 </script>
 
 <div>

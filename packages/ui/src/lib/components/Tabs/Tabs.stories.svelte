@@ -15,7 +15,7 @@
 	{#snippet template()}
 		<div class="primary-layout">
 			<div class="card">
-				<Tabs>
+				<Tabs value="overflow">
 					<TabList>
 						<TabTrigger tab="account">Tab 1</TabTrigger>
 						<TabTrigger tab="settings">Tab 2</TabTrigger>
@@ -37,6 +37,18 @@
 					</TabPanel>
 					<TabPanel tab="profile">
 						<p>This is the content of Tab 3.</p>
+					</TabPanel>
+					<TabPanel tab="disabled">
+						<p>This is the content of the disabled tab.</p>
+					</TabPanel>
+					<TabPanel tab="long">
+						<p>This is the content of the long tab.</p>
+					</TabPanel>
+					<TabPanel tab="overflow">
+						<p>This is the content of the overflow tab.</p>
+					</TabPanel>
+					<TabPanel tab="overflow2">
+						<p>This is the content of the overflow tab 2.</p>
 					</TabPanel>
 				</Tabs>
 			</div>
