@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
+	import type { ConditionalProps, Discriminate } from '../../types';
 	import type { HTMLButtonAttributes, HTMLLiAttributes } from 'svelte/elements';
 
 	interface Props extends Omit<HTMLLiAttributes, 'onclick'> {
@@ -17,13 +18,17 @@
 		onclick?: HTMLButtonAttributes['onclick'];
 		/** Disables the inner `<button>` (ignored when `raw`). */
 		disabled?: boolean;
+		/**
+		 * Controls whether the item is a link or a button. If `href` is provided, the item will be rendered as an `<a>` element instead of a `<button>`.
+		 */
+		href?: string;
 	}
-
 	let {
 		children,
 		keybind,
 		raw = false,
 		onclick,
+		href,
 		disabled,
 		class: className,
 		role,
@@ -43,6 +48,15 @@
 		{#if keybind}
 			{@render keybind()}
 		{/if}
+	</li>
+{:else if href}
+	<li class={['dropdown-item', className]} {...rest}>
+		<a {href} role="menuitem" class="dropdown-item-button | flex-group | nowrap">
+			{@render children?.()}
+			{#if keybind}
+				{@render keybind()}
+			{/if}
+		</a>
 	</li>
 {:else}
 	<li class={['dropdown-item', className]} {...rest}>
