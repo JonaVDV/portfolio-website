@@ -62,7 +62,7 @@ export async function add(names, { all, overwrite }) {
 	const { dist, registry } = loadRegistry(root);
 
 	if (all) names = Object.keys(registry.components);
-	if (!names.length) throw new Error('no components given — `scope-ui add <component...>` or --all');
+	if (!names.length) throw new Error('no components given — `jonavdv-ui add <component...>` or --all');
 
 	const { components, utils } = withDependencies(registry, names);
 	const jobs = [];

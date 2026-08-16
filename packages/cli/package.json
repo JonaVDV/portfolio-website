@@ -1,7 +1,7 @@
 {
-  "name": "@SCOPE/cli",
+  "name": "@jonavdv/cli",
   "version": "0.0.1",
-  "description": "CLI for @SCOPE/ui — copy component styles or vendor whole components into your project.",
+  "description": "CLI for @jonavdv/ui — copy component styles or vendor whole components into your project.",
   "license": "MIT",
   "keywords": [
     "svelte",
@@ -18,7 +18,7 @@
   },
   "type": "module",
   "bin": {
-    "scope-ui": "./src/cli.js"
+    "jonavdv-ui": "./src/cli.js"
   },
   "files": [
     "src"

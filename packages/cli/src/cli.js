@@ -3,16 +3,16 @@ import { parseArgs } from 'node:util';
 import { init } from './init.js';
 import { add } from './add.js';
 
-const HELP = `scope-ui — component CLI for @SCOPE/ui
+const HELP = `jonavdv-ui — component CLI for @jonavdv/ui
 
 Usage:
-  scope-ui init                       Create ui.config.json in this project
-  scope-ui add <component...>         Add components (styles or vendored source)
-  scope-ui add --all                  Add every component
-  scope-ui add button --overwrite     Overwrite existing files without asking
+  jonavdv-ui init                       Create ui.config.json in this project
+  jonavdv-ui add <component...>         Add components (styles or vendored source)
+  jonavdv-ui add --all                  Add every component
+  jonavdv-ui add button --overwrite     Overwrite existing files without asking
 
 Modes (set in ui.config.json by init):
-  package   you import components from @SCOPE/ui; add copies only the
+  package   you import components from @jonavdv/ui; add copies only the
             consumer-owned *.variants.css files into your styles dir
   vendor    add copies component source into your project (shadcn-style)
 `;

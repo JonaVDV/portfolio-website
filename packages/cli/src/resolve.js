@@ -2,7 +2,7 @@ import { createRequire } from 'node:module';
 import { readFileSync, existsSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 
-export const UI_PACKAGE = '@SCOPE/ui';
+export const UI_PACKAGE = '@jonavdv/ui';
 const SUPPORTED_REGISTRY_VERSION = 1;
 
 export function projectRoot() {
@@ -17,11 +17,11 @@ export function projectRoot() {
 
 export function loadConfig(root) {
 	const path = join(root, 'ui.config.json');
-	if (!existsSync(path)) throw new Error('no ui.config.json found — run `scope-ui init` first');
+	if (!existsSync(path)) throw new Error('no ui.config.json found — run `jonavdv-ui init` first');
 	return JSON.parse(readFileSync(path, 'utf8'));
 }
 
-/** Locate the installed @SCOPE/ui package and parse its registry. */
+/** Locate the installed @jonavdv/ui package and parse its registry. */
 export function loadRegistry(root) {
 	let pkgPath;
 	try {

@@ -52,6 +52,6 @@ export async function init() {
 		console.log(`\nNext steps:`);
 		console.log(`  1. install ${UI_PACKAGE}`);
 		console.log(`  2. import '${UI_PACKAGE}/styles/main.css' in your root layout`);
-		console.log(`  3. scope-ui add <component> to pull in its variant styles`);
+		console.log(`  3. jonavdv-ui add <component> to pull in its variant styles`);
 	}
 }
