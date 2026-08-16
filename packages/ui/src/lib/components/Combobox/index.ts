@@ -1,0 +1,6 @@
+export { default as Root } from './Combobox.svelte';
+export { default as Input } from './ComboboxInput.svelte';
+export { default as Item } from './ComboboxItem.svelte';
+export { default as Group } from './ComboboxGroup.svelte';
+
+export { ComboboxState, type ComboboxFilter, type ComboboxOptions } from './combobox.svelte.js';
